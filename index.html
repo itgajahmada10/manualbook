@@ -1,59 +1,118 @@
-<div class="form-column">
-    <div class="header">
-        <h2><i data-lucide="book-open"></i> Upload Manual Book</h2>
-        <p>Tambahkan buku baru ke otak AI (Pinecone)</p>
-    </div>
-    <form id="ingestForm">
-        <div class="form-group">
-            <label>Tipe Mesin (Untuk Label Rak Buku)</label>
-            <select id="engineLabel" required>
-                <option value="ME">Main Engine (ME)</option>
-                <option value="AE">Aux Engine (AE)</option>
-            </select>
-        </div>
-        <div class="upload-section req">
-            <label><i data-lucide="file-text"></i> Upload PDF Manual Book</label>
-            <input type="file" id="bookFile" accept="application/pdf" required>
-        </div>
-        <button type="submit" id="btnIngest" class="btn-submit">
-            <i data-lucide="upload"></i> MULAI BELAJAR
-        </button>
-    </form>
-    <div id="ingestResult"></div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Suci Ingestion — SPB Logistics Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 
-<script>
-    // URL Webhook n8n JALUR INGEST lu
-    const INGEST_WEBHOOK_URL = "https://n8.waruna-group.co.id/webhook/b626b15d-66f0-4997-afde-9183bf99bed7"; 
-
-    document.getElementById('ingestForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('btnIngest');
-        const resultBox = document.getElementById('ingestResult');
-        const file = document.getElementById('bookFile').files[0];
-        const engineType = document.getElementById('engineLabel').value;
-
-        btn.disabled = true;
-        btn.innerHTML = `<div class="loader"></div> Mengunggah & Membaca Buku... (Bisa 2-5 Menit)`;
-
-        const formData = new FormData();
-        formData.append('data', file); // 'data' adalah field yang diincar n8n
-        formData.append('engine_type', engineType); // Metadata buat Pinecone
-
-        try {
-            let response = await fetch(INGEST_WEBHOOK_URL, { 
-                method: 'POST', 
-                body: formData 
-            });
-            
-            if (!response.ok) throw new Error("Gagal terhubung ke n8n");
-            
-            resultBox.innerHTML = `<p style="color: green; margin-top:10px;">Buku berhasil masuk ke Pinecone!</p>`;
-        } catch (err) {
-            resultBox.innerHTML = `<p style="color: red; margin-top:10px;">Error: ${err.message}</p>`;
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="upload"></i> MULAI BELAJAR`;
+    <style>
+        :root {
+            --primary: #4e2b5c; --primary-hover: #3b1e47; --bg-card: #ffffff;
+            --border-color: #e8dee8; --text-main: #333333; --text-muted: #666666;
+            --success: #27ae60; --error: #c0392b; --accent-req: #fffaf0;
         }
-    });
-</script>
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; padding: 40px 20px; 
+            background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%);
+            color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .form-column { 
+            width: 100%; max-width: 450px; background-color: var(--bg-card); 
+            padding: 35px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); 
+        }
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h2 { color: var(--primary); margin: 0 0 8px 0; font-size: 22px; font-family: 'Poppins', sans-serif; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .header p { color: var(--text-muted); margin: 0; font-size: 13px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-main); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Poppins', sans-serif; }
+        select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; background-color: #fafafa; }
+        .upload-section { padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #b59ebc; background-color: var(--accent-req); }
+        .upload-section label { color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 12px; font-weight: 600;}
+        input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; font-size: 12px;}
+        button.btn-submit { 
+            background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; 
+            font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; 
+            display: flex; justify-content: center; align-items: center; gap: 10px; 
+        }
+        button.btn-submit:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        button.btn-submit:disabled { background-color: #a395a8; cursor: not-allowed; }
+        #ingestResult { margin-top: 20px; font-size: 13px; text-align: center; font-weight: 600; }
+        .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="form-column">
+        <div class="header">
+            <h2><i data-lucide="book-open"></i> Upload Manual Book</h2>
+            <p>Suntik data buku PDF ke otak Pinecone Vector DB</p>
+        </div>
+        <form id="ingestForm">
+            <div class="form-group">
+                <label>Tipe Mesin (Rak Buku Pinecone)</label>
+                <select id="engineLabel" required>
+                    <option value="ME">Main Engine (ME)</option>
+                    <option value="AE">Aux Engine (AE)</option>
+                </select>
+            </div>
+            <div class="upload-section">
+                <label><i data-lucide="file-text"></i> Pilih File PDF Manual Book</label>
+                <input type="file" id="bookFile" accept="application/pdf" required>
+            </div>
+            <button type="submit" id="btnIngest" class="btn-submit">
+                <i data-lucide="upload"></i> INGEST BUKU SEKARANG
+            </button>
+        </form>
+        <div id="ingestResult"></div>
+    </div>
+
+    <script>
+        if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        
+        // PASTIIN LU GANTI STRING DI BAWAH INI SAMA URL WEBHOOK N8N LU!
+        const INGEST_WEBHOOK_URL = "https://n8.waruna-group.co.id/webhook/b626b15d-66f0-4997-afde-9183bf99bed7"; 
+
+        document.getElementById('ingestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnIngest');
+            const resultBox = document.getElementById('ingestResult');
+            const file = document.getElementById('bookFile').files[0];
+            const engineType = document.getElementById('engineLabel').value;
+
+            if (INGEST_WEBHOOK_URL === "https://n8.waruna-group.co.id/webhook/b626b15d-66f0-4997-afde-9183bf99bed7") {
+                resultBox.innerHTML = `<p style="color: red;">Error: URL Webhook di kodingan belum lu ganti!</p>`;
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<div class="loader"></div> Mengunggah & Membaca Buku...`;
+
+            const formData = new FormData();
+            formData.append('data', file); 
+            formData.append('engine_type', engineType); 
+
+            try {
+                let response = await fetch(INGEST_WEBHOOK_URL, { 
+                    method: 'POST', 
+                    body: formData 
+                });
+                
+                if (!response.ok) throw new Error("Gagal terhubung ke n8n. Cek CORS lu.");
+                
+                resultBox.innerHTML = `<p style="color: var(--success);"><i data-lucide="check-circle"></i> Buku berhasil ditelan oleh Pinecone!</p>`;
+                lucide.createIcons();
+            } catch (err) {
+                resultBox.innerHTML = `<p style="color: var(--error);">Error: ${err.message}</p>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="upload"></i> INGEST BUKU SEKARANG`;
+            }
+        });
+    </script>
+</body>
+</html>
