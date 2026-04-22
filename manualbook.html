@@ -1,0 +1,59 @@
+<div class="form-column">
+    <div class="header">
+        <h2><i data-lucide="book-open"></i> Upload Manual Book</h2>
+        <p>Tambahkan buku baru ke otak AI (Pinecone)</p>
+    </div>
+    <form id="ingestForm">
+        <div class="form-group">
+            <label>Tipe Mesin (Untuk Label Rak Buku)</label>
+            <select id="engineLabel" required>
+                <option value="ME">Main Engine (ME)</option>
+                <option value="AE">Aux Engine (AE)</option>
+            </select>
+        </div>
+        <div class="upload-section req">
+            <label><i data-lucide="file-text"></i> Upload PDF Manual Book</label>
+            <input type="file" id="bookFile" accept="application/pdf" required>
+        </div>
+        <button type="submit" id="btnIngest" class="btn-submit">
+            <i data-lucide="upload"></i> MULAI BELAJAR
+        </button>
+    </form>
+    <div id="ingestResult"></div>
+</div>
+
+<script>
+    // URL Webhook n8n JALUR INGEST lu
+    const INGEST_WEBHOOK_URL = "https://n8.waruna-group.co.id/webhook/id-webhook-ingest-lu"; 
+
+    document.getElementById('ingestForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnIngest');
+        const resultBox = document.getElementById('ingestResult');
+        const file = document.getElementById('bookFile').files[0];
+        const engineType = document.getElementById('engineLabel').value;
+
+        btn.disabled = true;
+        btn.innerHTML = `<div class="loader"></div> Mengunggah & Membaca Buku... (Bisa 2-5 Menit)`;
+
+        const formData = new FormData();
+        formData.append('data', file); // 'data' adalah field yang diincar n8n
+        formData.append('engine_type', engineType); // Metadata buat Pinecone
+
+        try {
+            let response = await fetch(INGEST_WEBHOOK_URL, { 
+                method: 'POST', 
+                body: formData 
+            });
+            
+            if (!response.ok) throw new Error("Gagal terhubung ke n8n");
+            
+            resultBox.innerHTML = `<p style="color: green; margin-top:10px;">Buku berhasil masuk ke Pinecone!</p>`;
+        } catch (err) {
+            resultBox.innerHTML = `<p style="color: red; margin-top:10px;">Error: ${err.message}</p>`;
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="upload"></i> MULAI BELAJAR`;
+        }
+    });
+</script>
