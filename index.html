@@ -6,186 +6,101 @@
     <title>AI Logistics Portal — Waruna Group</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
-
     <style>
-        :root {
-            --primary: #4e2b5c; --primary-hover: #3b1e47; --bg-card: #ffffff;
-            --border-color: #e8dee8; --text-main: #333333; --text-muted: #666666;
-            --success: #27ae60; --error: #c0392b; --accent-rh: #f4f0f5; --accent-req: #fffaf0;
-        }
-        * { box-sizing: border-box; }
-        body { 
-            margin: 0; padding: 30px 20px; 
-            background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%);
-            color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh;
-        }
-        
-        .nav-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
-        .tab-btn {
-            background: rgba(255,255,255,0.6); border: 2px solid var(--border-color); padding: 12px 24px;
-            border-radius: 30px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px;
-            color: var(--text-muted); cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;
-        }
-        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-        .layout-wrapper { display: flex; gap: 25px; max-width: 600px; margin: 0 auto; align-items: flex-start; flex-direction: column; }
-        
-        .form-column { 
-            width: 100%; background-color: var(--bg-card); 
-            padding: 35px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); 
-        }
-
+        :root { --primary: #4e2b5c; --primary-hover: #3b1e47; --success: #27ae60; --bg-card: #ffffff; }
+        body { margin: 0; padding: 30px 20px; background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%); font-family: 'Inter', sans-serif; }
+        .layout-wrapper { max-width: 550px; margin: 0 auto; }
+        .form-column { background: var(--bg-card); padding: 35px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid #e8dee8; }
         .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { color: var(--primary); margin: 0 0 8px 0; font-size: 22px; font-family: 'Poppins', sans-serif; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .header p { color: var(--text-muted); margin: 0; font-size: 13px; }
-        
+        .header h2 { color: var(--primary); margin: 0; font-family: 'Poppins', sans-serif; }
         .upload-section { padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #b59ebc; }
-        .upload-section.rh { background-color: var(--accent-rh); }
-        .upload-section.req { background-color: var(--accent-req); border-color: #eeddb0; }
-        
-        button.btn-submit { 
-            background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; 
-            font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; 
-            display: flex; justify-content: center; align-items: center; gap: 10px; 
-        }
-        button.btn-submit:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
-
-        /* SUCCESS CARD STYLE */
-        .success-card {
-            text-align: center; padding: 30px; border-radius: 12px; background: #f9f6fa; border: 2px solid var(--primary);
-            display: none; animation: fadeIn 0.5s;
-        }
-        .btn-appsheet {
-            display: inline-block; margin-top: 20px; padding: 12px 25px; background: var(--success);
-            color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.2s;
-        }
-        .btn-appsheet:hover { background: #219150; transform: scale(1.05); }
-
+        .upload-section.rh { background: #f4f0f5; }
+        .upload-section.req { background: #fffaf0; border-color: #eeddb0; }
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; gap: 10px; }
+        .success-card { text-align: center; padding: 30px; border-radius: 12px; background: #f9f6fa; border: 2px solid var(--primary); display: none; }
+        .btn-appsheet { display: inline-block; margin-top: 20px; padding: 12px 25px; background: var(--success); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
         .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .status-error { margin-top: 20px; padding: 15px; border-radius: 8px; background: #fadbd8; color: #c0392b; border-left: 5px solid #c0392b; display: none; font-size: 13px;}
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="nav-tabs">
-        <button class="tab-btn active"><i data-lucide="shield-check"></i> SPB Audit</button>
-        <button class="tab-btn"><i data-lucide="database"></i> Qdrant Ingest</button>
-    </div>
-
-    <div class="layout-wrapper">
-        <div class="form-column" id="mainFormContainer">
-            <div class="header">
-                <h2><i data-lucide="shield-check"></i> Requisition Audit</h2>
-                <p>Engine Audit System (Background Mode)</p>
+<div class="layout-wrapper">
+    <div class="form-column" id="mainFormContainer">
+        <div class="header">
+            <h2><i data-lucide="shield-check"></i> Requisition Audit</h2>
+            <p>Engine Audit System (Background Mode)</p>
+        </div>
+        
+        <form id="auditForm">
+            <div style="margin-bottom:15px;">
+                <label style="display:block; font-size:11px; font-weight:bold;">ENGINE CATEGORY</label>
+                <select id="engineType" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+                    <option value="ME">Main Engine (ME)</option>
+                    <option value="AE">Aux Engine (AE)</option>
+                </select>
             </div>
-            
-            <form id="auditForm">
-                <div style="margin-bottom: 15px;">
-                    <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px;">ENGINE CATEGORY</label>
-                    <select id="engineType" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
-                        <option value="ME">Main Engine (ME)</option>
-                        <option value="AE">Aux Engine (AE)</option>
-                    </select>
-                </div>
 
-                <div class="upload-section rh">
-                    <label style="display:flex; align-items:center; gap:8px; color:var(--primary); font-weight:bold; font-size:12px; margin-bottom:10px;">
-                        <i data-lucide="clock"></i> 1. RUNNING HOURS (RH) REPORT
-                    </label>
-                    <input type="file" id="rhFile" accept="application/pdf, .xlsx, .xls">
-                </div>
+            <div class="upload-section rh">
+                <label style="font-weight:bold; font-size:12px;"><i data-lucide="clock"></i> 1. RUNNING HOURS REPORT</label>
+                <input type="file" id="rhFile" accept=".pdf, .xlsx, .xls">
+            </div>
 
-                <div class="upload-section req">
-                    <label style="display:flex; align-items:center; gap:8px; color:var(--primary); font-weight:bold; font-size:12px; margin-bottom:10px;">
-                        <i data-lucide="file-text"></i> 2. REQUISITION / PO PDF
-                    </label>
-                    <input type="file" id="reqFile" accept="application/pdf">
-                </div>
+            <div class="upload-section req">
+                <label style="font-weight:bold; font-size:12px;"><i data-lucide="file-text"></i> 2. REQUISITION / PO PDF</label>
+                <input type="file" id="reqFile" accept=".pdf" required>
+            </div>
 
-                <button type="submit" id="submitBtn" class="btn-submit">
-                    <i data-lucide="send"></i> START AUDIT PROCESS
-                </button>
-            </form>
-
-            <div id="errorBox" class="status-error"></div>
-        </div>
-
-        <div id="successCard" class="success-card">
-            <i data-lucide="check-circle" style="width: 50px; height: 50px; color: var(--success); margin-bottom: 15px;"></i>
-            <h2 style="color: var(--primary); margin-top: 0;">Audit Berhasil Dikirim!</h2>
-            <p id="successMsg" style="font-size: 14px; color: #555;"></p>
-            <p style="font-size: 12px; color: #888;">AI sedang memproses Manual Book & Mandatory Items di background untuk menghindari koneksi terputus.</p>
-            
-            <a id="appsheetLink" href="#" target="_blank" class="btn-appsheet">
-                <i data-lucide="external-link" style="width:16px; vertical-align:middle;"></i> LIHAT DI APPSHEET
-            </a>
-            
-            <button onclick="location.reload()" style="display:block; width:100%; margin-top:20px; background:none; border:none; color:var(--primary); cursor:pointer; font-size:12px; text-decoration:underline;">
-                Upload File Lain
-            </button>
-        </div>
+            <button type="submit" id="submitBtn" class="btn-submit">START AUDIT PROCESS</button>
+        </form>
     </div>
 
-    <script>
-        lucide.createIcons();
+    <div id="successCard" class="success-card">
+        <i data-lucide="check-circle" style="width: 50px; height: 50px; color: var(--success); margin-bottom: 15px;"></i>
+        <h2 style="color: var(--primary);">Audit Berhasil Dikirim!</h2>
+        <p id="successMsg"></p>
+        <a id="appsheetLink" href="#" target="_blank" class="btn-appsheet">BUKA DASHBOARD APPSHEET</a>
+        <button onclick="location.reload()" style="display:block; width:100%; margin-top:20px; background:none; border:none; color:var(--primary); cursor:pointer; text-decoration:underline;">Upload File Lain</button>
+    </div>
+</div>
 
-        // Ganti URL ini sesuai dengan URL Webhook n8n lu (Immediate Response)
-        const N8N_URL = "https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de";
+<script>
+    lucide.createIcons();
+    const N8N_URL = "https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de";
 
-        document.getElementById('auditForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const btn = document.getElementById('submitBtn');
-            const errorBox = document.getElementById('errorBox');
-            const rhFile = document.getElementById('rhFile').files[0];
-            const reqFile = document.getElementById('reqFile').files[0];
+    document.getElementById('auditForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const rhFile = document.getElementById('rhFile').files[0];
+        const reqFile = document.getElementById('reqFile').files[0];
 
-            if (!reqFile) {
-                alert("Mohon pilih file Requisition/PO PDF!");
-                return;
-            }
+        btn.disabled = true;
+        btn.innerHTML = `<div class="loader"></div> Mengirim...`;
 
-            // UI State: Loading
-            btn.disabled = true;
-            btn.innerHTML = `<div class="loader"></div> Mengirim Dokumen...`;
-            errorBox.style.display = 'none';
+        // KUNCI PERBAIKAN: Kirim semua dalam SATU FormData
+        const formData = new FormData();
+        formData.append('engine_type', document.getElementById('engineType').value);
+        formData.append('job_id', `JOB-${Date.now()}`);
+        if (rhFile) formData.append('RH_Report', rhFile);
+        formData.append('Requisition_Report', reqFile);
 
-            const formData = new FormData();
-            formData.append('engine_type', document.getElementById('engineType').value);
-            formData.append('job_id', `JOB-${Date.now()}`);
-            if (rhFile) formData.append('RH_Report', rhFile);
-            formData.append('Requisition_Report', reqFile);
+        try {
+            const response = await fetch(N8N_URL, { method: 'POST', body: formData });
+            const result = await response.json();
 
-            try {
-                const response = await fetch(N8N_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) throw new Error("Gagal terhubung ke server n8n.");
-
-                const result = await response.json();
-
-                if (result.status === "processing") {
-                    // SEMBUNYIKAN FORM, TAMPILKAN KARTU SUKSES
-                    document.getElementById('mainFormContainer').style.display = 'none';
-                    document.getElementById('successCard').style.display = 'block';
-                    document.getElementById('successMsg').innerText = result.message;
-                    document.getElementById('appsheetLink').href = result.appsheet_link || "#";
-                    lucide.createIcons();
-                }
-
-            } catch (err) {
-                errorBox.style.display = 'block';
-                errorBox.innerHTML = `<strong>Error:</strong> ${err.message}`;
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="send"></i> START AUDIT PROCESS`;
+            if (result.status === "processing") {
+                document.getElementById('mainFormContainer').style.display = 'none';
+                document.getElementById('successCard').style.display = 'block';
+                document.getElementById('successMsg').innerText = result.message;
+                document.getElementById('appsheetLink').href = result.appsheet_link || "#";
                 lucide.createIcons();
             }
-        });
-    </script>
+        } catch (err) {
+            alert("Error: " + err.message);
+            btn.disabled = false;
+            btn.innerHTML = "START AUDIT PROCESS";
+        }
+    });
+</script>
 </body>
 </html>
