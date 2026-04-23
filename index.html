@@ -4,173 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Logistics Portal — Waruna Group</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap)" rel="stylesheet">
+    <script src="[https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js](https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js)"></script>
 
     <style>
         :root {
             --primary: #4e2b5c; --primary-hover: #3b1e47; --bg-card: #ffffff;
-            --border-color: #e8dee8; --text-main: #333333; --text-muted: #666666;
-            --success: #27ae60; --error: #c0392b; --accent-rh: #f4f0f5; --accent-req: #fffaf0;
+            --border-color: #e8dee8; --text-main: #333333; --success: #27ae60; --error: #c0392b;
         }
-        * { box-sizing: border-box; }
         body { 
-            margin: 0; padding: 30px 20px; 
+            margin: 0; padding: 30px; 
             background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%);
             color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh;
         }
         
-        .layout-wrapper { display: flex; gap: 25px; max-width: 1600px; margin: 0 auto; align-items: flex-start; flex-wrap: wrap; justify-content: center;}
-        
-        .form-column { 
-            flex: 1 1 400px; max-width: 450px; background-color: var(--bg-card); 
-            padding: 35px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); 
-        }
-        
-        .report-column { 
-            flex: 2 1 800px; background-color: var(--bg-card); padding: 30px; border-radius: 16px; 
-            box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); display: none; 
-        }
+        /* SIDE BY SIDE LAYOUT */
+        .main-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
+        .left-panel { flex: 1; min-width: 350px; max-width: 450px; }
+        .right-panel { flex: 2; min-width: 600px; display: flex; flex-direction: column; gap: 20px; }
 
+        .card-box { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); }
         .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { color: var(--primary); margin: 0 0 8px 0; font-size: 22px; font-family: 'Poppins', sans-serif; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .header p { color: var(--text-muted); margin: 0; font-size: 13px; }
+        .header h2 { color: var(--primary); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; }
         
-        .form-group { margin-bottom: 18px; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-main); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Poppins', sans-serif; }
-        select, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; background-color: #fafafa; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 11px; text-transform: uppercase; font-family: 'Poppins', sans-serif; }
+        select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; margin-bottom: 15px;}
+        .upload-section { padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #b59ebc; background: #fbf9fc;}
+        input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; font-size: 12px;}
         
-        .upload-section { padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #b59ebc; }
-        .upload-section.rh { background-color: var(--accent-rh); }
-        .upload-section.req { background-color: var(--accent-req); border-color: #eeddb0; }
-        .upload-section label { color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 12px;}
-        input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; font-size: 12px;}
-        
-        button.btn-submit { 
-            background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; 
-            font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; 
-            display: flex; justify-content: center; align-items: center; gap: 10px; 
-        }
-        button.btn-submit:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        button.btn-submit { background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
         button.btn-submit:disabled { background-color: #a395a8; cursor: not-allowed; }
 
-        .status-box { margin-top: 20px; padding: 15px; border-radius: 8px; font-size: 13px; display: none; font-weight: 500; border-left: 5px solid var(--error); background-color: #fadbd8; color: var(--error); }
-        
-        /* POLLING / LOADING CARD */
-        .polling-card { text-align: center; padding: 30px; border-radius: 12px; background: #f9f6fa; border: 2px solid var(--primary); display: none; animation: fadeIn 0.5s; }
-        
+        /* POLLING & TABLE */
         .loader { border: 3px solid rgba(78, 43, 92, 0.3); border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
         .loader-small { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* TABLE STYLES */
-        .table-responsive { width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; font-size: 12px; }
         th { background-color: #fbf9fc; padding: 14px 12px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--border-color); font-family: 'Poppins', sans-serif;}
         td { padding: 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
-        .subsystem-header { background-color: #f0ebf2 !important; font-weight: 600; color: var(--primary); font-size: 13px; padding: 10px 15px !important; border-top: 2px solid #d2c5d6; font-family: 'Poppins', sans-serif;}
+        .subsystem-header { background-color: #f0ebf2 !important; font-weight: 600; color: var(--primary); font-size: 13px; padding: 10px 15px !important; border-top: 2px solid #d2c5d6;}
+        
         .badge { padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; }
         .badge-aman { background-color: #e9f7ef; color: #1e8449; border: 1px solid #a3e4d7; }
         .badge-pangkas { background-color: #fadbd8; color: #cb4335; border: 1px solid #f5b7b1; }
         .badge-kurang { background-color: #fcf3cf; color: #d4ac0d; border: 1px solid #f9e79f; }
         .badge-type-mandatory { font-size: 9px; background: #f0ebf2; color: var(--primary); padding: 2px 5px; border-radius: 3px; border: 1px solid #d2c5d6; font-weight: 700; display: inline-block; margin-top: 4px;}
+        .manual-ref-text { display: inline-block; font-size: 10px; background: #fff8e1; border-left: 3px solid #f1c40f; padding: 5px 8px; color: #886504; margin-bottom: 6px; border-radius: 0 4px 4px 0; font-style: italic;}
     </style>
 </head>
 <body>
 
-    <div class="layout-wrapper">
-        <div class="form-column" id="mainFormContainer">
-            <div class="header">
-                <h2><i data-lucide="shield-check"></i> Requisition Audit</h2>
-                <p>Engine Audit System (Background Mode)</p>
-            </div>
-            
-            <form id="auditForm">
-                <div class="form-group">
+    <div class="main-container">
+        <div class="left-panel">
+            <div class="card-box">
+                <div class="header">
+                    <h2><i data-lucide="shield-check"></i> SPB Audit</h2>
+                    <p style="color: #666; font-size: 12px;">Engine Audit System (Background Mode)</p>
+                </div>
+                
+                <form id="auditForm">
                     <label>ENGINE CATEGORY</label>
-                    <select id="engineType" required>
+                    <select id="engineType">
                         <option value="ME">Main Engine (ME)</option>
                         <option value="AE">Aux Engine (AE)</option>
                     </select>
-                </div>
 
-                <div class="upload-section rh">
-                    <label><i data-lucide="clock"></i> 1. RUNNING HOURS (RH) REPORT</label>
-                    <input type="file" id="rhFile" accept="application/pdf, .xlsx, .xls">
-                </div>
+                    <div class="upload-section">
+                        <label><i data-lucide="clock"></i> 1. RUNNING HOURS REPORT</label>
+                        <input type="file" id="rhFile" accept=".pdf, .xlsx, .xls">
+                    </div>
 
-                <div class="upload-section req">
-                    <label><i data-lucide="file-text"></i> 2. REQUISITION / PO PDF</label>
-                    <input type="file" id="reqFile" accept="application/pdf" required>
-                </div>
+                    <div class="upload-section">
+                        <label><i data-lucide="file-text"></i> 2. REQUISITION / PO PDF</label>
+                        <input type="file" id="reqFile" accept=".pdf" required>
+                    </div>
 
-                <button type="submit" id="submitBtn" class="btn-submit">
-                    <i data-lucide="send"></i> START AUDIT PROCESS
-                </button>
-            </form>
-
-            <div id="errorBox" class="status-box"></div>
+                    <button type="submit" id="submitBtn" class="btn-submit">
+                        <i data-lucide="send"></i> START AUDIT PROCESS
+                    </button>
+                    <div id="errorBox" style="margin-top:15px; color:red; font-size:12px; display:none;"></div>
+                </form>
+            </div>
         </div>
 
-        <div class="form-column" id="pollingCard" style="display: none;">
-            <div class="loader"></div>
-            <h2 style="color: var(--primary); margin-top: 0; font-family:'Poppins', sans-serif;">AI Sedang Memproses...</h2>
-            <p style="font-size: 14px; color: #555;">Dokumen berhasil diunggah. AI saat ini sedang membedah Manual Book dan menghitung kalkulasi limit.</p>
-            <p id="timerText" style="font-size: 12px; color: #888; font-weight: bold;">Menunggu respon dari server... (Estimasi: 2-3 Menit)</p>
-        </div>
+        <div class="right-panel">
+            
+            <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 60px 20px;">
+                <div class="loader"></div>
+                <h2 style="color: var(--primary); font-family:'Poppins', sans-serif;">Sistem AI Sedang Bekerja...</h2>
+                <p style="color: #555; font-size: 14px;">Dokumen PDF sedang dianalisis. AI sedang mengekstrak data buku manual dari Qdrant.</p>
+                <p id="timerText" style="color: #888; font-size: 12px; font-weight: bold; margin-top: 15px;">Menunggu balasan database... (Estimasi 2-3 Menit)</p>
+            </div>
 
-        <div class="report-column" id="reportPanel">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:2px solid var(--border-color); padding-bottom:15px;">
-                <h3 id="reportTitle" style="margin:0; color:var(--primary); font-family:'Poppins', sans-serif;">
-                    <i data-lucide="table"></i> Audit Results
+            <div id="reportPanel" class="card-box" style="display: none; padding: 20px;">
+                <h3 id="reportTitle" style="margin: 0 0 15px 0; color: var(--primary); font-family:'Poppins', sans-serif; display: flex; align-items: center; gap:8px;">
+                    <i data-lucide="ship"></i> Hasil Audit
                 </h3>
-                <button type="button" onclick="location.reload()" style="background:#f4f6f9; border:1px solid #ccc; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; font-size: 12px;">Audit Kapal Lain</button>
+                <div class="table-responsive">
+                    <table id="auditTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>ROB</th>
+                                <th>Limit</th>
+                                <th>Target Cyl</th>
+                                <th>AI Recommendation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table id="auditTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 30px;">No</th>
-                            <th>Description</th>
-                            <th>Qty</th>
-                            <th>ROB</th>
-                            <th>Limit</th>
-                            <th>Target Cyl</th>
-                            <th>AI Recommendation</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
-            </div>
+
         </div>
     </div>
 
     <script>
         lucide.createIcons();
 
-        // ==========================================
-        // KONFIGURASI URL WEBHOOK N8N
-        // ==========================================
-        // 1. URL untuk upload file (Workflow Utama)
-        const N8N_UPLOAD_URL = "https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de";
-        
-        // 2. URL untuk ngecek status hasil (Workflow Cek Status Baru)
-        const N8N_CHECK_STATUS_URL = "https://n8.waruna-group.co.id/webhook/check-audit-status"; 
+        // GANTI DENGAN URL LU SENDIRI YAK BRO
+        const N8N_UPLOAD_URL = "[https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de](https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de)";
+        const N8N_CHECK_STATUS_URL = "[https://n8.waruna-group.co.id/webhook/check-audit-status](https://n8.waruna-group.co.id/webhook/check-audit-status)"; 
 
         let pollingInterval;
 
-        // Fungsi Rendering Tabel
         function renderTable(auditData) {
             const reportPanel = document.getElementById('reportPanel');
             const tableBody = document.getElementById('tableBody');
             
             document.getElementById('pollingCard').style.display = 'none';
             reportPanel.style.display = 'block';
+            tableBody.innerHTML = '';
             
             let vessel = auditData[0].Nama_Kapal || "Unknown Vessel";
             let engine = auditData[0].Tipe_Mesin || "ME";
-            document.getElementById('reportTitle').innerHTML = `<i data-lucide="ship"></i> ${vessel} - ${engine}`;
+            document.getElementById('reportTitle').innerHTML = `<i data-lucide="ship"></i> Kapal: ${vessel} | Mesin: ${engine}`;
             
             let groupedData = {};
             auditData.forEach(item => {
@@ -182,14 +154,28 @@
             for (let sub in groupedData) {
                 let subTr = document.createElement('tr');
                 subTr.className = 'subsystem-header';
-                subTr.innerHTML = `<td colspan="7">SUB-SYSTEM: ${sub}</td>`;
+                subTr.innerHTML = `<td colspan="7">${sub}</td>`;
                 tableBody.appendChild(subTr);
 
                 groupedData[sub].forEach(item => {
                     let aiStatus = item.AI_Status || "";
                     let isMandatory = (aiStatus !== "NON-CRITICAL");
                     let statusClass = aiStatus === "REDUCED" ? "badge-pangkas" : (aiStatus === "UNDER-ORDER" ? "badge-kurang" : "badge-aman");
-                    let bullets = (item.Rekomendasi_AI || "").split("|").map(b => `• ${b.trim()}`).join("<br>");
+                    
+                    // Pisahkan kutipan buku dan peluru rekomendasi
+                    let rawRekomendasi = item.Rekomendasi_AI || "";
+                    let bookQuote = "";
+                    let bulletsText = rawRekomendasi;
+
+                    if (rawRekomendasi.includes("|")) {
+                        let parts = rawRekomendasi.split("|");
+                        if (parts[0].includes("Manual:")) {
+                            bookQuote = `<div class="manual-ref-text">${parts[0].trim()}</div>`;
+                            bulletsText = parts.slice(1).join("|");
+                        }
+                    }
+
+                    let bullets = bulletsText.split("|").map(b => `<div style="margin-top:2px;">• ${b.trim()}</div>`).join("");
 
                     let tr = document.createElement('tr');
                     tr.innerHTML = `
@@ -204,9 +190,10 @@
                         <td>${item.Max_Limit_Jam}</td>
                         <td style="color:#c0392b; font-weight:600;">${item.Target_Cylinder}</td>
                         <td>
-                            ${item.Warning_Text ? `<div style="color:red;font-weight:bold;font-size:10px;">${item.Warning_Text}</div>` : ''}
-                            <span class="badge ${statusClass}">${aiStatus}</span>
-                            <div style="font-size:10px; margin-top:5px; line-height:1.4;">${isMandatory ? bullets : 'Non-critical item.'}</div>
+                            ${item.Warning_Text ? `<div style="color:red;font-weight:bold;font-size:10px;margin-bottom:4px;">${item.Warning_Text}</div>` : ''}
+                            ${bookQuote}
+                            <div><span class="badge ${statusClass}">${aiStatus}</span></div>
+                            <div style="font-size:10px; margin-top:5px; line-height:1.4; color:#555;">${isMandatory ? bullets : 'Non-critical item.'}</div>
                         </td>
                     `;
                     tableBody.appendChild(tr);
@@ -215,22 +202,19 @@
             lucide.createIcons();
         }
 
-        // Fungsi Polling (Tanya Database tiap 10 detik)
         async function checkJobStatus(jobId) {
             try {
                 let response = await fetch(`${N8N_CHECK_STATUS_URL}?job_id=${jobId}`);
                 let result = await response.json();
 
                 if (result.status === "completed" && result.data && result.data.length > 0) {
-                    clearInterval(pollingInterval); // Hentikan timer
-                    renderTable(result.data); // Gambar tabelnya
+                    clearInterval(pollingInterval); 
+                    renderTable(result.data); 
                 } else {
-                    // Masih jalan, update teks
-                    let timerText = document.getElementById('timerText');
-                    timerText.innerText = "Sistem masih berhitung... " + new Date().toLocaleTimeString();
+                    document.getElementById('timerText').innerText = "Database masih memproses data... " + new Date().toLocaleTimeString();
                 }
             } catch (e) {
-                console.log("Menunggu server...", e);
+                console.log("Wait...", e);
             }
         }
 
@@ -244,8 +228,9 @@
             const jobId = `JOB-${Date.now()}`;
 
             btn.disabled = true;
-            btn.innerHTML = `<div class="loader-small"></div> Mengirim...`;
+            btn.innerHTML = `<div class="loader-small"></div> MENGIRIM DOKUMEN...`;
             errorBox.style.display = 'none';
+            document.getElementById('reportPanel').style.display = 'none';
 
             const formData = new FormData();
             formData.append('engine_type', document.getElementById('engineType').value);
@@ -255,23 +240,20 @@
 
             try {
                 const response = await fetch(N8N_UPLOAD_URL, { method: 'POST', body: formData });
+                if (!response.ok) throw new Error("Gagal nge-hit server utama n8n.");
 
-                if (!response.ok) throw new Error("Gagal terhubung ke server n8n.");
-
-                // Sembunyikan Form, Tampilkan Loading Polling
-                document.getElementById('mainFormContainer').style.display = 'none';
                 document.getElementById('pollingCard').style.display = 'block';
+                btn.innerHTML = `<i data-lucide="check"></i> BERHASIL DIKIRIM`;
                 
-                // Mulai interogasi n8n setiap 10 detik
                 pollingInterval = setInterval(() => checkJobStatus(jobId), 10000);
 
             } catch (err) {
                 errorBox.style.display = 'block';
-                errorBox.innerHTML = `<strong>Error:</strong> ${err.message}`;
+                errorBox.innerText = `Error: ${err.message}`;
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="send"></i> START AUDIT PROCESS`;
-                lucide.createIcons();
             }
+            lucide.createIcons();
         });
     </script>
 </body>
