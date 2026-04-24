@@ -7,6 +7,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         :root {
@@ -19,20 +20,10 @@
             color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh;
         }
         
-        /* NAVIGATION TABS */
-        .nav-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
-        .tab-btn { background: rgba(255,255,255,0.6); border: 2px solid var(--border-color); padding: 12px 24px; border-radius: 30px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; color: var(--text-muted); cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
-        .tab-btn:hover { background: #fff; border-color: #d2c5d6; }
-        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-        .tab-content { display: none; animation: fadeIn 0.4s; }
-        .tab-content.active { display: block; }
-
-        /* LAYOUTS */
         .main-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
-        .left-panel { flex: 1; min-width: 350px; max-width: 450px; position: sticky; top: 30px; }
-        .right-panel { flex: 2; min-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+        .left-panel { flex: 1; min-width: 350px; max-width: 400px; position: sticky; top: 30px; }
+        .right-panel { flex: 2; min-width: 700px; display: flex; flex-direction: column; gap: 20px; }
         .card-box { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); }
-        .single-center { max-width: 600px; margin: 0 auto; }
 
         .header { text-align: center; margin-bottom: 25px; }
         .header h2 { color: var(--primary); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -44,19 +35,15 @@
         
         button.btn-submit { background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
         button.btn-submit:disabled { background-color: #a395a8; cursor: not-allowed; }
-        .status-box { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 12px; font-weight: bold; display: none;}
-        .status-success { background: #e9f7ef; color: var(--success); border-left: 4px solid var(--success); display: block;}
 
-        /* POLLING & TABLE */
         .loader { border: 3px solid rgba(78, 43, 92, 0.3); border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
         .loader-small { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; font-size: 12px; }
         th { background-color: #fbf9fc; padding: 14px 12px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--border-color); font-family: 'Poppins', sans-serif;}
-        td { padding: 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        td { padding: 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
         .subsystem-header { background-color: #f0ebf2 !important; font-weight: 600; color: var(--primary); font-size: 13px; padding: 10px 15px !important; border-top: 2px solid #d2c5d6;}
         
         .badge { padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; }
@@ -64,68 +51,67 @@
         .badge-pangkas { background-color: #fadbd8; color: #cb4335; border: 1px solid #f5b7b1; }
         .badge-kurang { background-color: #fcf3cf; color: #d4ac0d; border: 1px solid #f9e79f; }
         .badge-type-mandatory { font-size: 9px; background: #f0ebf2; color: var(--primary); padding: 2px 5px; border-radius: 3px; border: 1px solid #d2c5d6; font-weight: 700; display: inline-block; margin-top: 4px;}
-        
-        /* STYLE MANUAL BOOK QUOTE */
-        .manual-ref-text { display: inline-block; font-size: 10px; background: #fff8e1; border-left: 3px solid #f1c40f; padding: 5px 8px; color: #886504; margin-bottom: 6px; border-radius: 0 4px 4px 0; font-style: italic;}
+
+        /* Checkbox Styling */
+        .verif-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('auditTab')"><i data-lucide="shield-check"></i> SPB Audit</button>
-        <button class="tab-btn" onclick="switchTab('ingestTab')"><i data-lucide="database"></i> Qdrant Ingest</button>
-    </div>
-
-    <div id="auditTab" class="tab-content active">
-        <div class="main-container">
-            <div class="left-panel">
-                <div class="card-box">
-                    <div class="header">
-                        <h2><i data-lucide="shield-check"></i> SPB Audit</h2>
-                        <p style="color: #666; font-size: 12px;">Engine Audit System (Background Mode)</p>
-                    </div>
-                    
-                    <form id="auditForm">
-                        <label>1. KATEGORI MESIN (Sistem)</label>
-                        <select id="engineType">
-                            <option value="ME">Main Engine (ME)</option>
-                            <option value="AE">Aux Engine (AE)</option>
-                        </select>
-
-                        <label>2. MEREK MESIN SPESIFIK (Filter Qdrant)</label>
-                        <input type="text" id="engineBrand" placeholder="Contoh: ME AKASAKA MITSUBISHI 6 UEC 33LS II" required>
-
-                        <div class="upload-section">
-                            <label><i data-lucide="clock"></i> 3. RUNNING HOURS REPORT</label>
-                            <input type="file" id="rhFile" accept=".pdf, .xlsx, .xls">
-                        </div>
-
-                        <div class="upload-section">
-                            <label><i data-lucide="file-text"></i> 4. REQUISITION / PO PDF</label>
-                            <input type="file" id="reqFile" accept=".pdf" required>
-                        </div>
-
-                        <button type="submit" id="submitBtn" class="btn-submit">
-                            <i data-lucide="send"></i> START AUDIT PROCESS
-                        </button>
-                        <div id="errorBox" style="margin-top:15px; color:red; font-size:12px; display:none; font-weight:bold;"></div>
-                    </form>
+    <div class="main-container">
+        <div class="left-panel">
+            <div class="card-box">
+                <div class="header">
+                    <h2><i data-lucide="shield-check"></i> SPB Audit</h2>
+                    <p style="color: #666; font-size: 12px;">Engine Audit System (Presentation Mode)</p>
                 </div>
+                
+                <form id="auditForm">
+                    <label>1. KATEGORI MESIN (Sistem)</label>
+                    <select id="engineType">
+                        <option value="ME">Main Engine (ME)</option>
+                        <option value="AE">Aux Engine (AE)</option>
+                    </select>
+
+                    <div style="display: none;">
+                        <input type="text" id="engineBrand" value="SKIP_PRESENTATION">
+                    </div>
+
+                    <div class="upload-section">
+                        <label><i data-lucide="clock"></i> 2. RUNNING HOURS REPORT</label>
+                        <input type="file" id="rhFile" accept=".pdf, .xlsx, .xls">
+                    </div>
+
+                    <div class="upload-section">
+                        <label><i data-lucide="file-text"></i> 3. REQUISITION / PO PDF</label>
+                        <input type="file" id="reqFile" accept=".pdf" required>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn-submit">
+                        <i data-lucide="send"></i> START AUDIT PROCESS
+                    </button>
+                    <div id="errorBox" style="margin-top:15px; color:red; font-size:12px; display:none; font-weight:bold;"></div>
+                </form>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 60px 20px;">
+                <div class="loader"></div>
+                <h2 style="color: var(--primary); font-family:'Poppins', sans-serif;">Sistem AI Sedang Bekerja...</h2>
+                <p style="color: #555; font-size: 14px;">Dokumen PDF sedang dianalisis. AI mengekstrak data histori dan rekomendasi batas jam kerja.</p>
+                <p id="timerText" style="color: #888; font-size: 12px; font-weight: bold; margin-top: 15px;">Menunggu balasan database... (Estimasi 2-3 Menit)</p>
             </div>
 
-            <div class="right-panel">
-                <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 60px 20px;">
-                    <div class="loader"></div>
-                    <h2 style="color: var(--primary); font-family:'Poppins', sans-serif;">Sistem AI Sedang Bekerja...</h2>
-                    <p style="color: #555; font-size: 14px;">Dokumen PDF sedang dianalisis. AI mengekstrak data buku manual dari Qdrant.</p>
-                    <p id="timerText" style="color: #888; font-size: 12px; font-weight: bold; margin-top: 15px;">Menunggu balasan database... (Estimasi 2-3 Menit)</p>
-                </div>
-
-                <div id="reportPanel" class="card-box" style="display: none; padding: 20px;">
+            <div id="reportPanel" class="card-box" style="display: none; padding: 20px;">
+                <div id="printableArea">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px;">
                         <h3 id="reportTitle" style="margin: 0; color: var(--primary); font-family:'Poppins', sans-serif; display: flex; align-items: center; gap:8px;">
                             <i data-lucide="ship"></i> Hasil Audit
                         </h3>
+                        <button id="btnDownload" type="button" onclick="downloadPDF()" style="background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="file-down" style="width: 16px;"></i> Download PDF
+                        </button>
                     </div>
                     <div class="table-responsive">
                         <table id="auditTable">
@@ -138,6 +124,7 @@
                                     <th>Limit</th>
                                     <th>Target Cyl</th>
                                     <th>AI Recommendation</th>
+                                    <th style="text-align: center;">Verifikasi</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody"></tbody>
@@ -148,128 +135,17 @@
         </div>
     </div>
 
-    <div id="ingestTab" class="tab-content">
-        <div class="card-box single-center">
-            <div class="header">
-                <h2><i data-lucide="database"></i> Upload Manual Book</h2>
-                <p style="color: #666; font-size: 12px;">Suntik teks buku PDF ke memori Qdrant Vector DB</p>
-            </div>
-            <form id="ingestForm">
-                <label>Tipe Mesin (Sesuai dengan Excel Mandatory)</label>
-                <input type="text" id="engineLabelIngest" placeholder="Contoh: ME AKASAKA MITSUBISHI 6 UEC 33LS II" required>
-                
-                <div class="upload-section">
-                    <label><i data-lucide="book"></i> Pilih File PDF Manual Book</label>
-                    <input type="file" id="bookFile" accept="application/pdf" required>
-                </div>
-                
-                <button type="submit" id="btnIngest" class="btn-submit">
-                    <i data-lucide="upload"></i> INGEST KE QDRANT
-                </button>
-                <div id="ingestResultBox" class="status-box"></div>
-            </form>
-
-            <div style="margin-top: 35px; border-top: 1px solid #e8dee8; padding-top: 25px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h4 style="margin: 0; color: var(--primary); font-family: 'Poppins', sans-serif; display:flex; align-items:center; gap:6px;"><i data-lucide="history" style="width:16px;"></i> History Mesin</h4>
-                    <button type="button" onclick="loadHistory()" style="background: #fbf9fc; border: 1px solid var(--primary); color: var(--primary); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; transition: 0.2s; display:flex; align-items:center; gap:4px;">
-                        <i data-lucide="refresh-cw" style="width: 12px;"></i> REFRESH
-                    </button>
-                </div>
-                <div id="historyList" style="margin-top: 15px; font-size: 12px; color: #555; max-height: 250px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; padding: 10px;">
-                    Belum ada data ditarik. Klik Refresh untuk melihat database.
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         lucide.createIcons();
 
-        // ==========================================
-        // TABS LOGIC
-        // ==========================================
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        // ==========================================
-        // URL N8N WEBHOOK LU
-        // ==========================================
         const N8N_UPLOAD_URL = "https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de";
         const N8N_CHECK_STATUS_URL = "https://n8.waruna-group.co.id/webhook/check-audit-status"; 
-        const INGEST_WEBHOOK_URL = "https://n8.waruna-group.co.id/webhook/ingest-manual-book-qdrant";
-        const GET_HISTORY_URL = "https://n8.waruna-group.co.id/webhook/get-history-manual"; 
 
-        // ==========================================
-        // LOGIC INGEST & HISTORY
-        // ==========================================
-        document.getElementById('ingestForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnIngest');
-            const resultBox = document.getElementById('ingestResultBox');
-            btn.disabled = true;
-            btn.innerHTML = `<div class="loader-small"></div> Mengirim...`;
-            resultBox.style.display = 'none';
-
-            const formData = new FormData();
-            formData.append('data', document.getElementById('bookFile').files[0]); 
-            formData.append('engine_type', document.getElementById('engineLabelIngest').value.trim().toUpperCase());
-
-            try {
-                let res = await fetch(INGEST_WEBHOOK_URL, { method: 'POST', body: formData });
-                if (!res.ok) throw new Error("Gagal terhubung ke N8N");
-                resultBox.className = 'status-box status-success';
-                resultBox.innerHTML = `<i data-lucide="check-circle"></i> File berhasil diproses ke Qdrant.`;
-                loadHistory(); 
-            } catch (err) {
-                resultBox.className = 'status-box';
-                resultBox.style.color = 'red';
-                resultBox.style.display = 'block';
-                resultBox.innerHTML = `Error: ${err.message}`;
-            }
-            btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="upload"></i> INGEST KE QDRANT`;
-            lucide.createIcons();
-        });
-
-        async function loadHistory() {
-            const historyBox = document.getElementById('historyList');
-            historyBox.innerHTML = `<div class="loader-small" style="border-top-color:var(--primary); margin: 10px auto;"></div>`;
-            try {
-                let res = await fetch(GET_HISTORY_URL);
-                let result = await res.json();
-                
-                if(result.data && result.data.length > 0) {
-                    let html = '<table style="width:100%; border-collapse:collapse; text-align:left;"><tr><th style="padding:8px; border-bottom:2px solid #ccc; position:sticky; top:0; background:#fff; font-family:\'Poppins\', sans-serif; color:var(--primary);">Tanggal</th><th style="padding:8px; border-bottom:2px solid #ccc; position:sticky; top:0; background:#fff; font-family:\'Poppins\', sans-serif; color:var(--primary);">Tipe Mesin</th><th style="padding:8px; border-bottom:2px solid #ccc; position:sticky; top:0; background:#fff; font-family:\'Poppins\', sans-serif; color:var(--primary);">Nama File</th></tr>';
-                    
-                    result.data.reverse().forEach(row => {
-                        html += `<tr>
-                            <td style="padding:8px; border-bottom:1px solid #eee; color:#888;">${row.Tanggal || '-'}</td>
-                            <td style="padding:8px; border-bottom:1px solid #eee; font-weight:bold; color:var(--primary);">${row.Tipe_Mesin || '-'}</td>
-                            <td style="padding:8px; border-bottom:1px solid #eee;">${row.Nama_File || '-'}</td>
-                        </tr>`;
-                    });
-                    html += '</table>';
-                    historyBox.innerHTML = html;
-                } else {
-                    historyBox.innerHTML = '<div style="text-align:center; padding:10px;">Belum ada buku manual yang di-ingest ke sistem.</div>';
-                }
-            } catch (err) {
-                historyBox.innerHTML = '<span style="color:red; font-weight:bold;">Gagal menarik data history. Cek koneksi N8N.</span>';
-            }
-        }
-
-        // ==========================================
-        // LOGIC AUDIT (RENDER TABEL & SMART POLLING)
-        // ==========================================
         let pollingInterval;
         let previousRowCount = 0; 
         let stableCount = 0;      
 
+        // FUNGSI RENDER TABEL & CHECKLIST
         function renderTable(auditData) {
             const reportPanel = document.getElementById('reportPanel');
             const tableBody = document.getElementById('tableBody');
@@ -280,7 +156,7 @@
             
             let vessel = auditData[0].Nama_Kapal || "Unknown Vessel";
             let engine = auditData[0].Tipe_Mesin || "ME";
-            document.getElementById('reportTitle').innerHTML = `<i data-lucide="ship"></i> Kapal: ${vessel} | Mesin: ${engine}`;
+            document.getElementById('reportTitle').innerHTML = `<i data-lucide="ship"></i> ${vessel} — ${engine}`;
             
             let groupedData = {};
             auditData.forEach(item => {
@@ -292,7 +168,7 @@
             for (let sub in groupedData) {
                 let subTr = document.createElement('tr');
                 subTr.className = 'subsystem-header';
-                subTr.innerHTML = `<td colspan="7">${sub}</td>`;
+                subTr.innerHTML = `<td colspan="8">SUB-SYSTEM: ${sub}</td>`;
                 tableBody.appendChild(subTr);
 
                 groupedData[sub].forEach(item => {
@@ -301,19 +177,20 @@
                     let statusClass = aiStatus === "REDUCED" ? "badge-pangkas" : (aiStatus === "UNDER-ORDER" ? "badge-kurang" : "badge-aman");
                     
                     let rawRekomendasi = item.Rekomendasi_AI || "";
-                    let bookQuote = "";
                     let bulletsText = rawRekomendasi;
 
-                    // FIX PARSING KUTIPAN BUKU MANUAL
+                    // Mengabaikan teks [📖 Hal...] jika AI n8n tanpa sengaja mengirimnya
                     if (rawRekomendasi.includes("|")) {
                         let parts = rawRekomendasi.split("|");
                         if (parts[0].includes("📖") || parts[0].includes("Hal.") || parts[0].includes("Manual")) {
-                            bookQuote = `<div class="manual-ref-text">${parts[0].trim()}</div>`;
                             bulletsText = parts.slice(1).join("|");
                         }
                     }
 
                     let bullets = bulletsText.split("|").map(b => `<div style="margin-top:2px;">• ${b.trim()}</div>`).join("");
+                    
+                    // Logika Auto-Checklist: Centang otomatis jika APPROVED, biarkan kosong jika REDUCED
+                    let isChecked = (aiStatus === "APPROVED") ? "checked" : "";
 
                     let tr = document.createElement('tr');
                     tr.innerHTML = `
@@ -329,15 +206,37 @@
                         <td style="color:#c0392b; font-weight:600;">${item.Target_Cylinder}</td>
                         <td>
                             ${item.Warning_Text ? `<div style="color:red;font-weight:bold;font-size:10px;margin-bottom:4px;">${item.Warning_Text}</div>` : ''}
-                            ${bookQuote}
                             <div><span class="badge ${statusClass}">${aiStatus}</span></div>
                             <div style="font-size:10px; margin-top:5px; line-height:1.4; color:#555;">${isMandatory ? bullets : 'Non-critical item.'}</div>
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="verif-checkbox" ${isChecked}>
                         </td>
                     `;
                     tableBody.appendChild(tr);
                 });
             }
             lucide.createIcons();
+        }
+
+        // FUNGSI DOWNLOAD PDF
+        function downloadPDF() {
+            const btn = document.getElementById('btnDownload');
+            btn.style.display = 'none'; // Sembunyikan tombol saat di print biar rapi
+
+            const element = document.getElementById('printableArea');
+            const opt = {
+                margin:       0.4,
+                filename:     'SPB_Audit_Report.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+
+            // Generate PDF lalu munculkan tombolnya lagi
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.style.display = 'flex'; 
+            });
         }
 
         async function checkJobStatus(jobId) {
@@ -359,7 +258,6 @@
                     let currentRowCount = auditData.length;
                     document.getElementById('timerText').innerText = `Sedang menarik data ke layar... (${currentRowCount} barang masuk)`;
 
-                    // Logika Anti-Balapan
                     if (currentRowCount > previousRowCount) {
                         previousRowCount = currentRowCount;
                         stableCount = 0; 
@@ -385,7 +283,6 @@
             const errorBox = document.getElementById('errorBox');
             const jobId = `JOB-${Date.now()}`;
 
-            // Reset state
             previousRowCount = 0;
             stableCount = 0;
 
@@ -396,7 +293,7 @@
 
             const formData = new FormData();
             formData.append('engine_type', document.getElementById('engineType').value);
-            formData.append('engine_brand', document.getElementById('engineBrand').value.trim().toUpperCase()); // UNTUK FILTER QDRANT
+            formData.append('engine_brand', document.getElementById('engineBrand').value); // Nilainya "SKIP_PRESENTATION"
             formData.append('job_id', jobId);
             if (document.getElementById('rhFile').files[0]) formData.append('RH_Report', document.getElementById('rhFile').files[0]);
             formData.append('Requisition_Report', document.getElementById('reqFile').files[0]);
@@ -408,7 +305,6 @@
                 document.getElementById('pollingCard').style.display = 'block';
                 btn.innerHTML = `<i data-lucide="check"></i> BERHASIL DIKIRIM`;
                 
-                // Interval 4 detik
                 pollingInterval = setInterval(() => checkJobStatus(jobId), 4000);
 
             } catch (err) {
