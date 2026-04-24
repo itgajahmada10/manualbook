@@ -219,23 +219,63 @@
             lucide.createIcons();
         }
 
-        // FUNGSI DOWNLOAD PDF
+        // FUNGSI DOWNLOAD PDF (HANYA YANG DICENTANG)
         function downloadPDF() {
             const btn = document.getElementById('btnDownload');
-            btn.style.display = 'none'; // Sembunyikan tombol saat di print biar rapi
+            btn.style.display = 'none'; // Sembunyikan tombol saat di print
 
+            // 1. Kumpulkan baris yang tidak dicentang dan sembunyikan
+            const checkboxes = document.querySelectorAll('.verif-checkbox');
+            const rowsToHide = [];
+            checkboxes.forEach(cb => {
+                if (!cb.checked) {
+                    const tr = cb.closest('tr');
+                    tr.style.display = 'none'; // Hilangkan dari layar sementara
+                    rowsToHide.push(tr);
+                }
+            });
+
+            // 2. Evaluasi Header Sub-System (Sembunyikan kalau kosong melompong)
+            const tableBody = document.getElementById('tableBody');
+            const allRows = Array.from(tableBody.children);
+            let currentHeader = null;
+            let visibleItemsCount = 0;
+            const headersToHide = [];
+
+            allRows.forEach(row => {
+                if (row.classList.contains('subsystem-header')) {
+                    // Cek header sebelumnya, kalau tidak ada item di bawahnya, sembunyikan
+                    if (currentHeader && visibleItemsCount === 0) {
+                        currentHeader.style.display = 'none';
+                        headersToHide.push(currentHeader);
+                    }
+                    currentHeader = row;
+                    visibleItemsCount = 0; // Reset ke 0 untuk grup yang baru
+                } else {
+                    if (row.style.display !== 'none') visibleItemsCount++;
+                }
+            });
+            // Cek header grup paling terakhir
+            if (currentHeader && visibleItemsCount === 0) {
+                currentHeader.style.display = 'none';
+                headersToHide.push(currentHeader);
+            }
+
+            // 3. Eksekusi Print PDF
             const element = document.getElementById('printableArea');
             const opt = {
                 margin:       0.4,
-                filename:     'SPB_Audit_Report.pdf',
+                filename:     'SPB_Verified_Report.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2 },
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
             };
 
-            // Generate PDF lalu munculkan tombolnya lagi
+            // 4. Kembalikan tabel seperti semula setelah PDF selesai dibuat
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.style.display = 'flex'; 
+                rowsToHide.forEach(tr => tr.style.display = ''); // Tampilkan ulang
+                headersToHide.forEach(th => th.style.display = ''); // Tampilkan ulang
             });
         }
 
