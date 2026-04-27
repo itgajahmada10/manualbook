@@ -52,6 +52,7 @@
         .badge-kurang { background-color: #fcf3cf; color: #d4ac0d; border: 1px solid #f9e79f; }
         .badge-type-mandatory { font-size: 9px; background: #f0ebf2; color: var(--primary); padding: 2px 5px; border-radius: 3px; border: 1px solid #d2c5d6; font-weight: 700; display: inline-block; margin-top: 4px;}
 
+        /* Checkbox Styling */
         .verif-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary); }
     </style>
 </head>
@@ -144,6 +145,7 @@
         let previousRowCount = 0; 
         let stableCount = 0;      
 
+        // FUNGSI RENDER TABEL & CHECKLIST
         function renderTable(auditData) {
             const reportPanel = document.getElementById('reportPanel');
             const tableBody = document.getElementById('tableBody');
@@ -177,6 +179,7 @@
                     let rawRekomendasi = item.Rekomendasi_AI || "";
                     let bulletsText = rawRekomendasi;
 
+                    // Mengabaikan teks [📖 Hal...] jika AI n8n tanpa sengaja mengirimnya
                     if (rawRekomendasi.includes("|")) {
                         let parts = rawRekomendasi.split("|");
                         if (parts[0].includes("📖") || parts[0].includes("Hal.") || parts[0].includes("Manual")) {
@@ -186,9 +189,21 @@
 
                     let bullets = bulletsText.split("|").map(b => `<div style="margin-top:2px;">• ${b.trim()}</div>`).join("");
                     
+                    // Logika Auto-Checklist: Centang otomatis jika APPROVED biasa atau APPROVED RESTOCK
                     let isChecked = (aiStatus === "APPROVED" || aiStatus === "APPROVED (RESTOCK)") ? "checked" : "";
 
-                    // --- KOTAK INFO MASTER ---
+                    // --- LOGIKA LINK PART NUMBER (BUKA PDF) ---
+                    // GANTI LINK DI BAWAH INI DENGAN LINK HOSTING PDF MANUAL BOOK LU NANTI
+                    let urlManualBook = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"; 
+                    
+                    let pnDisplay = "";
+                    if (item.No_Part !== "UNKNOWN" && item.No_Part !== "-") {
+                        pnDisplay = `<a href="${urlManualBook}#search=${item.No_Part}" target="_blank" style="color: #2980b9; text-decoration: underline; font-weight: 700; font-size: 10px; cursor: pointer;" title="Cari di Manual Book">PN: ${item.No_Part} ↗</a>`;
+                    } else {
+                        pnDisplay = `PN: ${item.No_Part}`;
+                    }
+
+                    // --- LOGIKA KOTAK INFO MASTER ---
                     let masterBadge = "";
                     if (isMandatory && item.Nama_Master) {
                         masterBadge = `
@@ -203,7 +218,7 @@
                         <td style="color:#999;">#${item.No_Item_PDF || "-"}</td>
                         <td>
                             <div style="font-weight:600; color:var(--primary);">${item.Nama_Barang}</div>
-                            <div style="font-size:10px;color:#888;">PN: ${item.No_Part}</div>
+                            <div style="margin-top: 2px; margin-bottom: 3px;">${pnDisplay}</div>
                             ${isMandatory ? '<span class="badge-type-mandatory">MANDATORY</span><br/>' : ''}
                             ${masterBadge}
                         </td>
@@ -226,20 +241,23 @@
             lucide.createIcons();
         }
 
+        // FUNGSI DOWNLOAD PDF (HANYA YANG DICENTANG)
         function downloadPDF() {
             const btn = document.getElementById('btnDownload');
-            btn.style.display = 'none';
+            btn.style.display = 'none'; // Sembunyikan tombol saat di print
 
+            // 1. Kumpulkan baris yang tidak dicentang dan sembunyikan
             const checkboxes = document.querySelectorAll('.verif-checkbox');
             const rowsToHide = [];
             checkboxes.forEach(cb => {
                 if (!cb.checked) {
                     const tr = cb.closest('tr');
-                    tr.style.display = 'none'; 
+                    tr.style.display = 'none'; // Hilangkan dari layar sementara
                     rowsToHide.push(tr);
                 }
             });
 
+            // 2. Evaluasi Header Sub-System (Sembunyikan kalau kosong melompong)
             const tableBody = document.getElementById('tableBody');
             const allRows = Array.from(tableBody.children);
             let currentHeader = null;
@@ -263,6 +281,7 @@
                 headersToHide.push(currentHeader);
             }
 
+            // 3. Eksekusi Print PDF
             const element = document.getElementById('printableArea');
             const opt = {
                 margin:       0.4,
@@ -272,6 +291,7 @@
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
             };
 
+            // 4. Kembalikan tabel seperti semula setelah PDF selesai dibuat
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.style.display = 'flex'; 
                 rowsToHide.forEach(tr => tr.style.display = ''); 
