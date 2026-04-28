@@ -177,28 +177,23 @@
                     let statusClass = aiStatus.includes("REDUCED") ? "badge-pangkas" : (aiStatus === "UNDER-ORDER" ? "badge-kurang" : "badge-aman");
                     
                     let rawRekomendasi = item.Rekomendasi_AI || "";
-                    let bulletsText = rawRekomendasi;
-
-                    // Mengabaikan teks [📖 Hal...] jika AI n8n tanpa sengaja mengirimnya
-                    if (rawRekomendasi.includes("|")) {
-                        let parts = rawRekomendasi.split("|");
-                        if (parts[0].includes("📖") || parts[0].includes("Hal.") || parts[0].includes("Manual")) {
-                            bulletsText = parts.slice(1).join("|");
-                        }
-                    }
-
-                    let bullets = bulletsText.split("|").map(b => `<div style="margin-top:2px;">• ${b.trim()}</div>`).join("");
+                    // Memecah teks rekomendasi menjadi bullet points yang rapi
+                    let bullets = rawRekomendasi.split("|").map(b => `<div style="margin-top:2px;">• ${b.trim()}</div>`).join("");
                     
-                    // Logika Auto-Checklist: Centang otomatis jika APPROVED biasa atau APPROVED RESTOCK
+                    // Logika Auto-Checklist
                     let isChecked = (aiStatus === "APPROVED" || aiStatus === "APPROVED (RESTOCK)") ? "checked" : "";
 
-                    // --- LOGIKA LINK PART NUMBER (BUKA PDF) ---
-                    // GANTI LINK DI BAWAH INI DENGAN LINK HOSTING PDF MANUAL BOOK LU NANTI
-                    let urlManualBook = item.Link_Manual_Book;
+                    // --- LOGIKA LINK PART NUMBER & HALAMAN ---
+                    let urlManualBook = item.Link_Manual_Book || "#";
                     
+                    // Badge halaman Qdrant
+                    let pageBadge = (item.Page_No && item.Page_No !== "-" && item.Page_No !== "undefined")
+                        ? `<span style="color:#2980b9; font-weight:bold; font-size:10px; background:#ebf5fb; padding:2px 4px; border-radius:4px; margin-left:4px;">Hal. ${item.Page_No}</span>`
+                        : "";
+
                     let pnDisplay = "";
                     if (item.No_Part !== "UNKNOWN" && item.No_Part !== "-") {
-                        pnDisplay = `<a href="${urlManualBook}#search=${item.No_Part}" target="_blank" style="color: #2980b9; text-decoration: underline; font-weight: 700; font-size: 10px; cursor: pointer;" title="Cari di Manual Book">PN: ${item.No_Part} ↗</a>`;
+                        pnDisplay = `<a href="${urlManualBook}" target="_blank" style="color: #2980b9; text-decoration: underline; font-weight: 700; font-size: 11px; cursor: pointer;" title="Buka PDF">PN: ${item.No_Part} ↗</a>${pageBadge}`;
                     } else {
                         pnDisplay = `PN: ${item.No_Part}`;
                     }
@@ -241,23 +236,20 @@
             lucide.createIcons();
         }
 
-        // FUNGSI DOWNLOAD PDF (HANYA YANG DICENTANG)
         function downloadPDF() {
             const btn = document.getElementById('btnDownload');
-            btn.style.display = 'none'; // Sembunyikan tombol saat di print
+            btn.style.display = 'none';
 
-            // 1. Kumpulkan baris yang tidak dicentang dan sembunyikan
             const checkboxes = document.querySelectorAll('.verif-checkbox');
             const rowsToHide = [];
             checkboxes.forEach(cb => {
                 if (!cb.checked) {
                     const tr = cb.closest('tr');
-                    tr.style.display = 'none'; // Hilangkan dari layar sementara
+                    tr.style.display = 'none'; 
                     rowsToHide.push(tr);
                 }
             });
 
-            // 2. Evaluasi Header Sub-System (Sembunyikan kalau kosong melompong)
             const tableBody = document.getElementById('tableBody');
             const allRows = Array.from(tableBody.children);
             let currentHeader = null;
@@ -281,7 +273,6 @@
                 headersToHide.push(currentHeader);
             }
 
-            // 3. Eksekusi Print PDF
             const element = document.getElementById('printableArea');
             const opt = {
                 margin:       0.4,
@@ -291,7 +282,6 @@
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
             };
 
-            // 4. Kembalikan tabel seperti semula setelah PDF selesai dibuat
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.style.display = 'flex'; 
                 rowsToHide.forEach(tr => tr.style.display = ''); 
