@@ -77,6 +77,19 @@
         .cyl-highlight { color: #c0392b; font-weight: 700; background: #fdedec; padding: 4px 8px; border-radius: 4px; display: inline-block; font-size: 11px;}
 
         .v-checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
+
+        /* ==========================================
+           PRINT CSS FIX (ANTI-MUTILASI BARIS) 
+           ========================================== */
+        @media print {
+            tr { page-break-inside: avoid !important; }
+            td { page-break-inside: avoid !important; }
+            .subsystem-header { page-break-after: avoid !important; }
+            .table-responsive { overflow: visible !important; }
+            body { background: white !important; }
+        }
+        /* Fix khusus untuk library html2pdf */
+        tr { page-break-inside: avoid; }
     </style>
 </head>
 <body>
@@ -131,7 +144,7 @@
                             <div id="reportSubtitle" style="color: #666; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;"></div>
                         </div>
                         <button id="btnDownload" type="button" onclick="downloadPDF()" style="background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                            <i data-lucide="printer" style="width: 16px;"></i> Print Report
+                            <i data-lucide="printer" style="width: 16px;"></i> Print Report A4
                         </button>
                     </div>
 
@@ -277,16 +290,42 @@
             lucide.createIcons();
         }
 
+        // ==========================================
+        // FUNGSI PRINT A4 LENGKAP ANTI-POTONG BARIS
+        // ==========================================
         function downloadPDF() {
             const btn = document.getElementById('btnDownload');
-            btn.style.display = 'none';
+            btn.style.display = 'none'; // Sembunyikan tombol saat di print
+
             const checkboxes = document.querySelectorAll('.v-checkbox');
             const rowsToHide = [];
-            checkboxes.forEach(cb => { if (!cb.checked) { const tr = cb.closest('tr'); tr.style.display = 'none'; rowsToHide.push(tr); } });
+            
+            // Sembunyikan baris yang centangnya dihilangkan user
+            checkboxes.forEach(cb => { 
+                if (!cb.checked) { 
+                    const tr = cb.closest('tr'); 
+                    tr.style.display = 'none'; 
+                    rowsToHide.push(tr); 
+                } 
+            });
 
             const element = document.getElementById('printableArea');
-            const opt = { margin: 0.3, filename: 'Verification_Report.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } };
-            html2pdf().set(opt).from(element).save().then(() => { btn.style.display = 'flex'; rowsToHide.forEach(tr => tr.style.display = ''); });
+            
+            // PENGATURAN KERTAS A4 & ANTI-MUTILASI TABEL
+            const opt = { 
+                margin:       [0.4, 0.4, 0.4, 0.4], // Margin seragam atas,kiri,bawah,kanan (inchi)
+                filename:     'Verification_Report.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, windowWidth: 1200 }, // Kunci lebar supaya tidak penyok
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }, // Paksa ukuran A4 Landscape
+                pagebreak:    { avoid: 'tr' } // INSTRUKSI MUTLAK: Jangan potong elemen <tr> (Tabel Row)
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => { 
+                // Kembalikan tampilan setelah selesai print
+                btn.style.display = 'flex'; 
+                rowsToHide.forEach(tr => tr.style.display = ''); 
+            });
         }
 
         async function checkJobStatus(jobId) {
