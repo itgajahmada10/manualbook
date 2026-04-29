@@ -7,6 +7,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
@@ -191,32 +192,53 @@
         let stableCount = 0;      
 
         // =====================================
-        // ENGINE PDF.JS
+        // ENGINE PDF.JS (DENGAN NATIVE TEXT SEARCH)
         // =====================================
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
         let currentPdfDoc = null;
         let currentPdfUrl = "";
 
-        async function renderPdfPage(url, pageNumStr) {
+        async function renderPdfPage(url, searchTerm) {
             document.getElementById('pdfPlaceholder').style.display = 'none';
             document.getElementById('pdfCanvasContainer').style.display = 'flex';
             document.getElementById('pdfLoadingText').style.display = 'inline';
+            document.getElementById('pdfStatusBadge').innerText = `Mencari PN: ${searchTerm}...`;
             
-            const pageNum = parseInt(pageNumStr) || 1; // Default ke 1 kalau bukan angka
-
             try {
-                // Jangan download ulang PDF jika URL-nya sama (hemat kuota & waktu)
+                // Jangan download ulang PDF jika URL-nya sama (hemat memori)
                 if (url !== currentPdfUrl || !currentPdfDoc) {
                     const loadingTask = pdfjsLib.getDocument(url);
                     currentPdfDoc = await loadingTask.promise;
                     currentPdfUrl = url;
                 }
 
-                // Render Halaman
-                const page = await currentPdfDoc.getPage(pageNum);
-                const scale = 1.6; // Zoom level biar tulisan kelihatan jelas
-                const viewport = page.getViewport({ scale: scale });
+                let targetPageNum = 1; // Default ke halaman 1
+
+                // PENCARIAN TEKS ASLI DI DALAM PDF
+                if (searchTerm && searchTerm !== "UNKNOWN" && searchTerm !== "-") {
+                    let cleanSearch = searchTerm.replace(/\s+/g, ''); // Buang spasi
+                    
+                    // Loop seluruh halaman PDF
+                    for (let i = 1; i <= currentPdfDoc.numPages; i++) {
+                        let page = await currentPdfDoc.getPage(i);
+                        let textContent = await page.getTextContent();
+                        
+                        // Gabungkan semua teks di halaman tersebut
+                        let pageString = textContent.items.map(item => item.str).join('').replace(/\s+/g, '');
+                        
+                        // Jika Part Number ketemu di halaman ini, berhenti mencari!
+                        if (pageString.includes(cleanSearch)) {
+                            targetPageNum = i;
+                            break; 
+                        }
+                    }
+                }
+
+                // Render Halaman yang Ditemukan
+                const targetPage = await currentPdfDoc.getPage(targetPageNum);
+                const scale = 1.6; // Zoom level
+                const viewport = targetPage.getViewport({ scale: scale });
                 
                 const canvas = document.getElementById('pdfCanvas');
                 const context = canvas.getContext('2d');
@@ -224,10 +246,12 @@
                 canvas.width = viewport.width;
 
                 const renderContext = { canvasContext: context, viewport: viewport };
-                await page.render(renderContext).promise;
+                await targetPage.render(renderContext).promise;
 
                 document.getElementById('pdfLoadingText').style.display = 'none';
-                document.getElementById('pdfStatusBadge').innerText = `Menampilkan Hal: ${pageNum}`;
+                document.getElementById('pdfStatusBadge').innerText = `Ditemukan di Hal: ${targetPageNum}`;
+                document.getElementById('pdfStatusBadge').style.background = "#e9f7ef";
+                document.getElementById('pdfStatusBadge').style.color = "#1e8449";
                 document.getElementById('pdfWorkspace').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             } catch (error) {
@@ -278,8 +302,9 @@
 
                     let urlManualBook = item.Link_Manual_Book || "";
                     let targetHal = item.Page_No || "1";
+                    let searchPnTerm = item.PN_Search || item.No_Part || "UNKNOWN";
                     
-                    let pageBadge = `<span style="color:#2980b9; font-weight:bold; font-size:10px; background:#ebf5fb; padding:2px 4px; border-radius:4px; margin-left:4px;">Hal. ${targetHal}</span>`;
+                    let pageBadge = `<span style="color:#2980b9; font-weight:bold; font-size:10px; background:#ebf5fb; padding:2px 4px; border-radius:4px; margin-left:4px;">Auto-Search</span>`;
 
                     let masterBadge = "";
                     if (isMandatory && item.Nama_Master) {
@@ -324,8 +349,8 @@
                         this.classList.add('row-active'); 
 
                         if(urlManualBook && urlManualBook !== "") {
-                            // Panggil fungsi PDF.js kita, bukan lagi pakai Iframe
-                            renderPdfPage(urlManualBook, targetHal);
+                            // Panggil fungsi PDF.js dengan membawa keyword PN
+                            renderPdfPage(urlManualBook, searchPnTerm);
                         }
                     });
 
