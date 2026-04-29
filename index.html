@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <style>
         :root {
@@ -52,66 +54,33 @@
         .badge-kurang { background-color: #fcf3cf; color: #d4ac0d; border: 1px solid #f9e79f; }
         .badge-type-mandatory { font-size: 9px; background: #f0ebf2; color: var(--primary); padding: 2px 5px; border-radius: 3px; border: 1px solid #d2c5d6; font-weight: 700; display: inline-block; margin-top: 4px;}
 
-        /* Checkbox Styling */
         .verif-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary); }
 
-        /* STRUKTUR TUMPUNG (ATAS-BAWAH) UNTUK PDF */
-        .workspace-container {
-            display: flex;
-            flex-direction: column; /* Tabel di atas, PDF di bawah */
-            gap: 25px;
-            width: 100%;
-        }
-        
-        .table-panel {
-            width: 100%;
-            overflow-x: auto;
-        }
+        .workspace-container { display: flex; flex-direction: column; gap: 25px; width: 100%; }
+        .table-panel { width: 100%; overflow-x: auto; }
 
         .pdf-viewer-panel {
-            width: 100%; /* Mengambil lebar penuh layar */
-            background: #fff;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            height: 800px; /* Tinggi ruang baca PDF yang lega */
+            width: 100%; background: #fff; border-radius: 12px; border: 1px solid var(--border-color);
+            display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: 900px;
         }
 
         .pdf-header {
-            padding: 15px 20px;
-            background: #fbf9fc;
-            border-bottom: 1px solid var(--border-color);
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            color: var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 15px 20px; background: #fbf9fc; border-bottom: 1px solid var(--border-color);
+            font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--primary);
+            display: flex; justify-content: space-between; align-items: center;
         }
 
-        .pdf-frame {
-            flex: 1;
-            width: 100%;
-            border: none;
-            background: #525659; /* Warna latar bawaan PDF viewer Chrome */
+        /* WADAH CANVAS UNTUK PDF.JS */
+        .pdf-canvas-container {
+            flex: 1; width: 100%; background: #525659; overflow: auto; display: flex; justify-content: center; padding: 20px 0;
         }
         
-        /* Highlight baris yang sedang dipilih */
-        .row-active {
-            background-color: #f0ebf2 !important;
-            border-left: 4px solid var(--primary);
-        }
+        canvas { box-shadow: 0 0 10px rgba(0,0,0,0.3); }
 
-        .clickable-row {
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .clickable-row:hover {
-            background-color: #fbf9fc;
-        }
+        .row-active { background-color: #f0ebf2 !important; border-left: 4px solid var(--primary); }
+        .clickable-row { cursor: pointer; transition: background 0.2s; }
+        .clickable-row:hover { background-color: #fbf9fc; }
     </style>
 </head>
 <body>
@@ -130,21 +99,15 @@
                         <option value="ME">Main Engine (ME)</option>
                         <option value="AE">Aux Engine (AE)</option>
                     </select>
-
-                    <div style="display: none;">
-                        <input type="text" id="engineBrand" value="SKIP_PRESENTATION">
-                    </div>
-
+                    <div style="display: none;"><input type="text" id="engineBrand" value="SKIP_PRESENTATION"></div>
                     <div class="upload-section">
                         <label><i data-lucide="clock"></i> 2. RUNNING HOURS REPORT</label>
                         <input type="file" id="rhFile" accept=".pdf, .xlsx, .xls">
                     </div>
-
                     <div class="upload-section">
                         <label><i data-lucide="file-text"></i> 3. REQUISITION / PO PDF</label>
                         <input type="file" id="reqFile" accept=".pdf" required>
                     </div>
-
                     <button type="submit" id="submitBtn" class="btn-submit">
                         <i data-lucide="send"></i> START AUDIT PROCESS
                     </button>
@@ -173,7 +136,6 @@
                     </div>
 
                     <div class="workspace-container">
-                        
                         <div class="table-panel">
                             <div class="table-responsive">
                                 <table id="auditTable">
@@ -197,15 +159,21 @@
                         <div id="pdfWorkspace" class="pdf-viewer-panel" style="display: none;">
                             <div class="pdf-header">
                                 <span><i data-lucide="book-open" style="width: 18px; margin-right:5px; vertical-align:-3px;"></i> Manual Book Reference</span>
-                                <span id="pdfStatusBadge" style="font-size: 10px; background: #e9f7ef; color: #1e8449; padding: 3px 6px; border-radius: 4px;">Ready</span>
+                                <div>
+                                    <span id="pdfLoadingText" style="font-size: 11px; color: #888; display: none; margin-right: 10px;">Memuat PDF...</span>
+                                    <span id="pdfStatusBadge" style="font-size: 10px; background: #e9f7ef; color: #1e8449; padding: 3px 6px; border-radius: 4px;">Ready</span>
+                                </div>
                             </div>
-                            <iframe id="pdfIframe" class="pdf-frame" src="" title="Manual Book Viewer" style="display:none;"></iframe>
+                            
+                            <div id="pdfCanvasContainer" class="pdf-canvas-container" style="display:none;">
+                                <canvas id="pdfCanvas"></canvas>
+                            </div>
+                            
                             <div id="pdfPlaceholder" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#999; padding:40px; text-align:center;">
                                 <i data-lucide="file-search" style="width: 48px; height: 48px; margin-bottom:15px; opacity: 0.5;"></i>
-                                <p style="font-size: 14px; max-width: 400px;">Klik pada <b>Part Number</b> di tabel atas untuk memuat gambar teknik dari buku manual secara otomatis di sini.</p>
+                                <p style="font-size: 14px; max-width: 400px;">Klik pada <b>Part Number</b> di tabel atas untuk merender halaman manual book secara akurat.</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -222,7 +190,56 @@
         let previousRowCount = 0; 
         let stableCount = 0;      
 
-        // FUNGSI RENDER TABEL & PDF VIEWER
+        // =====================================
+        // ENGINE PDF.JS
+        // =====================================
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        let currentPdfDoc = null;
+        let currentPdfUrl = "";
+
+        async function renderPdfPage(url, pageNumStr) {
+            document.getElementById('pdfPlaceholder').style.display = 'none';
+            document.getElementById('pdfCanvasContainer').style.display = 'flex';
+            document.getElementById('pdfLoadingText').style.display = 'inline';
+            
+            const pageNum = parseInt(pageNumStr) || 1; // Default ke 1 kalau bukan angka
+
+            try {
+                // Jangan download ulang PDF jika URL-nya sama (hemat kuota & waktu)
+                if (url !== currentPdfUrl || !currentPdfDoc) {
+                    const loadingTask = pdfjsLib.getDocument(url);
+                    currentPdfDoc = await loadingTask.promise;
+                    currentPdfUrl = url;
+                }
+
+                // Render Halaman
+                const page = await currentPdfDoc.getPage(pageNum);
+                const scale = 1.6; // Zoom level biar tulisan kelihatan jelas
+                const viewport = page.getViewport({ scale: scale });
+                
+                const canvas = document.getElementById('pdfCanvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = { canvasContext: context, viewport: viewport };
+                await page.render(renderContext).promise;
+
+                document.getElementById('pdfLoadingText').style.display = 'none';
+                document.getElementById('pdfStatusBadge').innerText = `Menampilkan Hal: ${pageNum}`;
+                document.getElementById('pdfWorkspace').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (error) {
+                console.error("Error rendering PDF:", error);
+                document.getElementById('pdfLoadingText').style.display = 'none';
+                document.getElementById('pdfStatusBadge').innerText = "Gagal memuat PDF";
+                document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
+                document.getElementById('pdfStatusBadge').style.color = "#cb4335";
+            }
+        }
+
+        // FUNGSI RENDER TABEL
         function renderTable(auditData) {
             const reportPanel = document.getElementById('reportPanel');
             const tableBody = document.getElementById('tableBody');
@@ -230,7 +247,7 @@
             
             document.getElementById('pollingCard').style.display = 'none';
             reportPanel.style.display = 'block';
-            pdfWorkspace.style.display = 'flex'; // Tampilkan panel PDF di bawah
+            pdfWorkspace.style.display = 'flex';
             tableBody.innerHTML = '';
             
             let vessel = auditData[0].Nama_Kapal || "Unknown Vessel";
@@ -259,12 +276,10 @@
                     let bullets = rawRekomendasi.split("|").map(b => `<div style="margin-top:2px;">• ${b.trim()}</div>`).join("");
                     let isChecked = (aiStatus === "APPROVED" || aiStatus === "APPROVED (RESTOCK)") ? "checked" : "";
 
-                    // LOGIKA LINK PART NUMBER
-                    let urlManualBook = item.Link_Manual_Book || "#";
-                    let targetHal = item.Page_No && item.Page_No !== "-" && item.Page_No !== "Auto-Search" ? item.Page_No : "Auto-Search";
-                    let pageBadge = targetHal !== "Auto-Search" 
-                        ? `<span style="color:#2980b9; font-weight:bold; font-size:10px; background:#ebf5fb; padding:2px 4px; border-radius:4px; margin-left:4px;">Hal. ${targetHal}</span>` 
-                        : `<span style="color:#2980b9; font-weight:bold; font-size:10px; background:#ebf5fb; padding:2px 4px; border-radius:4px; margin-left:4px;">Auto-Search</span>`;
+                    let urlManualBook = item.Link_Manual_Book || "";
+                    let targetHal = item.Page_No || "1";
+                    
+                    let pageBadge = `<span style="color:#2980b9; font-weight:bold; font-size:10px; background:#ebf5fb; padding:2px 4px; border-radius:4px; margin-left:4px;">Hal. ${targetHal}</span>`;
 
                     let masterBadge = "";
                     if (isMandatory && item.Nama_Master) {
@@ -276,7 +291,7 @@
                     }
 
                     let tr = document.createElement('tr');
-                    tr.className = 'clickable-row'; // Class untuk efek hover & klik
+                    tr.className = 'clickable-row'; 
                     tr.innerHTML = `
                         <td style="color:#999;">#${item.No_Item_PDF || "-"}</td>
                         <td>
@@ -301,29 +316,16 @@
                         </td>
                     `;
 
-                    // EVENT LISTENER KETIKA BARIS DIKLIK (Membuka PDF & Auto-Scroll)
+                    // EVENT LISTENER TRIGGERS PDF.JS
                     tr.addEventListener('click', function(e) {
-                        if(e.target.type === 'checkbox') return; // Abaikan jika ngeklik checkbox
+                        if(e.target.type === 'checkbox') return; 
                         
-                        // Hapus highlight dari row lain
                         document.querySelectorAll('.row-active').forEach(row => row.classList.remove('row-active'));
-                        this.classList.add('row-active'); // Tambah highlight
+                        this.classList.add('row-active'); 
 
-                        if(urlManualBook && urlManualBook !== "#") {
-                            document.getElementById('pdfPlaceholder').style.display = 'none';
-                            const iframe = document.getElementById('pdfIframe');
-                            iframe.style.display = 'block';
-                            
-                            // Paksa iframe reload URL agar browser memicu anchor tag (#page atau #search)
-                            iframe.src = 'about:blank';
-                            setTimeout(() => {
-                                iframe.src = urlManualBook;
-                            }, 50);
-                            
-                            document.getElementById('pdfStatusBadge').innerText = `Target: Hal. ${targetHal}`;
-
-                            // SCROLL OTOMATIS KE BAWAH (Menuju PDF)
-                            document.getElementById('pdfWorkspace').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        if(urlManualBook && urlManualBook !== "") {
+                            // Panggil fungsi PDF.js kita, bukan lagi pakai Iframe
+                            renderPdfPage(urlManualBook, targetHal);
                         }
                     });
 
@@ -333,12 +335,10 @@
             lucide.createIcons();
         }
 
-        // FUNGSI DOWNLOAD PDF REPORT
         function downloadPDF() {
             const btn = document.getElementById('btnDownload');
             btn.style.display = 'none';
 
-            // Sembunyikan panel PDF saat nge-print laporan
             const pdfWorkspace = document.getElementById('pdfWorkspace');
             const originalPdfDisplay = pdfWorkspace.style.display;
             pdfWorkspace.style.display = 'none';
@@ -353,7 +353,6 @@
                 }
             });
 
-            // Logika sembunyikan header kosong
             const tableBody = document.getElementById('tableBody');
             const allRows = Array.from(tableBody.children);
             let currentHeader = null;
@@ -388,13 +387,12 @@
 
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.style.display = 'flex'; 
-                pdfWorkspace.style.display = originalPdfDisplay; // Munculin panel PDF lagi
+                pdfWorkspace.style.display = originalPdfDisplay; 
                 rowsToHide.forEach(tr => tr.style.display = ''); 
                 headersToHide.forEach(th => th.style.display = ''); 
             });
         }
 
-        // POLLING N8N
         async function checkJobStatus(jobId) {
             try {
                 let response = await fetch(`${N8N_CHECK_STATUS_URL}?job_id=${jobId}`);
@@ -433,7 +431,6 @@
             }
         }
 
-        // SUBMIT FORM
         document.getElementById('auditForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
