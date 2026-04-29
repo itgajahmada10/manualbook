@@ -4,188 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verification Portal — Waruna Group</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <style>
-        /* ==========================================
-           GLOBAL VARIABLES & STYLING
-           ========================================== */
-        :root { 
-            --primary: #4e2b5c; 
-            --primary-hover: #3b1e47; 
-            --bg-card: #ffffff; 
-            --border-color: #e8dee8; 
-            --text-main: #333333; 
-            --success: #27ae60; 
-            --error: #c0392b; 
-            --warning: #d4ac0d; 
-        }
-        
-        body { 
-            margin: 0; 
-            padding: 30px; 
-            background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%); 
-            color: var(--text-main); 
-            font-family: 'Inter', sans-serif; 
-            min-height: 100vh; 
-        }
-        
-        .main-container { 
-            display: flex; 
-            gap: 25px; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-            max-width: 1500px; 
-            margin: 0 auto; 
-            align-items: flex-start; 
-        }
-        
-        /* ==========================================
-           LEFT PANEL (INPUT FORM)
-           ========================================== */
-        .left-panel { 
-            flex: 1; 
-            min-width: 320px; 
-            max-width: 380px; 
-            position: sticky; 
-            top: 30px; 
-        }
-        
-        .card-box { 
-            background-color: var(--bg-card); 
-            padding: 30px; 
-            border-radius: 16px; 
-            box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); 
-            border: 1px solid var(--border-color); 
-        }
-        
+        :root { --primary: #4e2b5c; --primary-hover: #3b1e47; --bg-card: #ffffff; --border-color: #e8dee8; --text-main: #333333; --success: #27ae60; --error: #c0392b; --warning: #d4ac0d; }
+        body { margin: 0; padding: 30px; background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; }
+        .main-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; max-width: 1500px; margin: 0 auto; align-items: flex-start; }
+        .left-panel { flex: 1; min-width: 320px; max-width: 380px; position: sticky; top: 30px; }
+        .card-box { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); }
         .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { 
-            color: var(--primary); 
-            margin: 0 0 8px 0; 
-            font-family: 'Poppins', sans-serif; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
-            font-size: 24px;
-        }
-        
-        label { 
-            display: block; 
-            font-weight: 600; 
-            margin-bottom: 6px; 
-            font-size: 11px; 
-            text-transform: uppercase; 
-            font-family: 'Poppins', sans-serif; 
-            letter-spacing: 0.5px;
-        }
-        
-        select, input[type="text"] { 
-            width: 100%; 
-            padding: 12px; 
-            border: 1px solid #ccc; 
-            border-radius: 8px; 
-            font-size: 13px; 
-            margin-bottom: 15px; 
-            background: #fafafa; 
-            box-sizing: border-box;
-        }
-        
-        .upload-section { 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin-bottom: 15px; 
-            border: 1px dashed #b59ebc; 
-            background: #fbf9fc;
-        }
-        
-        input[type="file"] { 
-            width: 100%; 
-            padding: 8px; 
-            background-color: #fff; 
-            border-radius: 6px; 
-            border: 1px solid #ccc; 
-            font-size: 11px; 
-            box-sizing: border-box;
-        }
-        
-        button.btn-submit { 
-            background-color: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 15px; 
-            width: 100%; 
-            font-size: 14px; 
-            font-family: 'Poppins', sans-serif; 
-            font-weight: 600; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 10px; 
-        }
-        
-        button.btn-submit:disabled { background-color: #a395a8; cursor: not-allowed; }
-
-        /* LOADER ANIMATION */
+        .header h2 { color: var(--primary); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 24px;}
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 11px; text-transform: uppercase; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;}
+        select, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; margin-bottom: 15px; background: #fafafa; box-sizing: border-box;}
+        .upload-section { padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #b59ebc; background: #fbf9fc;}
+        input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; font-size: 11px; box-sizing: border-box;}
+        button.btn-submit { background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .loader { border: 3px solid rgba(78, 43, 92, 0.3); border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
         .loader-small { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* ==========================================
-           RIGHT PANEL (RESULTS TABLE)
-           ========================================== */
         .right-panel { flex: 3; min-width: 850px; width: 100%; }
         .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); background: #fff;}
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
         th { background-color: #fbf9fc; padding: 16px 14px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--border-color); font-family: 'Poppins', sans-serif; font-size: 11px; text-transform: uppercase;}
         td { padding: 16px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
-        
         .subsystem-header { background-color: #4e2b5c !important; color: white !important; font-family: 'Poppins', sans-serif;}
-        
-        /* BADGES */
         .badge-mandatory { font-size: 9px; background: var(--primary); color: white; padding: 3px 6px; border-radius: 4px; font-weight: 700; display: inline-block; margin-bottom: 8px;}
-        .badge-reduced { background-color: #fdedec; color: #c0392b; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
-        .badge-warning { background-color: #fcf3cf; color: #d4ac0d; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
-        .badge-approved { background-color: #e9f7ef; color: #1e8449; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
-
-        /* CONTENT BOXES */
         .trace-box { background: #fbf9fc; border: 1px dashed #d2c5d6; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 11px; line-height: 1.5;}
         .ai-box { background: #f8f9f9; border: 1px solid #eaeded; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 11px; }
         .ai-step { color: #666; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-weight: 500;}
         .ai-decision { padding: 8px 10px; border-radius: 6px; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 11px; text-transform: uppercase;}
         .ai-decision.safe { background: #ebf5fb; color: #2980b9; border: 1px solid #d6eaf8;}
         .ai-decision.cut { background: #fdedec; color: #c0392b; border: 1px solid #fadbd8; }
-        
         .num-val { font-size: 14px; font-weight: 800; font-family: 'Poppins', sans-serif; color: var(--text-main);}
+        .tag-info { font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: 700; margin-left: 4px; vertical-align: middle;}
+        .tag-std { background: #fdedec; color: #d35400; }
+        .tag-rh { background: #ebf5fb; color: #2980b9; }
         .v-checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
-        
-        #printHeader { display: none; text-align: center; margin-bottom: 20px; border-bottom: 3px solid var(--primary); padding-bottom: 15px; }
-
-        /* ==========================================
-           PRINT FIX (ANTI TERPOTONG A4)
-           ========================================== */
-        @media print {
-            #auditTable { font-size: 10.5px !important; }
-            #auditTable th { font-size: 9.5px !important; padding: 8px 6px !important; }
-            #auditTable td { padding: 8px 6px !important; }
-            .trace-box, .ai-box { font-size: 9.5px !important; padding: 8px !important; }
-            .v-checkbox { display: none !important; } 
-            .th-verify { color: var(--primary); font-weight: 600; text-transform: uppercase; font-size: 11px; }
-            tr { page-break-inside: avoid !important; }
-            td { page-break-inside: avoid !important; }
-        }
+        .badge-reduced { background-color: #fdedec; color: #c0392b; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
+        .badge-warning { background-color: #fcf3cf; color: #d4ac0d; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
+        .badge-approved { background-color: #e9f7ef; color: #1e8449; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
     </style>
 </head>
 <body>
     <div class="main-container">
-        
         <div class="left-panel">
             <div class="card-box">
                 <div class="header">
@@ -194,21 +56,10 @@
                 </div>
                 <form id="auditForm">
                     <label>1. Engine Category</label>
-                    <select id="engineType">
-                        <option value="ME">Main Engine (ME)</option>
-                        <option value="AE">Aux Engine (AE)</option>
-                    </select>
-                    <div class="upload-section">
-                        <label>2. Running Hours Report</label>
-                        <input type="file" id="rhFile" accept=".pdf, .xlsx, .xls">
-                    </div>
-                    <div class="upload-section">
-                        <label>3. Requisition / PO PDF</label>
-                        <input type="file" id="reqFile" accept=".pdf" required>
-                    </div>
-                    <button type="submit" id="submitBtn" class="btn-submit">
-                        <i data-lucide="zap"></i> RUN AI VERIFICATION
-                    </button>
+                    <select id="engineType"><option value="ME">Main Engine (ME)</option><option value="AE">Aux Engine (AE)</option></select>
+                    <div class="upload-section"><label>2. Running Hours Report</label><input type="file" id="rhFile" accept=".pdf, .xlsx, .xls"></div>
+                    <div class="upload-section"><label>3. Requisition / PO PDF</label><input type="file" id="reqFile" accept=".pdf" required></div>
+                    <button type="submit" id="submitBtn" class="btn-submit"><i data-lucide="zap"></i> RUN AI VERIFICATION</button>
                     <div id="errorBox" style="margin-top:15px; display:none; color:red; font-size:12px; font-weight:bold;"></div>
                 </form>
             </div>
@@ -222,40 +73,37 @@
             </div>
 
             <div id="reportPanel" class="card-box" style="display: none;">
-                <div id="printableArea">
-                    
-                    <div id="printHeader">
-                        <h2 id="printTitle" style="color: #4e2b5c; margin: 0 0 5px 0;">Verification Results</h2>
-                        <div id="printSubtitle" style="font-weight: bold; margin-bottom: 10px; color: #555; font-size: 12px;"></div>
-                        <div style="background: #4e2b5c; color: white; display: inline-block; padding: 6px 15px; border-radius: 20px; font-size: 11px; font-weight: 800;">GENERATED BY AI WARUNA</div>
-                    </div>
+                <div id="printHeaderTemplate" style="display: none; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #ccc; padding-bottom: 15px;">
+                    <h2 id="printTitle" style="color: #4e2b5c; margin: 0 0 5px 0; font-family:'Poppins', sans-serif;">Verification Results</h2>
+                    <div id="printSubtitle" style="font-weight: bold; margin-bottom: 10px; color: #555; font-size: 12px;"></div>
+                    <div style="background: #4e2b5c; color: white; display: inline-block; padding: 6px 15px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1px;">GENERATED BY AI WARUNA</div>
+                </div>
 
-                    <div id="webHeader" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e8dee8; padding-bottom: 15px; margin-bottom: 15px;">
-                        <div>
-                            <h3 id="reportTitle" style="margin:0; display:flex; align-items:center; gap:8px;"><i data-lucide="anchor"></i> Results</h3>
-                            <div id="reportSubtitle" style="font-size:11px; color:#666; font-weight:600; margin-top:5px;"></div>
-                        </div>
-                        <button id="btnDownload" onclick="downloadPDF()" style="background:var(--primary); color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:8px;">
-                            <i data-lucide="printer" style="width:16px;"></i> Print Report A4
-                        </button>
+                <div id="webHeader" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e8dee8; padding-bottom: 15px; margin-bottom: 15px;">
+                    <div>
+                        <h3 id="reportTitle" style="margin:0; display:flex; align-items:center; gap:8px;"><i data-lucide="anchor"></i> Results</h3>
+                        <div id="reportSubtitle" style="font-size:11px; color:#666; font-weight:600; margin-top:5px;"></div>
                     </div>
+                    <button id="btnDownload" onclick="downloadPDF()" style="background:var(--primary); color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:8px;">
+                        <i data-lucide="printer" style="width:16px;"></i> Print Report A4
+                    </button>
+                </div>
 
-                    <div class="table-responsive" id="tableContainer">
-                        <table id="auditTable">
-                            <thead>
-                                <tr>
-                                    <th style="width:30px; text-align:center;">No</th>
-                                    <th style="width:32%;">Identity & Traceability</th>
-                                    <th>Inventory</th>
-                                    <th>Limit</th>
-                                    <th>Target RH</th>
-                                    <th style="width:28%;">Decision Logic</th>
-                                    <th style="text-align:center;" class="th-verify">Verify</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody"></tbody>
-                        </table>
-                    </div>
+                <div class="table-responsive" id="tableContainer">
+                    <table id="auditTable">
+                        <thead>
+                            <tr>
+                                <th style="width:30px; text-align:center;">No</th>
+                                <th style="width:32%;">Identity & Traceability</th>
+                                <th>Inventory</th>
+                                <th>Limit</th>
+                                <th>Target RH</th>
+                                <th style="width:28%;">Decision Logic</th>
+                                <th style="text-align:center;" class="th-verify">Verify</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -263,11 +111,8 @@
 
     <script>
         lucide.createIcons();
-        
-        // GANTI URL INI JIKA WEBHOOK N8N BERUBAH
         const WEBHOOK_URL = "https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de";
         const STATUS_URL = "https://n8.waruna-group.co.id/webhook/check-audit-status";
-        
         let pollingInterval;
 
         function renderTable(auditData) {
@@ -353,75 +198,87 @@
         }
 
         // ==========================================
-        // FUNGSI PRINT A4 PORTRAIT PERFECT FIT
+        // FUNGSI PRINT MUTLAK: METODE CLONE & SANDBOX
         // ==========================================
         function downloadPDF() {
             const btn = document.getElementById('btnDownload');
-            btn.style.display = 'none';
+            btn.disabled = true;
+            btn.innerHTML = `<div class="loader-small"></div> Generating PDF...`;
 
-            const checkboxes = document.querySelectorAll('.v-checkbox');
-            const rowsToHide = [];
+            // 1. Buat Ruang Sandbox Rahasia di Latar Belakang (Lebar FIX 1000px)
+            const sandbox = document.createElement('div');
+            sandbox.id = 'pdf-sandbox';
+            sandbox.style.cssText = 'position:absolute; top:-9999px; left:0; width:1000px; background:#fff; padding:20px; font-family:"Inter", sans-serif; box-sizing:border-box; z-index:-1;';
+            document.body.appendChild(sandbox);
+
+            // 2. Clone Header Khusus Print
+            document.getElementById('printTitle').innerText = document.getElementById('reportTitle').innerText;
+            document.getElementById('printSubtitle').innerText = document.getElementById('reportSubtitle').innerText;
+            const headerClone = document.getElementById('printHeaderTemplate').cloneNode(true);
+            headerClone.style.display = 'block';
+            sandbox.appendChild(headerClone);
+
+            // 3. Clone Tabel Asli
+            const tableClone = document.getElementById('auditTable').cloneNode(true);
+            tableClone.style.width = '100%';
             
-            // 1. Sembunyikan baris yang tidak dicentang
-            checkboxes.forEach(cb => { 
-                if (!cb.checked) { 
-                    const tr = cb.closest('tr'); 
-                    tr.style.display = 'none'; 
-                    rowsToHide.push(tr); 
-                } 
-            });
-
-            // 2. Sembunyikan Header Sub-system jika tidak ada baris di bawahnya
-            const tableBody = document.getElementById('tableBody');
+            // 4. Proses Filter Baris di dalam Clone (Berdasarkan status checkbox asli)
+            const liveCheckboxes = document.querySelectorAll('.v-checkbox');
+            const cloneTbody = tableClone.querySelector('tbody');
+            const cloneRows = Array.from(cloneTbody.querySelectorAll('tr'));
+            
+            let dataRowIndex = 0;
             let currentHeader = null;
             let visibleCount = 0;
 
-            Array.from(tableBody.children).forEach(row => {
-                if (row.classList.contains('subsystem-header')) {
-                    if (currentHeader && visibleCount === 0) {
-                        currentHeader.style.display = 'none';
-                        rowsToHide.push(currentHeader);
+            cloneRows.forEach((row) => {
+                if (row.classList.contains('data-row')) {
+                    // Cek status centang di layar asli
+                    const isChecked = liveCheckboxes[dataRowIndex].checked;
+                    if (!isChecked) {
+                        row.remove(); // Hapus baris dari PDF jika tidak dicentang
+                    } else {
+                        visibleCount++;
+                        row.removeChild(row.lastElementChild); // Hapus sel Checkbox (Kolom ke-7)
                     }
+                    dataRowIndex++;
+                } else if (row.classList.contains('subsystem-header')) {
+                    // Hapus Header Subsistem sebelumnya jika tidak ada baris yang lolos filter
+                    if (currentHeader && visibleCount === 0) currentHeader.remove();
                     currentHeader = row;
                     visibleCount = 0;
-                } else if (row.classList.contains('data-row')) {
-                    if (row.style.display !== 'none') visibleCount++;
+                    
+                    // Ubah colspan dari 7 jadi 6 (karena kolom checkbox dibuang)
+                    const td = row.querySelector('td');
+                    if(td) td.setAttribute('colspan', '6');
                 }
             });
-            if (currentHeader && visibleCount === 0) {
-                currentHeader.style.display = 'none';
-                rowsToHide.push(currentHeader);
-            }
+            // Cek header terakhir
+            if (currentHeader && visibleCount === 0) currentHeader.remove();
 
-            // 3. Persiapan Elemen PDF
-            document.getElementById('webHeader').style.display = 'none';
-            document.getElementById('printHeader').style.display = 'block';
-            const container = document.getElementById('tableContainer');
-            container.style.overflow = 'visible'; // Matikan scroll agar tidak terpotong
-            
-            document.getElementById('printTitle').innerHTML = document.getElementById('reportTitle').innerHTML;
-            document.getElementById('printSubtitle').innerHTML = document.getElementById('reportSubtitle').innerHTML;
+            // 5. Hapus Judul Kolom (TH) 'Verify'
+            const theadTr = tableClone.querySelector('thead tr');
+            theadTr.removeChild(theadTr.lastElementChild);
 
-            const element = document.getElementById('printableArea');
-            
-            // 4. Konfigurasi Kertas A4 & Anti-Mutilasi Baris
+            // Masukkan tabel yang sudah bersih ke Sandbox
+            sandbox.appendChild(tableClone);
+
+            // 6. Jalankan Mesin PDF memotret Sandbox
             const opt = { 
                 margin:       [0.4, 0.4, 0.4, 0.4], 
                 filename:     'Verification_Report.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, windowWidth: 1200 }, // Paksa layar virtual 1200px lebar lalu perkecil otomatis
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }, // Paksa Portrait
-                pagebreak:    { avoid: 'tr' } // Paksa jangan gunting baris tabel
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 2, useCORS: true }, 
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { avoid: 'tr' } // Anti-Mutilasi Baris
             };
 
-            // 5. Eksekusi Print
-            html2pdf().set(opt).from(element).save().then(() => { 
-                // Kembalikan semua tampilan ke keadaan semula
-                btn.style.display = 'flex'; 
-                rowsToHide.forEach(tr => tr.style.display = ''); 
-                document.getElementById('webHeader').style.display = 'flex';
-                document.getElementById('printHeader').style.display = 'none';
-                container.style.overflow = 'auto'; 
+            html2pdf().set(opt).from(sandbox).save().then(() => { 
+                // Hancurkan Sandbox & kembalikan tombol
+                document.body.removeChild(sandbox);
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="printer" style="width:16px;"></i> Print Report A4`;
+                lucide.createIcons();
             });
         }
 
