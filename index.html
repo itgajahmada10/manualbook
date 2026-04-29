@@ -13,38 +13,70 @@
         :root {
             --primary: #4e2b5c; --primary-hover: #3b1e47; --bg-card: #ffffff;
             --border-color: #e8dee8; --text-main: #333333; --text-muted: #666666;
-            --success: #27ae60; --error: #c0392b;
+            --success: #27ae60; --error: #c0392b; --warning: #d4ac0d; --info: #2980b9;
         }
         body { margin: 0; padding: 30px; background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; }
         .main-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
-        .left-panel { flex: 1; min-width: 350px; max-width: 400px; position: sticky; top: 30px; }
-        .right-panel { flex: 2; min-width: 700px; width: 100%; }
+        
+        /* PANEL KIRI */
+        .left-panel { flex: 1; min-width: 300px; max-width: 350px; position: sticky; top: 30px; }
         .card-box { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); }
         .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { color: var(--primary); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 11px; text-transform: uppercase; font-family: 'Poppins', sans-serif; }
-        select, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; margin-bottom: 15px; background: #fafafa; box-sizing: border-box;}
+        .header h2 { color: var(--primary); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 24px;}
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 11px; text-transform: uppercase; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;}
+        select, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; margin-bottom: 15px; background: #fafafa; box-sizing: border-box; font-family: 'Inter', sans-serif;}
         .upload-section { padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #b59ebc; background: #fbf9fc;}
-        input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; font-size: 12px; box-sizing: border-box;}
+        input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; font-size: 11px; box-sizing: border-box;}
         button.btn-submit { background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
         button.btn-submit:disabled { background-color: #a395a8; cursor: not-allowed; }
+
+        /* LOADER */
         .loader { border: 3px solid rgba(78, 43, 92, 0.3); border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
         .loader-small { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th { background-color: #fbf9fc; padding: 14px 12px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--border-color); font-family: 'Poppins', sans-serif;}
-        td { padding: 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
-        .subsystem-header { background-color: #f0ebf2 !important; font-weight: 600; color: var(--primary); font-size: 13px; padding: 10px 15px !important; border-top: 2px solid #d2c5d6;}
-        .badge { padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; }
+
+        /* PANEL KANAN (TABEL) */
+        .right-panel { flex: 3; min-width: 800px; width: 100%; }
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); background: #fff;}
+        table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+        th { background-color: #fbf9fc; padding: 16px 14px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--border-color); font-family: 'Poppins', sans-serif; font-size: 12px; text-transform: uppercase;}
+        td { padding: 16px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        
+        .subsystem-header { background-color: #4e2b5c !important; color: white !important; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;}
+        .subsystem-header td { padding: 12px 15px !important; font-size: 13px; font-weight: 600;}
+        
+        .row-hover:hover { background-color: #fcfbfd; }
+
+        /* BADGES & PILLS */
+        .badge { padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;}
         .badge-aman { background-color: #e9f7ef; color: #1e8449; border: 1px solid #a3e4d7; }
         .badge-pangkas { background-color: #fadbd8; color: #cb4335; border: 1px solid #f5b7b1; }
         .badge-kurang { background-color: #fcf3cf; color: #d4ac0d; border: 1px solid #f9e79f; }
-        .badge-type-mandatory { font-size: 9px; background: #f0ebf2; color: var(--primary); padding: 2px 5px; border-radius: 3px; border: 1px solid #d2c5d6; font-weight: 700; display: inline-block; margin-top: 4px;}
-        .verif-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary); }
-        .row-active { background-color: #f0ebf2 !important; border-left: 4px solid var(--primary); }
-        .clickable-row { cursor: pointer; transition: background 0.2s; }
-        .clickable-row:hover { background-color: #fbf9fc; }
+        .badge-type-mandatory { font-size: 9px; background: var(--primary); color: white; padding: 3px 6px; border-radius: 4px; font-weight: 700; display: inline-block; margin-bottom: 8px; letter-spacing: 0.5px;}
+
+        /* KOTAK TRIANGULASI (TRACEABILITY) */
+        .triangulation-box { background: #fbf9fc; border: 1px dashed #d2c5d6; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 11px; line-height: 1.4; position: relative;}
+        .t-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+        .t-row:last-child { margin-bottom: 0; }
+        .t-icon { color: var(--primary); margin-top: 2px;}
+        .t-label { font-weight: 700; color: var(--primary); min-width: 45px;}
+        .t-value { font-weight: 600; color: #444; }
+        
+        /* KARTU ANALISA AI */
+        .ai-logic-box { background: #f8f9f9; border: 1px solid #eaeded; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 11px; }
+        .ai-logic-step { color: #555; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-weight: 500;}
+        .ai-final-decision { padding: 6px 8px; border-radius: 6px; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 11.5px;}
+        .ai-final-decision.aman { background: #ebf5fb; color: #2980b9; border: 1px solid #d6eaf8;}
+        .ai-final-decision.pangkas { background: #fdedec; color: #c0392b; border: 1px solid #fadbd8; }
+
+        /* HIGHLIGHT ANGKA */
+        .num-highlight { font-size: 14px; font-weight: 800; font-family: 'Poppins', sans-serif; color: var(--text-main);}
+        .limit-tag { font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: 700; margin-left: 4px; vertical-align: middle;}
+        .limit-rh { background: #ebf5fb; color: #2980b9; }
+        .limit-std { background: #fdedec; color: #d35400; }
+        .cyl-alert { color: #c0392b; font-weight: 700; background: #fdedec; padding: 4px 8px; border-radius: 4px; display: inline-block; font-size: 11px;}
+
+        .verif-checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
     </style>
 </head>
 <body>
@@ -53,47 +85,50 @@
         <div class="left-panel">
             <div class="card-box">
                 <div class="header">
-                    <h2><i data-lucide="shield-check"></i> SPB Audit</h2>
-                    <p style="color: #666; font-size: 12px;">Engine Audit System (Core Engine)</p>
+                    <h2><i data-lucide="cpu" style="width:28px; height:28px;"></i> SPB Audit</h2>
+                    <p style="color: #666; font-size: 12px; font-weight:500;">Core Engine Calculation</p>
                 </div>
                 <form id="auditForm">
-                    <label>1. KATEGORI MESIN (Sistem)</label>
+                    <label>1. Kategori Mesin (Sistem)</label>
                     <select id="engineType">
                         <option value="ME">Main Engine (ME)</option>
                         <option value="AE">Aux Engine (AE)</option>
                     </select>
                     <div style="display: none;"><input type="text" id="engineBrand" value="SKIP_PRESENTATION"></div>
                     <div class="upload-section">
-                        <label><i data-lucide="clock"></i> 2. RUNNING HOURS REPORT</label>
+                        <label><i data-lucide="clock" style="width:14px; height:14px; vertical-align:-2px;"></i> 2. Running Hours Report</label>
                         <input type="file" id="rhFile" accept=".pdf, .xlsx, .xls">
                     </div>
                     <div class="upload-section">
-                        <label><i data-lucide="file-text"></i> 3. REQUISITION / PO PDF</label>
+                        <label><i data-lucide="file-text" style="width:14px; height:14px; vertical-align:-2px;"></i> 3. Requisition / PO PDF</label>
                         <input type="file" id="reqFile" accept=".pdf" required>
                     </div>
                     <button type="submit" id="submitBtn" class="btn-submit">
-                        <i data-lucide="send"></i> START AUDIT PROCESS
+                        <i data-lucide="bot"></i> JALANKAN AUDIT AI
                     </button>
-                    <div id="errorBox" style="margin-top:15px; color:red; font-size:12px; display:none; font-weight:bold;"></div>
+                    <div id="errorBox" style="margin-top:15px; color:#c0392b; font-size:12px; display:none; font-weight:bold; background:#fadbd8; padding:10px; border-radius:6px;"></div>
                 </form>
             </div>
         </div>
 
         <div class="right-panel">
-            <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 60px 20px;">
+            <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 80px 20px;">
                 <div class="loader"></div>
-                <h2 style="color: var(--primary); font-family:'Poppins', sans-serif;">Sistem AI Sedang Bekerja...</h2>
-                <p id="timerText" style="color: #888; font-size: 12px; font-weight: bold; margin-top: 15px;">Menunggu balasan database...</p>
+                <h2 style="color: var(--primary); font-family:'Poppins', sans-serif;">AI Sedang Membedah Dokumen...</h2>
+                <p id="timerText" style="color: #666; font-size: 13px; font-weight: 500; margin-top: 15px;">Melakukan Triangulasi Data SPB ⇄ Master ⇄ Running Hours</p>
             </div>
 
-            <div id="reportPanel" class="card-box" style="display: none; padding: 20px; width: 100%; box-sizing: border-box;">
+            <div id="reportPanel" class="card-box" style="display: none; padding: 25px; width: 100%; box-sizing: border-box;">
                 <div id="printableArea">
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px;">
-                        <h3 id="reportTitle" style="margin: 0; color: var(--primary); font-family:'Poppins', sans-serif; display: flex; align-items: center; gap:8px;">
-                            <i data-lucide="ship"></i> Hasil Audit
-                        </h3>
-                        <button id="btnDownload" type="button" onclick="downloadPDF()" style="background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                            <i data-lucide="file-down" style="width: 16px;"></i> Download PDF
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;">
+                        <div>
+                            <h3 id="reportTitle" style="margin: 0 0 5px 0; color: var(--primary); font-family:'Poppins', sans-serif; display: flex; align-items: center; gap:8px; font-size: 20px;">
+                                <i data-lucide="ship"></i> Hasil Audit SPB
+                            </h3>
+                            <div id="reportSubtitle" style="color: #666; font-size: 12px; font-weight: 500;"></div>
+                        </div>
+                        <button id="btnDownload" type="button" onclick="downloadPDF()" style="background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s;">
+                            <i data-lucide="printer" style="width: 16px;"></i> Cetak Laporan
                         </button>
                     </div>
 
@@ -101,14 +136,13 @@
                         <table id="auditTable">
                             <thead>
                                 <tr>
-                                    <th style="width: 30px;">No</th>
-                                    <th>Description</th>
-                                    <th>Qty</th>
-                                    <th>ROB</th>
-                                    <th>Limit</th>
-                                    <th>Target Cyl</th>
-                                    <th>AI Recommendation</th>
-                                    <th style="text-align: center;">Verifikasi</th>
+                                    <th style="width: 30px; text-align:center;">No</th>
+                                    <th style="width: 30%;">Identitas & Traktasi Barang</th>
+                                    <th>Inventory</th>
+                                    <th>Limit Jam</th>
+                                    <th>Target RH Over</th>
+                                    <th style="width: 25%;">Analisa & Keputusan AI</th>
+                                    <th style="text-align: center;">Verif</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody"></tbody>
@@ -140,11 +174,13 @@
             
             let vessel = auditData[0].Nama_Kapal || "Unknown Vessel";
             let engine = auditData[0].Tipe_Mesin || "ME";
-            document.getElementById('reportTitle').innerHTML = `<i data-lucide="ship"></i> ${vessel} — ${engine}`;
+            let tanggal = auditData[0].Tanggal || "-";
+            document.getElementById('reportTitle').innerHTML = `<i data-lucide="anchor"></i> ${vessel} — ${engine}`;
+            document.getElementById('reportSubtitle').innerHTML = `Tanggal Permintaan: <b>${tanggal}</b>`;
             
             let groupedData = {};
             auditData.forEach(item => {
-                let sub = item.Subsystem && item.Subsystem !== "-" ? item.Subsystem : "GENERAL";
+                let sub = item.Subsystem && item.Subsystem !== "-" ? item.Subsystem : "GENERAL COMPONENTS";
                 if (!groupedData[sub]) groupedData[sub] = [];
                 groupedData[sub].push(item);
             });
@@ -152,62 +188,97 @@
             for (let sub in groupedData) {
                 let subTr = document.createElement('tr');
                 subTr.className = 'subsystem-header';
-                subTr.innerHTML = `<td colspan="8">SUB-SYSTEM: ${sub}</td>`;
+                subTr.innerHTML = `<td colspan="7"><i data-lucide="layers" style="width:14px; height:14px; vertical-align:-2px; margin-right:6px;"></i> SYSTEM: ${sub}</td>`;
                 tableBody.appendChild(subTr);
 
                 groupedData[sub].forEach((item, index) => {
                     let aiStatus = item.AI_Status || "";
                     let isMandatory = (aiStatus !== "NON-CRITICAL");
-                    let statusClass = aiStatus.includes("REDUCED") ? "badge-pangkas" : (aiStatus === "UNDER-ORDER" ? "badge-kurang" : "badge-aman");
                     
-                    let rawRekomendasi = item.Rekomendasi_AI || "";
-                    let bullets = rawRekomendasi.split("|").map(b => `<div style="margin-top:2px;">• ${b.trim()}</div>`).join("");
-                    let isChecked = (aiStatus === "APPROVED" || aiStatus === "APPROVED (RESTOCK)") ? "checked" : "";
+                    // Style Penentuan Status Utama
+                    let statusClass = aiStatus.includes("REDUCED") ? "badge-pangkas" : (aiStatus === "UNDER-ORDER" ? "badge-kurang" : "badge-aman");
+                    let statusIcon = aiStatus.includes("REDUCED") ? "alert-triangle" : (aiStatus === "UNDER-ORDER" ? "info" : "check-circle");
 
+                    let isChecked = (aiStatus === "APPROVED" || aiStatus === "APPROVED (RESTOCK)") ? "checked" : "";
                     let namaRh = item.Nama_RH && item.Nama_RH !== "-" ? item.Nama_RH : ""; 
 
+                    // KOTAK TRIANGULASI (TRACEABILITY)
                     let masterBadge = "";
                     if (isMandatory && item.Nama_Master) {
                         masterBadge = `
-                        <div style="margin-top: 6px; font-size: 10px; line-height: 1.3; background: #fbf9fc; padding: 4px 6px; border-radius: 4px; border: 1px dashed #d2c5d6; display: inline-block;">
-                            <span style="color: var(--primary);">🔍 Master: <b>${item.Nama_Master}</b></span><br/>
-                            <span style="color: #888; font-style: italic; font-size: 9px;">(via ${item.Tipe_Match})</span>
-                            ${namaRh ? `<br/><div style="margin-top:3px; border-top:1px dashed #e8dee8; padding-top:3px;"><span style="color: #d35400;">⚙️ RH: <b>${namaRh}</b></span></div>` : ''}
+                        <div class="triangulation-box">
+                            <div class="t-row">
+                                <i data-lucide="database" class="t-icon" style="width:12px; height:12px;"></i>
+                                <div><span class="t-label">Master:</span> <span class="t-value">${item.Nama_Master}</span></div>
+                            </div>
+                            <div class="t-row" style="margin-top:2px;">
+                                <i data-lucide="activity" class="t-icon" style="width:12px; height:12px; color:#d35400;"></i>
+                                <div><span class="t-label" style="color:#d35400;">Lap. RH:</span> <span class="t-value">${namaRh ? namaRh : '<span style="color:#e74c3c; font-style:italic;">Tidak Ditemukan</span>'}</span></div>
+                            </div>
+                            <div style="font-size:9px; color:#999; margin-top:6px; font-style:italic; border-top:1px solid #e8dee8; padding-top:4px;">
+                                Matched via: ${item.Tipe_Match}
+                            </div>
                         </div>`;
                     }
 
+                    // KARTU LOGIKA AI (AI REASONING)
+                    let logicHtml = "";
+                    if (isMandatory && item.Rekomendasi_AI) {
+                        let recParts = item.Rekomendasi_AI.split("|").map(p => p.trim());
+                        logicHtml = `<div class="ai-logic-box">`;
+                        
+                        recParts.forEach(part => {
+                            if(part.includes("AI Approved")) {
+                                let decisionClass = aiStatus.includes("REDUCED") ? "pangkas" : "aman";
+                                let decisionIcon = aiStatus.includes("REDUCED") ? "scissors" : "check-circle";
+                                logicHtml += `<div class="ai-final-decision ${decisionClass}"><i data-lucide="${decisionIcon}" style="width:14px; height:14px;"></i> ${part.replace("AI Approved:", "Keputusan AI: ")}</div>`;
+                            } else {
+                                logicHtml += `<div class="ai-logic-step"><i data-lucide="corner-down-right" style="width:12px; height:12px; color:#bdc3c7;"></i> ${part}</div>`;
+                            }
+                        });
+                        logicHtml += `</div>`;
+                    }
+
+                    // LIMIT JAM BADGE
+                    let rawLimit = item.Max_Limit_Jam || "";
+                    let isLimitRh = rawLimit.includes("Data RH");
+                    let limitNum = rawLimit.replace(/<[^>]*>?/gm, '').replace(/\D/g,''); // Extract numbers only
+                    let limitBadge = isLimitRh ? 
+                        `<div class="num-highlight" style="color:#2980b9;">${limitNum} <span class="limit-tag limit-rh">Limit Kapal</span></div>` :
+                        `<div class="num-highlight" style="color:#d35400;">${limitNum} <span class="limit-tag limit-std">Limit Standard</span></div>`;
+                    
+                    if(!limitNum) limitBadge = "-";
+
                     let tr = document.createElement('tr');
-                    tr.className = 'clickable-row'; 
+                    tr.className = 'row-hover'; 
                     tr.innerHTML = `
-                        <td style="color:#999;">#${item.No_Item_PDF || "-"}</td>
+                        <td style="color:#999; text-align:center; font-weight:600;">${item.No_Item_PDF || "-"}</td>
                         <td>
-                            <div style="font-weight:600; color:var(--primary);">${item.Nama_Barang}</div>
-                            <div style="margin-top: 2px; margin-bottom: 3px; font-weight: 700; color: #2980b9; font-size: 11px;">
-                                PN: ${item.No_Part !== "UNKNOWN" ? item.No_Part : "-"}
+                            ${isMandatory ? '<span class="badge-type-mandatory">ITEM MANDATORY</span>' : ''}
+                            <div style="font-weight:700; color:var(--primary); font-size: 14px; margin-bottom: 4px;">${item.Nama_Barang}</div>
+                            <div style="font-weight: 600; color: #555; font-size: 11px; margin-bottom: 8px;">
+                                Part No: <span style="font-family:monospace; background:#f0f0f0; padding:2px 4px; border-radius:3px; color:#333;">${item.No_Part !== "UNKNOWN" ? item.No_Part : "-"}</span>
                             </div>
-                            ${isMandatory ? '<span class="badge-type-mandatory">MANDATORY</span><br/>' : ''}
                             ${masterBadge}
                         </td>
-                        <td><strong>${item.Qty_Diminta}</strong></td>
-                        <td>${item.ROB}</td>
-                        <td>${item.Max_Limit_Jam}</td>
-                        <td style="color:#c0392b; font-weight:600;">${item.Target_Cylinder}</td>
                         <td>
-                            ${item.Warning_Text ? `<div style="color:red;font-weight:bold;font-size:10px;margin-bottom:4px;">${item.Warning_Text}</div>` : ''}
-                            <div><span class="badge ${statusClass}">${aiStatus}</span></div>
-                            <div style="font-size:10px; margin-top:5px; line-height:1.4; color:#555;">${isMandatory ? bullets : 'Non-critical item.'}</div>
+                            <div style="margin-bottom:6px;"><span style="font-size:10px; color:#888; text-transform:uppercase;">Diminta (Req)</span><br/><span class="num-highlight">${item.Qty_Diminta}</span></div>
+                            <div><span style="font-size:10px; color:#888; text-transform:uppercase;">Sisa (ROB)</span><br/><span class="num-highlight">${item.ROB}</span></div>
                         </td>
-                        <td style="text-align: center;">
+                        <td>${limitBadge}</td>
+                        <td>
+                            ${item.Target_Cylinder !== "-" ? `<div class="cyl-alert"><i data-lucide="alert-octagon" style="width:12px; height:12px; vertical-align:-2px;"></i> ${item.Target_Cylinder}</div>` : '<span style="color:#aaa;">Aman / Di bawah limit</span>'}
+                            <div style="font-size:9.5px; color:#888; margin-top:6px; line-height:1.3;">Histori Lengkap:<br/>${item.RH_Terakhir}</div>
+                        </td>
+                        <td>
+                            ${item.Warning_Text ? `<div style="color:#c0392b; font-weight:800; font-size:11px; margin-bottom:6px;"><i data-lucide="x-circle" style="width:12px; height:12px; vertical-align:-2px;"></i> ${item.Warning_Text}</div>` : ''}
+                            <span class="badge ${statusClass}"><i data-lucide="${statusIcon}" style="width:12px; height:12px;"></i> ${aiStatus}</span>
+                            ${isMandatory ? logicHtml : '<div style="font-size:11px; color:#888; margin-top:8px;">Bukan item kritikal (Non-Mandatory). Lolos otomatis.</div>'}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
                             <input type="checkbox" class="verif-checkbox" ${isChecked}>
                         </td>
                     `;
-
-                    // Klik baris hanya untuk highlight visual
-                    tr.addEventListener('click', function(e) {
-                        if(e.target.type === 'checkbox') return; 
-                        document.querySelectorAll('.row-active').forEach(row => row.classList.remove('row-active'));
-                        this.classList.add('row-active'); 
-                    });
 
                     tableBody.appendChild(tr);
                 });
@@ -229,6 +300,7 @@
                 }
             });
 
+            // Sembunyikan Header Subsystem yang kosong
             const tableBody = document.getElementById('tableBody');
             const allRows = Array.from(tableBody.children);
             let currentHeader = null;
@@ -254,7 +326,7 @@
 
             const element = document.getElementById('printableArea');
             const opt = {
-                margin:       0.4,
+                margin:       0.3,
                 filename:     'SPB_Verified_Report.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2 },
@@ -285,7 +357,7 @@
 
                 if (auditData) {
                     let currentRowCount = auditData.length;
-                    document.getElementById('timerText').innerText = `Sedang menarik data ke layar... (${currentRowCount} barang masuk)`;
+                    document.getElementById('timerText').innerText = `Merender ${currentRowCount} baris data ke dashboard...`;
 
                     if (currentRowCount > previousRowCount) {
                         previousRowCount = currentRowCount;
@@ -299,7 +371,7 @@
                         renderTable(auditData); 
                     }
                 } else {
-                    document.getElementById('timerText').innerText = "Sistem masih merangkum data... " + new Date().toLocaleTimeString();
+                    document.getElementById('timerText').innerText = "Sistem AI sedang menalar dan menyusun keputusan... " + new Date().toLocaleTimeString();
                 }
             } catch (e) {
                 console.log("Menunggu N8N...", e);
@@ -329,20 +401,20 @@
 
             try {
                 const response = await fetch(N8N_UPLOAD_URL, { method: 'POST', body: formData });
-                if (!response.ok) throw new Error("Gagal terhubung ke n8n.");
+                if (!response.ok) throw new Error("Koneksi ke N8N gagal. Cek status server N8N.");
 
                 document.getElementById('pollingCard').style.display = 'block';
                 btn.innerHTML = `<i data-lucide="check"></i> BERHASIL DIKIRIM`;
                 
-                pollingInterval = setInterval(() => checkJobStatus(jobId), 4000);
+                pollingInterval = setInterval(() => checkJobStatus(jobId), 3000);
 
             } catch (err) {
                 errorBox.style.display = 'block';
-                errorBox.innerText = `Error: ${err.message}`;
+                errorBox.innerHTML = `<i data-lucide="alert-triangle" style="width:16px; height:16px; vertical-align:-3px;"></i> Error: ${err.message}`;
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="send"></i> START AUDIT PROCESS`;
+                btn.innerHTML = `<i data-lucide="bot"></i> JALANKAN AUDIT AI`;
+                lucide.createIcons();
             }
-            lucide.createIcons();
         });
     </script>
 </body>
