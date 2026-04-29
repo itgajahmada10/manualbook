@@ -162,7 +162,7 @@
         let stableCount = 0;      
 
         // =====================================
-        // ENGINE PDF.JS (HYBRID LOGIC DENGAN CORS PROXY)
+        // ENGINE PDF.JS
         // =====================================
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         const pdfjsViewer = window['pdfjs-dist/web/pdf_viewer'];
@@ -200,7 +200,7 @@
             initPdfViewer();
 
             try {
-                // KITA PAKAI CORS PROXY PUBLIK KARENA DOMAINNYA BERBEDA / SPASINYA BIKIN ERROR CORS
+                // KITA PAKAI CORS PROXY AGAR AMAN
                 const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(rawUrl);
 
                 if (rawUrl !== currentPdfUrl || !currentPdfDoc) {
@@ -239,7 +239,7 @@
                         document.getElementById('pdfStatusBadge').innerText = `Ditemukan di Hal: ${targetPageNum}`;
                         document.getElementById('pdfStatusBadge').style.background = "#e9f7ef";
                         document.getElementById('pdfStatusBadge').style.color = "#1e8449";
-                    }, 500); // Beri waktu viewer untuk render halamannya
+                    }, 500); 
                 } else {
                     document.getElementById('pdfStatusBadge').innerText = "PN Tidak Ditemukan";
                     document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
@@ -293,15 +293,18 @@
 
                     let urlManualBook = item.Link_Manual_Book || "";
                     let searchPnTerm = item.PN_Search || item.No_Part || "UNKNOWN";
+                    let namaRh = item.Nama_RH && item.Nama_RH !== "-" ? item.Nama_RH : ""; // <--- VARIABEL RH BARU
                     
                     let pageBadge = `<span style="color:#2980b9; font-weight:bold; font-size:10px; background:#ebf5fb; padding:2px 4px; border-radius:4px; margin-left:4px;"><i data-lucide="search" style="width:10px;"></i> Lacak Part</span>`;
 
                     let masterBadge = "";
                     if (isMandatory && item.Nama_Master) {
+                        // KOTAK BADGE DIUPDATE: SEKARANG ADA NAMA MASTER & NAMA RH
                         masterBadge = `
                         <div style="margin-top: 6px; font-size: 10px; line-height: 1.3; background: #fbf9fc; padding: 4px 6px; border-radius: 4px; border: 1px dashed #d2c5d6; display: inline-block;">
                             <span style="color: var(--primary);">🔍 Master: <b>${item.Nama_Master}</b></span><br/>
                             <span style="color: #888; font-style: italic; font-size: 9px;">(via ${item.Tipe_Match})</span>
+                            ${namaRh ? `<br/><div style="margin-top:3px; border-top:1px dashed #e8dee8; padding-top:3px;"><span style="color: #d35400;">⚙️ RH: <b>${namaRh}</b></span></div>` : ''}
                         </div>`;
                     }
 
@@ -346,6 +349,19 @@
                 });
             }
             lucide.createIcons();
+            
+            if (auditData.length > 0 && auditData[0].Link_Manual_Book) {
+                let initialUrl = auditData[0].Link_Manual_Book;
+                if (!currentPdfDoc) {
+                    initPdfViewer();
+                    pdfjsLib.getDocument('https://api.allorigins.win/raw?url=' + encodeURIComponent(initialUrl)).promise.then(doc => {
+                        currentPdfDoc = doc;
+                        currentPdfUrl = initialUrl;
+                        pdfViewer.setDocument(doc);
+                        pdfLinkService.setDocument(doc, null);
+                    }).catch(e => console.log("Preload failed", e));
+                }
+            }
         }
 
         function downloadPDF() {
