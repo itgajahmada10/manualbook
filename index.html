@@ -162,7 +162,7 @@
         let stableCount = 0;      
 
         // =====================================
-        // ENGINE PDF.JS (HYBRID LOGIC: Programmatic Search + Native Viewer)
+        // ENGINE PDF.JS (HYBRID LOGIC DENGAN CORS PROXY)
         // =====================================
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         const pdfjsViewer = window['pdfjs-dist/web/pdf_viewer'];
@@ -171,15 +171,12 @@
         let currentPdfDoc = null;
         let currentPdfUrl = "";
         let isViewerInitialized = false;
-        
-        let eventBus, pdfViewer, pdfLinkService;
+        let pdfViewer, pdfLinkService;
 
-        // Inisialisasi UI Viewer (TIDAK ADA PDFFindController, anti crash)
         function initPdfViewer() {
             if (isViewerInitialized) return;
             const container = document.getElementById('viewerContainer');
-            
-            eventBus = new pdfjsViewer.EventBus();
+            const eventBus = new pdfjsViewer.EventBus();
             pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
 
             pdfViewer = new pdfjsViewer.PDFViewer({
@@ -192,7 +189,7 @@
             isViewerInitialized = true;
         }
 
-        async function loadAndSearchPdf(url, searchTerm) {
+        async function loadAndSearchPdf(rawUrl, searchTerm) {
             document.getElementById('pdfPlaceholder').style.display = 'none';
             document.getElementById('viewerContainer').style.display = 'block';
             document.getElementById('pdfStatusBadge').innerText = `Melacak PN: ${searchTerm}...`;
@@ -203,12 +200,14 @@
             initPdfViewer();
 
             try {
-                // 1. Tarik Dokumen dari URL Github langsung (Tanpa Proxy)
-                if (url !== currentPdfUrl || !currentPdfDoc) {
+                // KITA PAKAI CORS PROXY PUBLIK KARENA DOMAINNYA BERBEDA / SPASINYA BIKIN ERROR CORS
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(rawUrl);
+
+                if (rawUrl !== currentPdfUrl || !currentPdfDoc) {
                     document.getElementById('pdfLoadingText').style.display = 'inline';
-                    const loadingTask = pdfjsLib.getDocument(url);
+                    const loadingTask = pdfjsLib.getDocument(proxyUrl);
                     currentPdfDoc = await loadingTask.promise;
-                    currentPdfUrl = url;
+                    currentPdfUrl = rawUrl;
                     
                     pdfViewer.setDocument(currentPdfDoc);
                     pdfLinkService.setDocument(currentPdfDoc, null);
@@ -218,7 +217,6 @@
                 let targetPageNum = 1;
                 let isFound = false;
 
-                // 2. Pencarian Part Number Lintas Halaman secara Instan
                 if (searchTerm && searchTerm !== "UNKNOWN" && searchTerm !== "-") {
                     let cleanSearch = searchTerm.replace(/\s+/g, ''); 
                     
@@ -235,15 +233,13 @@
                     }
                 }
 
-                // 3. Paksa Viewer Melompat ke Halaman yang Ditemukan
                 if(isFound) {
-                    // Jeda sejenak agar Viewer selesai render kerangka dasar halaman 1
                     setTimeout(() => {
                         pdfViewer.currentPageNumber = targetPageNum;
                         document.getElementById('pdfStatusBadge').innerText = `Ditemukan di Hal: ${targetPageNum}`;
                         document.getElementById('pdfStatusBadge').style.background = "#e9f7ef";
                         document.getElementById('pdfStatusBadge').style.color = "#1e8449";
-                    }, 300);
+                    }, 500); // Beri waktu viewer untuk render halamannya
                 } else {
                     document.getElementById('pdfStatusBadge').innerText = "PN Tidak Ditemukan";
                     document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
@@ -253,13 +249,12 @@
             } catch (error) {
                 console.error("GAGAL LOAD PDF:", error);
                 document.getElementById('pdfLoadingText').style.display = 'none';
-                document.getElementById('pdfStatusBadge').innerText = "Koneksi PDF Gagal";
+                document.getElementById('pdfStatusBadge').innerText = "Koneksi PDF Gagal (CORS/URL Error)";
                 document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
                 document.getElementById('pdfStatusBadge').style.color = "#cb4335";
             }
         }
 
-        // FUNGSI RENDER TABEL 
         function renderTable(auditData) {
             const reportPanel = document.getElementById('reportPanel');
             const tableBody = document.getElementById('tableBody');
@@ -336,7 +331,6 @@
                         </td>
                     `;
 
-                    // EVENT LISTENER TRIGGERS HYBRID SEARCH
                     tr.addEventListener('click', function(e) {
                         if(e.target.type === 'checkbox') return; 
                         
@@ -352,20 +346,6 @@
                 });
             }
             lucide.createIcons();
-            
-            // Background load PDF untuk kecepatan ekstra
-            if (auditData.length > 0 && auditData[0].Link_Manual_Book) {
-                let initialUrl = auditData[0].Link_Manual_Book;
-                if (!currentPdfDoc) {
-                    initPdfViewer();
-                    pdfjsLib.getDocument(initialUrl).promise.then(doc => {
-                        currentPdfDoc = doc;
-                        currentPdfUrl = initialUrl;
-                        pdfViewer.setDocument(doc);
-                        pdfLinkService.setDocument(doc, null);
-                    }).catch(e => console.log("Preload failed", e));
-                }
-            }
         }
 
         function downloadPDF() {
