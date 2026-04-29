@@ -172,7 +172,7 @@
         let stableCount = 0;      
 
         // =====================================
-        // ENGINE PDF.JS (PDFFindController + eventBus)
+        // ENGINE PDF.JS (PDFFindController + eventBus + Silent Preload)
         // =====================================
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         const pdfjsViewer = window['pdfjs-dist/web/pdf_viewer'];
@@ -220,10 +220,37 @@
             isViewerInitialized = true;
         }
 
+        // FUNGSI SILENT PRELOAD (Download di background tanpa ganti UI)
+        async function silentPreloadPdf(url) {
+            if (!url || url === "-" || url === "UNKNOWN") return;
+            initPdfViewer(); 
+
+            try {
+                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                if (url !== currentPdfUrl) {
+                    document.getElementById('pdfStatusBadge').innerText = "Mendownload PDF ke Memori...";
+                    document.getElementById('pdfStatusBadge').style.background = "#ebf5fb";
+                    document.getElementById('pdfStatusBadge').style.color = "#2980b9";
+                    
+                    const loadingTask = pdfjsLib.getDocument(proxyUrl);
+                    currentPdfDoc = await loadingTask.promise;
+                    currentPdfUrl = url;
+                    
+                    pdfViewer.setDocument(currentPdfDoc);
+                    pdfLinkService.setDocument(currentPdfDoc, null);
+                    
+                    document.getElementById('pdfStatusBadge').innerText = "PDF Siap di Memori (Fast Search Ready)";
+                    document.getElementById('pdfStatusBadge').style.background = "#e9f7ef";
+                    document.getElementById('pdfStatusBadge').style.color = "#1e8449";
+                }
+            } catch (e) {
+                console.log("Preload PDF gagal/diblokir", e);
+            }
+        }
+
         async function loadAndSearchPdf(url, searchTerm) {
             document.getElementById('pdfPlaceholder').style.display = 'none';
             document.getElementById('viewerContainer').style.display = 'block';
-            document.getElementById('pdfLoadingText').style.display = 'inline';
             document.getElementById('pdfStatusBadge').innerText = `Mencari PN: ${searchTerm}...`;
             document.getElementById('pdfStatusBadge').style.background = "#fcf3cf";
             document.getElementById('pdfStatusBadge').style.color = "#d4ac0d";
@@ -233,10 +260,10 @@
             initPdfViewer();
 
             try {
-                // Gunakan Proxy agar tidak kena blokir CORS Github
-                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
-
+                // CEK APAKAH PDF SUDAH DI-PRELOAD ATAU BELUM
                 if (url !== currentPdfUrl || !currentPdfDoc) {
+                    document.getElementById('pdfLoadingText').style.display = 'inline';
+                    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
                     const loadingTask = pdfjsLib.getDocument(proxyUrl);
                     currentPdfDoc = await loadingTask.promise;
                     currentPdfUrl = url;
@@ -251,8 +278,6 @@
                 if (searchTerm && searchTerm !== "UNKNOWN" && searchTerm !== "-") {
                     let cleanSearch = searchTerm.replace(/\s+/g, ''); // Buang spasi
                     
-                    // Kita harus tunggu sampai halaman PDF selesai di-render TextLayer-nya
-                    // sebelum nembak event 'find'
                     const executeFind = () => {
                         eventBus.dispatch('find', {
                             query: cleanSearch,
@@ -263,7 +288,6 @@
                         });
                     };
 
-                    // Jika ini baru pertama load dokumen, tunggu event 'pagesinit'
                     if (!pdfViewer.pagesCount) {
                         const onPagesInit = function() {
                             executeFind();
@@ -271,7 +295,6 @@
                         };
                         eventBus.on('pagesinit', onPagesInit);
                     } else {
-                        // Jika dokumen sudah terbuka, langsung tembak pencariannya
                         executeFind();
                     }
                 }
@@ -285,7 +308,7 @@
             }
         }
 
-        // FUNGSI RENDER TABEL (TETAP SAMA SEPERTI SEBELUMNYA)
+        // FUNGSI RENDER TABEL 
         function renderTable(auditData) {
             const reportPanel = document.getElementById('reportPanel');
             const tableBody = document.getElementById('tableBody');
@@ -379,6 +402,11 @@
                 });
             }
             lucide.createIcons();
+            
+            // JALANKAN SILENT PRELOAD SETELAH TABEL RENDER
+            if (auditData.length > 0 && auditData[0].Link_Manual_Book) {
+                silentPreloadPdf(auditData[0].Link_Manual_Book);
+            }
         }
 
         function downloadPDF() {
