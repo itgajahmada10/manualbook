@@ -8,10 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf_viewer.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf_viewer.css">
 
     <style>
         :root {
@@ -22,7 +18,7 @@
         body { margin: 0; padding: 30px; background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; }
         .main-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
         .left-panel { flex: 1; min-width: 350px; max-width: 400px; position: sticky; top: 30px; }
-        .right-panel { flex: 2; min-width: 700px; display: flex; flex-direction: column; gap: 20px; width: 100%; }
+        .right-panel { flex: 2; min-width: 700px; width: 100%; }
         .card-box { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); }
         .header { text-align: center; margin-bottom: 25px; }
         .header h2 { color: var(--primary); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -46,11 +42,6 @@
         .badge-kurang { background-color: #fcf3cf; color: #d4ac0d; border: 1px solid #f9e79f; }
         .badge-type-mandatory { font-size: 9px; background: #f0ebf2; color: var(--primary); padding: 2px 5px; border-radius: 3px; border: 1px solid #d2c5d6; font-weight: 700; display: inline-block; margin-top: 4px;}
         .verif-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary); }
-        .workspace-container { display: flex; flex-direction: column; gap: 25px; width: 100%; }
-        .pdf-viewer-panel { width: 100%; background: #fff; border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 900px; }
-        .pdf-header { padding: 15px 20px; background: #fbf9fc; border-bottom: 1px solid var(--border-color); font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--primary); display: flex; justify-content: space-between; align-items: center; }
-        
-        #viewerContainer { flex: 1; width: 100%; background: #525659; overflow: auto; position: relative; display: none; }
         .row-active { background-color: #f0ebf2 !important; border-left: 4px solid var(--primary); }
         .clickable-row { cursor: pointer; transition: background 0.2s; }
         .clickable-row:hover { background-color: #fbf9fc; }
@@ -63,7 +54,7 @@
             <div class="card-box">
                 <div class="header">
                     <h2><i data-lucide="shield-check"></i> SPB Audit</h2>
-                    <p style="color: #666; font-size: 12px;">Engine Audit System (Presentation Mode)</p>
+                    <p style="color: #666; font-size: 12px;">Engine Audit System (Core Engine)</p>
                 </div>
                 <form id="auditForm">
                     <label>1. KATEGORI MESIN (Sistem)</label>
@@ -106,46 +97,24 @@
                         </button>
                     </div>
 
-                    <div class="workspace-container">
-                        <div class="table-panel">
-                            <div class="table-responsive">
-                                <table id="auditTable">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 30px;">No</th>
-                                            <th>Description</th>
-                                            <th>Qty</th>
-                                            <th>ROB</th>
-                                            <th>Limit</th>
-                                            <th>Target Cyl</th>
-                                            <th>AI Recommendation</th>
-                                            <th style="text-align: center;">Verifikasi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tableBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div id="pdfWorkspace" class="pdf-viewer-panel" style="display: none;">
-                            <div class="pdf-header">
-                                <span><i data-lucide="book-open" style="width: 18px; margin-right:5px; vertical-align:-3px;"></i> Manual Book Reference</span>
-                                <div>
-                                    <span id="pdfLoadingText" style="font-size: 11px; color: #888; display: none; margin-right: 10px;">Menarik Dokumen...</span>
-                                    <span id="pdfStatusBadge" style="font-size: 10px; background: #e9f7ef; color: #1e8449; padding: 3px 6px; border-radius: 4px;">Siap Cari PN</span>
-                                </div>
-                            </div>
-                            
-                            <div id="viewerContainer">
-                                <div id="viewer" class="pdfViewer"></div>
-                            </div>
-                            
-                            <div id="pdfPlaceholder" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#999; padding:40px; text-align:center;">
-                                <i data-lucide="file-search" style="width: 48px; height: 48px; margin-bottom:15px; opacity: 0.5;"></i>
-                                <p style="font-size: 14px; max-width: 400px;">Klik pada <b>Part Number</b> di tabel atas. Sistem akan melacak dan merender halaman terkait.</p>
-                            </div>
-                        </div>
+                    <div class="table-responsive">
+                        <table id="auditTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30px;">No</th>
+                                    <th>Description</th>
+                                    <th>Qty</th>
+                                    <th>ROB</th>
+                                    <th>Limit</th>
+                                    <th>Target Cyl</th>
+                                    <th>AI Recommendation</th>
+                                    <th style="text-align: center;">Verifikasi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -161,108 +130,12 @@
         let previousRowCount = 0; 
         let stableCount = 0;      
 
-        // =====================================
-        // ENGINE PDF.JS
-        // =====================================
-        const pdfjsLib = window['pdfjs-dist/build/pdf'];
-        const pdfjsViewer = window['pdfjs-dist/web/pdf_viewer'];
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-        
-        let currentPdfDoc = null;
-        let currentPdfUrl = "";
-        let isViewerInitialized = false;
-        let pdfViewer, pdfLinkService;
-
-        function initPdfViewer() {
-            if (isViewerInitialized) return;
-            const container = document.getElementById('viewerContainer');
-            const eventBus = new pdfjsViewer.EventBus();
-            pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
-
-            pdfViewer = new pdfjsViewer.PDFViewer({
-                container: container,
-                eventBus: eventBus,
-                linkService: pdfLinkService,
-                removePageBorders: true
-            });
-            pdfLinkService.setViewer(pdfViewer);
-            isViewerInitialized = true;
-        }
-
-        async function loadAndSearchPdf(rawUrl, searchTerm) {
-            document.getElementById('pdfPlaceholder').style.display = 'none';
-            document.getElementById('viewerContainer').style.display = 'block';
-            document.getElementById('pdfStatusBadge').innerText = `Melacak PN: ${searchTerm}...`;
-            document.getElementById('pdfStatusBadge').style.background = "#fcf3cf";
-            document.getElementById('pdfStatusBadge').style.color = "#d4ac0d";
-            document.getElementById('pdfWorkspace').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            initPdfViewer();
-
-            try {
-                // KITA PAKAI CORS PROXY AGAR AMAN
-                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(rawUrl);
-
-                if (rawUrl !== currentPdfUrl || !currentPdfDoc) {
-                    document.getElementById('pdfLoadingText').style.display = 'inline';
-                    const loadingTask = pdfjsLib.getDocument(proxyUrl);
-                    currentPdfDoc = await loadingTask.promise;
-                    currentPdfUrl = rawUrl;
-                    
-                    pdfViewer.setDocument(currentPdfDoc);
-                    pdfLinkService.setDocument(currentPdfDoc, null);
-                }
-                document.getElementById('pdfLoadingText').style.display = 'none';
-
-                let targetPageNum = 1;
-                let isFound = false;
-
-                if (searchTerm && searchTerm !== "UNKNOWN" && searchTerm !== "-") {
-                    let cleanSearch = searchTerm.replace(/\s+/g, ''); 
-                    
-                    for (let i = 1; i <= currentPdfDoc.numPages; i++) {
-                        let page = await currentPdfDoc.getPage(i);
-                        let textContent = await page.getTextContent();
-                        let pageString = textContent.items.map(item => item.str).join('').replace(/\s+/g, '');
-                        
-                        if (pageString.includes(cleanSearch)) {
-                            targetPageNum = i;
-                            isFound = true;
-                            break; 
-                        }
-                    }
-                }
-
-                if(isFound) {
-                    setTimeout(() => {
-                        pdfViewer.currentPageNumber = targetPageNum;
-                        document.getElementById('pdfStatusBadge').innerText = `Ditemukan di Hal: ${targetPageNum}`;
-                        document.getElementById('pdfStatusBadge').style.background = "#e9f7ef";
-                        document.getElementById('pdfStatusBadge').style.color = "#1e8449";
-                    }, 500); 
-                } else {
-                    document.getElementById('pdfStatusBadge').innerText = "PN Tidak Ditemukan";
-                    document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
-                    document.getElementById('pdfStatusBadge').style.color = "#cb4335";
-                }
-
-            } catch (error) {
-                console.error("GAGAL LOAD PDF:", error);
-                document.getElementById('pdfLoadingText').style.display = 'none';
-                document.getElementById('pdfStatusBadge').innerText = "Koneksi PDF Gagal (CORS/URL Error)";
-                document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
-                document.getElementById('pdfStatusBadge').style.color = "#cb4335";
-            }
-        }
-
         function renderTable(auditData) {
             const reportPanel = document.getElementById('reportPanel');
             const tableBody = document.getElementById('tableBody');
-            const pdfWorkspace = document.getElementById('pdfWorkspace');
             
             document.getElementById('pollingCard').style.display = 'none';
             reportPanel.style.display = 'block';
-            pdfWorkspace.style.display = 'flex';
             tableBody.innerHTML = '';
             
             let vessel = auditData[0].Nama_Kapal || "Unknown Vessel";
@@ -291,15 +164,10 @@
                     let bullets = rawRekomendasi.split("|").map(b => `<div style="margin-top:2px;">• ${b.trim()}</div>`).join("");
                     let isChecked = (aiStatus === "APPROVED" || aiStatus === "APPROVED (RESTOCK)") ? "checked" : "";
 
-                    let urlManualBook = item.Link_Manual_Book || "";
-                    let searchPnTerm = item.PN_Search || item.No_Part || "UNKNOWN";
-                    let namaRh = item.Nama_RH && item.Nama_RH !== "-" ? item.Nama_RH : ""; // <--- VARIABEL RH BARU
-                    
-                    let pageBadge = `<span style="color:#2980b9; font-weight:bold; font-size:10px; background:#ebf5fb; padding:2px 4px; border-radius:4px; margin-left:4px;"><i data-lucide="search" style="width:10px;"></i> Lacak Part</span>`;
+                    let namaRh = item.Nama_RH && item.Nama_RH !== "-" ? item.Nama_RH : ""; 
 
                     let masterBadge = "";
                     if (isMandatory && item.Nama_Master) {
-                        // KOTAK BADGE DIUPDATE: SEKARANG ADA NAMA MASTER & NAMA RH
                         masterBadge = `
                         <div style="margin-top: 6px; font-size: 10px; line-height: 1.3; background: #fbf9fc; padding: 4px 6px; border-radius: 4px; border: 1px dashed #d2c5d6; display: inline-block;">
                             <span style="color: var(--primary);">🔍 Master: <b>${item.Nama_Master}</b></span><br/>
@@ -315,7 +183,7 @@
                         <td>
                             <div style="font-weight:600; color:var(--primary);">${item.Nama_Barang}</div>
                             <div style="margin-top: 2px; margin-bottom: 3px; font-weight: 700; color: #2980b9; font-size: 11px;">
-                                PN: ${item.No_Part} ${item.No_Part !== "UNKNOWN" ? pageBadge : ""}
+                                PN: ${item.No_Part !== "UNKNOWN" ? item.No_Part : "-"}
                             </div>
                             ${isMandatory ? '<span class="badge-type-mandatory">MANDATORY</span><br/>' : ''}
                             ${masterBadge}
@@ -334,43 +202,22 @@
                         </td>
                     `;
 
+                    // Klik baris hanya untuk highlight visual
                     tr.addEventListener('click', function(e) {
                         if(e.target.type === 'checkbox') return; 
-                        
                         document.querySelectorAll('.row-active').forEach(row => row.classList.remove('row-active'));
                         this.classList.add('row-active'); 
-
-                        if(urlManualBook && urlManualBook !== "") {
-                            loadAndSearchPdf(urlManualBook, searchPnTerm);
-                        }
                     });
 
                     tableBody.appendChild(tr);
                 });
             }
             lucide.createIcons();
-            
-            if (auditData.length > 0 && auditData[0].Link_Manual_Book) {
-                let initialUrl = auditData[0].Link_Manual_Book;
-                if (!currentPdfDoc) {
-                    initPdfViewer();
-                    pdfjsLib.getDocument('https://api.allorigins.win/raw?url=' + encodeURIComponent(initialUrl)).promise.then(doc => {
-                        currentPdfDoc = doc;
-                        currentPdfUrl = initialUrl;
-                        pdfViewer.setDocument(doc);
-                        pdfLinkService.setDocument(doc, null);
-                    }).catch(e => console.log("Preload failed", e));
-                }
-            }
         }
 
         function downloadPDF() {
             const btn = document.getElementById('btnDownload');
             btn.style.display = 'none';
-
-            const pdfWorkspace = document.getElementById('pdfWorkspace');
-            const originalPdfDisplay = pdfWorkspace.style.display;
-            pdfWorkspace.style.display = 'none';
 
             const checkboxes = document.querySelectorAll('.verif-checkbox');
             const rowsToHide = [];
@@ -416,7 +263,6 @@
 
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.style.display = 'flex'; 
-                pdfWorkspace.style.display = originalPdfDisplay; 
                 rowsToHide.forEach(tr => tr.style.display = ''); 
                 headersToHide.forEach(th => th.style.display = ''); 
             });
