@@ -220,19 +220,19 @@
             isViewerInitialized = true;
         }
 
-        // FUNGSI SILENT PRELOAD (Download di background tanpa ganti UI)
+        // FUNGSI SILENT PRELOAD (MURNI TANPA PROXY)
         async function silentPreloadPdf(url) {
             if (!url || url === "-" || url === "UNKNOWN") return;
             initPdfViewer(); 
 
             try {
-                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
                 if (url !== currentPdfUrl) {
                     document.getElementById('pdfStatusBadge').innerText = "Mendownload PDF ke Memori...";
                     document.getElementById('pdfStatusBadge').style.background = "#ebf5fb";
                     document.getElementById('pdfStatusBadge').style.color = "#2980b9";
                     
-                    const loadingTask = pdfjsLib.getDocument(proxyUrl);
+                    // LANGSUNG TARIK DARI URL
+                    const loadingTask = pdfjsLib.getDocument(url);
                     currentPdfDoc = await loadingTask.promise;
                     currentPdfUrl = url;
                     
@@ -248,6 +248,7 @@
             }
         }
 
+        // FUNGSI LOAD & SEARCH (MURNI TANPA PROXY)
         async function loadAndSearchPdf(url, searchTerm) {
             document.getElementById('pdfPlaceholder').style.display = 'none';
             document.getElementById('viewerContainer').style.display = 'block';
@@ -263,8 +264,9 @@
                 // CEK APAKAH PDF SUDAH DI-PRELOAD ATAU BELUM
                 if (url !== currentPdfUrl || !currentPdfDoc) {
                     document.getElementById('pdfLoadingText').style.display = 'inline';
-                    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
-                    const loadingTask = pdfjsLib.getDocument(proxyUrl);
+                    
+                    // LANGSUNG TARIK DARI URL
+                    const loadingTask = pdfjsLib.getDocument(url);
                     currentPdfDoc = await loadingTask.promise;
                     currentPdfUrl = url;
                     
@@ -302,7 +304,7 @@
             } catch (error) {
                 console.error("GAGAL LOAD PDF:", error);
                 document.getElementById('pdfLoadingText').style.display = 'none';
-                document.getElementById('pdfStatusBadge').innerText = "Koneksi PDF Terblokir";
+                document.getElementById('pdfStatusBadge').innerText = "Gagal memuat PDF (Cek URL)";
                 document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
                 document.getElementById('pdfStatusBadge').style.color = "#cb4335";
             }
