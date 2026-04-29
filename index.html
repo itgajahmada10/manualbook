@@ -50,15 +50,7 @@
         .pdf-viewer-panel { width: 100%; background: #fff; border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 900px; }
         .pdf-header { padding: 15px 20px; background: #fbf9fc; border-bottom: 1px solid var(--border-color); font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--primary); display: flex; justify-content: space-between; align-items: center; }
         
-        /* CONTAINER UNTUK NATIVE VIEWER */
-        #viewerContainer {
-            flex: 1; width: 100%; background: #525659; overflow: auto; position: relative; display: none;
-        }
-        
-        /* WARNA HIGHLIGHT CUSTOM KETIKA KETEMU PART NUMBER */
-        .highlight { background-color: rgba(255, 255, 0, 0.5) !important; }
-        .highlight.selected { background-color: rgba(255, 165, 0, 0.8) !important; }
-
+        #viewerContainer { flex: 1; width: 100%; background: #525659; overflow: auto; position: relative; display: none; }
         .row-active { background-color: #f0ebf2 !important; border-left: 4px solid var(--primary); }
         .clickable-row { cursor: pointer; transition: background 0.2s; }
         .clickable-row:hover { background-color: #fbf9fc; }
@@ -73,7 +65,6 @@
                     <h2><i data-lucide="shield-check"></i> SPB Audit</h2>
                     <p style="color: #666; font-size: 12px;">Engine Audit System (Presentation Mode)</p>
                 </div>
-                
                 <form id="auditForm">
                     <label>1. KATEGORI MESIN (Sistem)</label>
                     <select id="engineType">
@@ -101,8 +92,7 @@
             <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 60px 20px;">
                 <div class="loader"></div>
                 <h2 style="color: var(--primary); font-family:'Poppins', sans-serif;">Sistem AI Sedang Bekerja...</h2>
-                <p style="color: #555; font-size: 14px;">Dokumen PDF sedang dianalisis. AI mengekstrak data histori dan rekomendasi batas jam kerja.</p>
-                <p id="timerText" style="color: #888; font-size: 12px; font-weight: bold; margin-top: 15px;">Menunggu balasan database... (Estimasi 2-3 Menit)</p>
+                <p id="timerText" style="color: #888; font-size: 12px; font-weight: bold; margin-top: 15px;">Menunggu balasan database...</p>
             </div>
 
             <div id="reportPanel" class="card-box" style="display: none; padding: 20px; width: 100%; box-sizing: border-box;">
@@ -152,7 +142,7 @@
                             
                             <div id="pdfPlaceholder" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#999; padding:40px; text-align:center;">
                                 <i data-lucide="file-search" style="width: 48px; height: 48px; margin-bottom:15px; opacity: 0.5;"></i>
-                                <p style="font-size: 14px; max-width: 400px;">Klik pada <b>Part Number</b> di tabel atas. Sistem akan melacak dan melakukan highlight pada PDF asli.</p>
+                                <p style="font-size: 14px; max-width: 400px;">Klik pada <b>Part Number</b> di tabel atas. Sistem akan melacak dan merender halaman terkait.</p>
                             </div>
                         </div>
                     </div>
@@ -172,7 +162,7 @@
         let stableCount = 0;      
 
         // =====================================
-        // ENGINE PDF.JS (PDFFindController + eventBus + Silent Preload)
+        // ENGINE PDF.JS (HYBRID LOGIC: Programmatic Search + Native Viewer)
         // =====================================
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         const pdfjsViewer = window['pdfjs-dist/web/pdf_viewer'];
@@ -182,90 +172,40 @@
         let currentPdfUrl = "";
         let isViewerInitialized = false;
         
-        let eventBus, pdfViewer, pdfFindController, pdfLinkService;
+        let eventBus, pdfViewer, pdfLinkService;
 
+        // Inisialisasi UI Viewer (TIDAK ADA PDFFindController, anti crash)
         function initPdfViewer() {
             if (isViewerInitialized) return;
-            
             const container = document.getElementById('viewerContainer');
             
-            // Inisialisasi Arsitektur EventBus
             eventBus = new pdfjsViewer.EventBus();
             pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
-            pdfFindController = new pdfjsViewer.PDFFindController({ eventBus, linkService: pdfLinkService });
 
-            // Inisialisasi Viewer Utama (menggambar text layer & canvas)
             pdfViewer = new pdfjsViewer.PDFViewer({
                 container: container,
                 eventBus: eventBus,
                 linkService: pdfLinkService,
-                findController: pdfFindController,
                 removePageBorders: true
             });
             pdfLinkService.setViewer(pdfViewer);
-
-            // Listener ketika hasil pencarian di-update
-            eventBus.on('updatefindmatchescount', function (e) {
-                if (e.matchesCount.total > 0) {
-                    document.getElementById('pdfStatusBadge').innerText = `Ditemukan ${e.matchesCount.total} Match PN`;
-                    document.getElementById('pdfStatusBadge').style.background = "#e9f7ef";
-                    document.getElementById('pdfStatusBadge').style.color = "#1e8449";
-                } else {
-                    document.getElementById('pdfStatusBadge').innerText = "PN Tidak Ditemukan";
-                    document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
-                    document.getElementById('pdfStatusBadge').style.color = "#cb4335";
-                }
-            });
-
             isViewerInitialized = true;
         }
 
-        // FUNGSI SILENT PRELOAD (MURNI TANPA PROXY)
-        async function silentPreloadPdf(url) {
-            if (!url || url === "-" || url === "UNKNOWN") return;
-            initPdfViewer(); 
-
-            try {
-                if (url !== currentPdfUrl) {
-                    document.getElementById('pdfStatusBadge').innerText = "Mendownload PDF ke Memori...";
-                    document.getElementById('pdfStatusBadge').style.background = "#ebf5fb";
-                    document.getElementById('pdfStatusBadge').style.color = "#2980b9";
-                    
-                    // LANGSUNG TARIK DARI URL
-                    const loadingTask = pdfjsLib.getDocument(url);
-                    currentPdfDoc = await loadingTask.promise;
-                    currentPdfUrl = url;
-                    
-                    pdfViewer.setDocument(currentPdfDoc);
-                    pdfLinkService.setDocument(currentPdfDoc, null);
-                    
-                    document.getElementById('pdfStatusBadge').innerText = "PDF Siap di Memori (Fast Search Ready)";
-                    document.getElementById('pdfStatusBadge').style.background = "#e9f7ef";
-                    document.getElementById('pdfStatusBadge').style.color = "#1e8449";
-                }
-            } catch (e) {
-                console.log("Preload PDF gagal/diblokir", e);
-            }
-        }
-
-        // FUNGSI LOAD & SEARCH (MURNI TANPA PROXY)
         async function loadAndSearchPdf(url, searchTerm) {
             document.getElementById('pdfPlaceholder').style.display = 'none';
             document.getElementById('viewerContainer').style.display = 'block';
-            document.getElementById('pdfStatusBadge').innerText = `Mencari PN: ${searchTerm}...`;
+            document.getElementById('pdfStatusBadge').innerText = `Melacak PN: ${searchTerm}...`;
             document.getElementById('pdfStatusBadge').style.background = "#fcf3cf";
             document.getElementById('pdfStatusBadge').style.color = "#d4ac0d";
-            
             document.getElementById('pdfWorkspace').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             initPdfViewer();
 
             try {
-                // CEK APAKAH PDF SUDAH DI-PRELOAD ATAU BELUM
+                // 1. Tarik Dokumen dari URL Github langsung (Tanpa Proxy)
                 if (url !== currentPdfUrl || !currentPdfDoc) {
                     document.getElementById('pdfLoadingText').style.display = 'inline';
-                    
-                    // LANGSUNG TARIK DARI URL
                     const loadingTask = pdfjsLib.getDocument(url);
                     currentPdfDoc = await loadingTask.promise;
                     currentPdfUrl = url;
@@ -273,38 +213,47 @@
                     pdfViewer.setDocument(currentPdfDoc);
                     pdfLinkService.setDocument(currentPdfDoc, null);
                 }
-
                 document.getElementById('pdfLoadingText').style.display = 'none';
 
-                // EKSEKUSI EVENT BUS SEARCH
-                if (searchTerm && searchTerm !== "UNKNOWN" && searchTerm !== "-") {
-                    let cleanSearch = searchTerm.replace(/\s+/g, ''); // Buang spasi
-                    
-                    const executeFind = () => {
-                        eventBus.dispatch('find', {
-                            query: cleanSearch,
-                            type: '',              
-                            caseSensitive: false,
-                            highlightAll: true,    // Highlight semua PN yang ketemu
-                            phraseSearch: true     // Cari persis rentetan karakternya
-                        });
-                    };
+                let targetPageNum = 1;
+                let isFound = false;
 
-                    if (!pdfViewer.pagesCount) {
-                        const onPagesInit = function() {
-                            executeFind();
-                            eventBus.off('pagesinit', onPagesInit);
-                        };
-                        eventBus.on('pagesinit', onPagesInit);
-                    } else {
-                        executeFind();
+                // 2. Pencarian Part Number Lintas Halaman secara Instan
+                if (searchTerm && searchTerm !== "UNKNOWN" && searchTerm !== "-") {
+                    let cleanSearch = searchTerm.replace(/\s+/g, ''); 
+                    
+                    for (let i = 1; i <= currentPdfDoc.numPages; i++) {
+                        let page = await currentPdfDoc.getPage(i);
+                        let textContent = await page.getTextContent();
+                        let pageString = textContent.items.map(item => item.str).join('').replace(/\s+/g, '');
+                        
+                        if (pageString.includes(cleanSearch)) {
+                            targetPageNum = i;
+                            isFound = true;
+                            break; 
+                        }
                     }
+                }
+
+                // 3. Paksa Viewer Melompat ke Halaman yang Ditemukan
+                if(isFound) {
+                    // Jeda sejenak agar Viewer selesai render kerangka dasar halaman 1
+                    setTimeout(() => {
+                        pdfViewer.currentPageNumber = targetPageNum;
+                        document.getElementById('pdfStatusBadge').innerText = `Ditemukan di Hal: ${targetPageNum}`;
+                        document.getElementById('pdfStatusBadge').style.background = "#e9f7ef";
+                        document.getElementById('pdfStatusBadge').style.color = "#1e8449";
+                    }, 300);
+                } else {
+                    document.getElementById('pdfStatusBadge').innerText = "PN Tidak Ditemukan";
+                    document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
+                    document.getElementById('pdfStatusBadge').style.color = "#cb4335";
                 }
 
             } catch (error) {
                 console.error("GAGAL LOAD PDF:", error);
                 document.getElementById('pdfLoadingText').style.display = 'none';
-                document.getElementById('pdfStatusBadge').innerText = "Gagal memuat PDF (Cek URL)";
+                document.getElementById('pdfStatusBadge').innerText = "Koneksi PDF Gagal";
                 document.getElementById('pdfStatusBadge').style.background = "#fadbd8";
                 document.getElementById('pdfStatusBadge').style.color = "#cb4335";
             }
@@ -387,7 +336,7 @@
                         </td>
                     `;
 
-                    // EVENT LISTENER TRIGGERS EVENT BUS PDF.JS
+                    // EVENT LISTENER TRIGGERS HYBRID SEARCH
                     tr.addEventListener('click', function(e) {
                         if(e.target.type === 'checkbox') return; 
                         
@@ -395,7 +344,6 @@
                         this.classList.add('row-active'); 
 
                         if(urlManualBook && urlManualBook !== "") {
-                            // Panggil fungsi pencarian mutlak
                             loadAndSearchPdf(urlManualBook, searchPnTerm);
                         }
                     });
@@ -405,9 +353,18 @@
             }
             lucide.createIcons();
             
-            // JALANKAN SILENT PRELOAD SETELAH TABEL RENDER
+            // Background load PDF untuk kecepatan ekstra
             if (auditData.length > 0 && auditData[0].Link_Manual_Book) {
-                silentPreloadPdf(auditData[0].Link_Manual_Book);
+                let initialUrl = auditData[0].Link_Manual_Book;
+                if (!currentPdfDoc) {
+                    initPdfViewer();
+                    pdfjsLib.getDocument(initialUrl).promise.then(doc => {
+                        currentPdfDoc = doc;
+                        currentPdfUrl = initialUrl;
+                        pdfViewer.setDocument(doc);
+                        pdfLinkService.setDocument(doc, null);
+                    }).catch(e => console.log("Preload failed", e));
+                }
             }
         }
 
