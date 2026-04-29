@@ -16,10 +16,10 @@
             --success: #27ae60; --error: #c0392b; --warning: #d4ac0d; --info: #2980b9;
         }
         body { margin: 0; padding: 30px; background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; }
-        .main-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
+        .main-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; max-width: 1500px; margin: 0 auto; align-items: flex-start; }
         
-        /* PANEL KIRI */
-        .left-panel { flex: 1; min-width: 300px; max-width: 350px; position: sticky; top: 30px; }
+        /* LEFT PANEL (INPUT) */
+        .left-panel { flex: 1; min-width: 320px; max-width: 380px; position: sticky; top: 30px; }
         .card-box { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); }
         .header { text-align: center; margin-bottom: 25px; }
         .header h2 { color: var(--primary); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 24px;}
@@ -35,48 +35,48 @@
         .loader-small { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* PANEL KANAN (TABEL) */
-        .right-panel { flex: 3; min-width: 800px; width: 100%; }
+        /* RIGHT PANEL (RESULTS) */
+        .right-panel { flex: 3; min-width: 850px; width: 100%; }
         .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); background: #fff;}
-        table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-        th { background-color: #fbf9fc; padding: 16px 14px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--border-color); font-family: 'Poppins', sans-serif; font-size: 12px; text-transform: uppercase;}
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { background-color: #fbf9fc; padding: 16px 14px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--border-color); font-family: 'Poppins', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;}
         td { padding: 16px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
         
         .subsystem-header { background-color: #4e2b5c !important; color: white !important; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;}
-        .subsystem-header td { padding: 12px 15px !important; font-size: 13px; font-weight: 600;}
+        .subsystem-header td { padding: 12px 15px !important; font-size: 12px; font-weight: 600;}
         
         .row-hover:hover { background-color: #fcfbfd; }
 
-        /* BADGES & PILLS */
-        .badge { padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;}
-        .badge-aman { background-color: #e9f7ef; color: #1e8449; border: 1px solid #a3e4d7; }
-        .badge-pangkas { background-color: #fadbd8; color: #cb4335; border: 1px solid #f5b7b1; }
-        .badge-kurang { background-color: #fcf3cf; color: #d4ac0d; border: 1px solid #f9e79f; }
-        .badge-type-mandatory { font-size: 9px; background: var(--primary); color: white; padding: 3px 6px; border-radius: 4px; font-weight: 700; display: inline-block; margin-bottom: 8px; letter-spacing: 0.5px;}
+        /* BADGES */
+        .badge { padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 10.5px; display: inline-flex; align-items: center; gap: 4px;}
+        .badge-approved { background-color: #e9f7ef; color: #1e8449; border: 1px solid #a3e4d7; }
+        .badge-reduced { background-color: #fdedec; color: #c0392b; border: 1px solid #fadbd8; }
+        .badge-warning { background-color: #fcf3cf; color: #d4ac0d; border: 1px solid #f9e79f; }
+        .badge-mandatory { font-size: 9px; background: var(--primary); color: white; padding: 3px 6px; border-radius: 4px; font-weight: 700; display: inline-block; margin-bottom: 8px; letter-spacing: 0.5px;}
 
-        /* KOTAK TRIANGULASI (TRACEABILITY) */
-        .triangulation-box { background: #fbf9fc; border: 1px dashed #d2c5d6; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 11px; line-height: 1.4; position: relative;}
-        .t-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
-        .t-row:last-child { margin-bottom: 0; }
-        .t-icon { color: var(--primary); margin-top: 2px;}
-        .t-label { font-weight: 700; color: var(--primary); min-width: 45px;}
-        .t-value { font-weight: 600; color: #444; }
+        /* TRACEABILITY BOX (TRIANGULATION) */
+        .trace-box { background: #fbf9fc; border: 1px dashed #d2c5d6; border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 11px; line-height: 1.5; position: relative;}
+        .trace-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+        .trace-row:last-child { margin-bottom: 0; }
+        .trace-icon { color: var(--primary); margin-top: 2px;}
+        .trace-label { font-weight: 700; color: var(--primary); min-width: 65px; display: inline-block;}
+        .trace-value { font-weight: 600; color: #444; }
         
-        /* KARTU ANALISA AI */
-        .ai-logic-box { background: #f8f9f9; border: 1px solid #eaeded; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 11px; }
-        .ai-logic-step { color: #555; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-weight: 500;}
-        .ai-final-decision { padding: 6px 8px; border-radius: 6px; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 11.5px;}
-        .ai-final-decision.aman { background: #ebf5fb; color: #2980b9; border: 1px solid #d6eaf8;}
-        .ai-final-decision.pangkas { background: #fdedec; color: #c0392b; border: 1px solid #fadbd8; }
+        /* AI LOGIC ANALYSIS */
+        .ai-box { background: #f8f9f9; border: 1px solid #eaeded; border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 11px; }
+        .ai-step { color: #666; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-weight: 500;}
+        .ai-decision { padding: 8px 10px; border-radius: 6px; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 11px; text-transform: uppercase;}
+        .ai-decision.safe { background: #ebf5fb; color: #2980b9; border: 1px solid #d6eaf8;}
+        .ai-decision.cut { background: #fdedec; color: #c0392b; border: 1px solid #fadbd8; }
 
-        /* HIGHLIGHT ANGKA */
-        .num-highlight { font-size: 14px; font-weight: 800; font-family: 'Poppins', sans-serif; color: var(--text-main);}
-        .limit-tag { font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: 700; margin-left: 4px; vertical-align: middle;}
-        .limit-rh { background: #ebf5fb; color: #2980b9; }
-        .limit-std { background: #fdedec; color: #d35400; }
-        .cyl-alert { color: #c0392b; font-weight: 700; background: #fdedec; padding: 4px 8px; border-radius: 4px; display: inline-block; font-size: 11px;}
+        /* DATA HIGHLIGHTS */
+        .num-val { font-size: 14px; font-weight: 800; font-family: 'Poppins', sans-serif; color: var(--text-main);}
+        .tag-info { font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: 700; margin-left: 4px; vertical-align: middle;}
+        .tag-rh { background: #ebf5fb; color: #2980b9; }
+        .tag-std { background: #fdedec; color: #d35400; }
+        .cyl-highlight { color: #c0392b; font-weight: 700; background: #fdedec; padding: 4px 8px; border-radius: 4px; display: inline-block; font-size: 11px;}
 
-        .verif-checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
+        .v-checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
     </style>
 </head>
 <body>
@@ -85,28 +85,31 @@
         <div class="left-panel">
             <div class="card-box">
                 <div class="header">
-                    <h2><i data-lucide="cpu" style="width:28px; height:28px;"></i> SPB Audit</h2>
-                    <p style="color: #666; font-size: 12px; font-weight:500;">Core Engine Calculation</p>
+                    <h2><i data-lucide="shield-check" style="width:28px; height:28px;"></i> Verification</h2>
+                    <p style="color: #666; font-size: 12px; font-weight:500;">Spare Part Logic Engine</p>
                 </div>
                 <form id="auditForm">
-                    <label>1. Kategori Mesin (Sistem)</label>
+                    <label>1. Engine Category (System)</label>
                     <select id="engineType">
                         <option value="ME">Main Engine (ME)</option>
                         <option value="AE">Aux Engine (AE)</option>
                     </select>
-                    <div style="display: none;"><input type="text" id="engineBrand" value="SKIP_PRESENTATION"></div>
+                    <div style="display: none;"><input type="text" id="engineBrand" value="SKIP"></div>
+                    
                     <div class="upload-section">
-                        <label><i data-lucide="clock" style="width:14px; height:14px; vertical-align:-2px;"></i> 2. Running Hours Report</label>
+                        <label><i data-lucide="clock" style="width:13px; margin-right:4px;"></i> 2. Running Hours Report</label>
                         <input type="file" id="rhFile" accept=".pdf, .xlsx, .xls">
                     </div>
+                    
                     <div class="upload-section">
-                        <label><i data-lucide="file-text" style="width:14px; height:14px; vertical-align:-2px;"></i> 3. Requisition / PO PDF</label>
+                        <label><i data-lucide="file-text" style="width:13px; margin-right:4px;"></i> 3. Requisition / PO PDF</label>
                         <input type="file" id="reqFile" accept=".pdf" required>
                     </div>
+                    
                     <button type="submit" id="submitBtn" class="btn-submit">
-                        <i data-lucide="bot"></i> JALANKAN AUDIT AI
+                        <i data-lucide="zap"></i> RUN AI VERIFICATION
                     </button>
-                    <div id="errorBox" style="margin-top:15px; color:#c0392b; font-size:12px; display:none; font-weight:bold; background:#fadbd8; padding:10px; border-radius:6px;"></div>
+                    <div id="errorBox" style="margin-top:15px; color:#c0392b; font-size:12px; display:none; font-weight:bold; background:#fdedec; padding:12px; border-radius:8px; border:1px solid #fadbd8;"></div>
                 </form>
             </div>
         </div>
@@ -114,8 +117,8 @@
         <div class="right-panel">
             <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 80px 20px;">
                 <div class="loader"></div>
-                <h2 style="color: var(--primary); font-family:'Poppins', sans-serif;">AI Sedang Membedah Dokumen...</h2>
-                <p id="timerText" style="color: #666; font-size: 13px; font-weight: 500; margin-top: 15px;">Melakukan Triangulasi Data SPB ⇄ Master ⇄ Running Hours</p>
+                <h2 style="color: var(--primary); font-family:'Poppins', sans-serif;">AI is Analyzing Documents...</h2>
+                <p id="timerText" style="color: #666; font-size: 13px; font-weight: 500; margin-top: 15px;">Performing Triangulation: Requisition ⇄ Master ⇄ Running Hours</p>
             </div>
 
             <div id="reportPanel" class="card-box" style="display: none; padding: 25px; width: 100%; box-sizing: border-box;">
@@ -123,12 +126,12 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;">
                         <div>
                             <h3 id="reportTitle" style="margin: 0 0 5px 0; color: var(--primary); font-family:'Poppins', sans-serif; display: flex; align-items: center; gap:8px; font-size: 20px;">
-                                <i data-lucide="ship"></i> Hasil Audit SPB
+                                <i data-lucide="anchor"></i> Verification Results
                             </h3>
-                            <div id="reportSubtitle" style="color: #666; font-size: 12px; font-weight: 500;"></div>
+                            <div id="reportSubtitle" style="color: #666; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;"></div>
                         </div>
-                        <button id="btnDownload" type="button" onclick="downloadPDF()" style="background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s;">
-                            <i data-lucide="printer" style="width: 16px;"></i> Cetak Laporan
+                        <button id="btnDownload" type="button" onclick="downloadPDF()" style="background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="printer" style="width: 16px;"></i> Print Report
                         </button>
                     </div>
 
@@ -137,18 +140,17 @@
                             <thead>
                                 <tr>
                                     <th style="width: 30px; text-align:center;">No</th>
-                                    <th style="width: 30%;">Identitas & Traktasi Barang</th>
+                                    <th style="width: 32%;">Item Identity & Traceability</th>
                                     <th>Inventory</th>
-                                    <th>Limit Jam</th>
+                                    <th>Hours Limit</th>
                                     <th>Target RH Over</th>
-                                    <th style="width: 25%;">Analisa & Keputusan AI</th>
-                                    <th style="text-align: center;">Verif</th>
+                                    <th style="width: 28%;">AI Decision Logic</th>
+                                    <th style="text-align: center;">Verify</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody"></tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -174,9 +176,9 @@
             
             let vessel = auditData[0].Nama_Kapal || "Unknown Vessel";
             let engine = auditData[0].Tipe_Mesin || "ME";
-            let tanggal = auditData[0].Tanggal || "-";
+            let date = auditData[0].Tanggal || "-";
             document.getElementById('reportTitle').innerHTML = `<i data-lucide="anchor"></i> ${vessel} — ${engine}`;
-            document.getElementById('reportSubtitle').innerHTML = `Tanggal Permintaan: <b>${tanggal}</b>`;
+            document.getElementById('reportSubtitle').innerHTML = `Request Date: ${date}`;
             
             let groupedData = {};
             auditData.forEach(item => {
@@ -188,98 +190,87 @@
             for (let sub in groupedData) {
                 let subTr = document.createElement('tr');
                 subTr.className = 'subsystem-header';
-                subTr.innerHTML = `<td colspan="7"><i data-lucide="layers" style="width:14px; height:14px; vertical-align:-2px; margin-right:6px;"></i> SYSTEM: ${sub}</td>`;
+                subTr.innerHTML = `<td colspan="7"><i data-lucide="layers" style="width:13px; margin-right:6px; vertical-align:-2px;"></i> SYSTEM: ${sub}</td>`;
                 tableBody.appendChild(subTr);
 
-                groupedData[sub].forEach((item, index) => {
+                groupedData[sub].forEach((item) => {
                     let aiStatus = item.AI_Status || "";
-                    let isMandatory = (aiStatus !== "NON-CRITICAL");
-                    
-                    // Style Penentuan Status Utama
-                    let statusClass = aiStatus.includes("REDUCED") ? "badge-pangkas" : (aiStatus === "UNDER-ORDER" ? "badge-kurang" : "badge-aman");
-                    let statusIcon = aiStatus.includes("REDUCED") ? "alert-triangle" : (aiStatus === "UNDER-ORDER" ? "info" : "check-circle");
-
                     let isChecked = (aiStatus === "APPROVED" || aiStatus === "APPROVED (RESTOCK)") ? "checked" : "";
-                    let namaRh = item.Nama_RH && item.Nama_RH !== "-" ? item.Nama_RH : ""; 
+                    
+                    // Logic Styles
+                    let statusClass = aiStatus.includes("REDUCED") ? "badge-reduced" : (aiStatus === "UNDER-ORDER" ? "badge-warning" : "badge-approved");
+                    let statusIcon = aiStatus.includes("REDUCED") ? "alert-circle" : (aiStatus === "UNDER-ORDER" ? "help-circle" : "check-circle");
 
-                    // KOTAK TRIANGULASI (TRACEABILITY)
-                    let masterBadge = "";
-                    if (isMandatory && item.Nama_Master) {
-                        masterBadge = `
-                        <div class="triangulation-box">
-                            <div class="t-row">
-                                <i data-lucide="database" class="t-icon" style="width:12px; height:12px;"></i>
-                                <div><span class="t-label">Master:</span> <span class="t-value">${item.Nama_Master}</span></div>
+                    // TRACEABILITY BOX
+                    let traceHtml = `
+                        <div class="trace-box">
+                            <div class="trace-row">
+                                <i data-lucide="database" class="trace-icon" style="width:11px; height:11px;"></i>
+                                <div><span class="trace-label">Master DB:</span> <span class="trace-value">${item.Nama_Master}</span></div>
                             </div>
-                            <div class="t-row" style="margin-top:2px;">
-                                <i data-lucide="activity" class="t-icon" style="width:12px; height:12px; color:#d35400;"></i>
-                                <div><span class="t-label" style="color:#d35400;">Lap. RH:</span> <span class="t-value">${namaRh ? namaRh : '<span style="color:#e74c3c; font-style:italic;">Tidak Ditemukan</span>'}</span></div>
+                            <div class="trace-row">
+                                <i data-lucide="activity" class="trace-icon" style="width:11px; height:11px; color:#d35400;"></i>
+                                <div><span class="trace-label" style="color:#d35400;">RH Report:</span> <span class="trace-value">${item.Nama_RH && item.Nama_RH !== "-" ? item.Nama_RH : '<span style="color:#e74c3c;">[NOT FOUND]</span>'}</span></div>
                             </div>
-                            <div style="font-size:9px; color:#999; margin-top:6px; font-style:italic; border-top:1px solid #e8dee8; padding-top:4px;">
+                            <div style="font-size:9px; color:#999; margin-top:8px; border-top:1px solid #e8dee8; padding-top:5px; font-style:italic;">
                                 Matched via: ${item.Tipe_Match}
                             </div>
                         </div>`;
-                    }
 
-                    // KARTU LOGIKA AI (AI REASONING)
-                    let logicHtml = "";
-                    if (isMandatory && item.Rekomendasi_AI) {
-                        let recParts = item.Rekomendasi_AI.split("|").map(p => p.trim());
-                        logicHtml = `<div class="ai-logic-box">`;
-                        
-                        recParts.forEach(part => {
-                            if(part.includes("AI Approved")) {
-                                let decisionClass = aiStatus.includes("REDUCED") ? "pangkas" : "aman";
-                                let decisionIcon = aiStatus.includes("REDUCED") ? "scissors" : "check-circle";
-                                logicHtml += `<div class="ai-final-decision ${decisionClass}"><i data-lucide="${decisionIcon}" style="width:14px; height:14px;"></i> ${part.replace("AI Approved:", "Keputusan AI: ")}</div>`;
+                    // AI DECISION BOX
+                    let aiBoxHtml = "";
+                    if (item.Rekomendasi_AI) {
+                        let steps = item.Rekomendasi_AI.split("|").map(s => s.trim());
+                        aiBoxHtml = `<div class="ai-box">`;
+                        steps.forEach(step => {
+                            if(step.includes("AI Approved")) {
+                                let decisionClass = aiStatus.includes("REDUCED") ? "cut" : "safe";
+                                let decisionIcon = aiStatus.includes("REDUCED") ? "scissors" : "check-square";
+                                aiBoxHtml += `<div class="ai-decision ${decisionClass}"><i data-lucide="${decisionIcon}" style="width:13px; height:13px;"></i> ${step.replace("AI Approved:", "FINAL DECISION:")}</div>`;
                             } else {
-                                logicHtml += `<div class="ai-logic-step"><i data-lucide="corner-down-right" style="width:12px; height:12px; color:#bdc3c7;"></i> ${part}</div>`;
+                                aiBoxHtml += `<div class="ai-step"><i data-lucide="chevron-right" style="width:12px; height:12px; color:#ccc;"></i> ${step}</div>`;
                             }
                         });
-                        logicHtml += `</div>`;
+                        aiBoxHtml += `</div>`;
                     }
 
-                    // LIMIT JAM BADGE
+                    // HOURS LIMIT
                     let rawLimit = item.Max_Limit_Jam || "";
                     let isLimitRh = rawLimit.includes("Data RH");
-                    let limitNum = rawLimit.replace(/<[^>]*>?/gm, '').replace(/\D/g,''); // Extract numbers only
-                    let limitBadge = isLimitRh ? 
-                        `<div class="num-highlight" style="color:#2980b9;">${limitNum} <span class="limit-tag limit-rh">Limit Kapal</span></div>` :
-                        `<div class="num-highlight" style="color:#d35400;">${limitNum} <span class="limit-tag limit-std">Limit Standard</span></div>`;
-                    
-                    if(!limitNum) limitBadge = "-";
+                    let limitNum = rawLimit.replace(/<[^>]*>?/gm, '').replace(/\D/g,'');
+                    let limitBadge = limitNum ? 
+                        `<div class="num-val" style="color:${isLimitRh ? '#2980b9' : '#d35400'}">${limitNum} <span class="tag-info ${isLimitRh ? 'tag-rh' : 'tag-std'}">${isLimitRh ? 'Ship Data' : 'Standard'}</span></div>` : "-";
 
                     let tr = document.createElement('tr');
                     tr.className = 'row-hover'; 
                     tr.innerHTML = `
                         <td style="color:#999; text-align:center; font-weight:600;">${item.No_Item_PDF || "-"}</td>
                         <td>
-                            ${isMandatory ? '<span class="badge-type-mandatory">ITEM MANDATORY</span>' : ''}
+                            <span class="badge-mandatory">MANDATORY ITEM</span>
                             <div style="font-weight:700; color:var(--primary); font-size: 14px; margin-bottom: 4px;">${item.Nama_Barang}</div>
-                            <div style="font-weight: 600; color: #555; font-size: 11px; margin-bottom: 8px;">
-                                Part No: <span style="font-family:monospace; background:#f0f0f0; padding:2px 4px; border-radius:3px; color:#333;">${item.No_Part !== "UNKNOWN" ? item.No_Part : "-"}</span>
+                            <div style="font-weight: 600; color: #666; font-size: 11px;">
+                                PN: <span style="font-family:monospace; background:#f4f4f4; padding:2px 5px; border-radius:4px; color:#333;">${item.No_Part !== "UNKNOWN" ? item.No_Part : "-"}</span>
                             </div>
-                            ${masterBadge}
+                            ${traceHtml}
                         </td>
                         <td>
-                            <div style="margin-bottom:6px;"><span style="font-size:10px; color:#888; text-transform:uppercase;">Diminta (Req)</span><br/><span class="num-highlight">${item.Qty_Diminta}</span></div>
-                            <div><span style="font-size:10px; color:#888; text-transform:uppercase;">Sisa (ROB)</span><br/><span class="num-highlight">${item.ROB}</span></div>
+                            <div style="margin-bottom:8px;"><span style="font-size:10px; color:#999; text-transform:uppercase;">Req. Qty</span><br/><span class="num-val">${item.Qty_Diminta}</span></div>
+                            <div><span style="font-size:10px; color:#999; text-transform:uppercase;">ROB Sisa</span><br/><span class="num-val">${item.ROB}</span></div>
                         </td>
                         <td>${limitBadge}</td>
                         <td>
-                            ${item.Target_Cylinder !== "-" ? `<div class="cyl-alert"><i data-lucide="alert-octagon" style="width:12px; height:12px; vertical-align:-2px;"></i> ${item.Target_Cylinder}</div>` : '<span style="color:#aaa;">Aman / Di bawah limit</span>'}
-                            <div style="font-size:9.5px; color:#888; margin-top:6px; line-height:1.3;">Histori Lengkap:<br/>${item.RH_Terakhir}</div>
+                            ${item.Target_Cylinder !== "-" ? `<div class="cyl-highlight"><i data-lucide="alert-triangle" style="width:11px; margin-right:4px; vertical-align:-1px;"></i> ${item.Target_Cylinder}</div>` : '<span style="color:#bbb; font-weight:500;">Safe / Below Limit</span>'}
+                            <div style="font-size:9.5px; color:#888; margin-top:8px; line-height:1.4; background:#f9f9f9; padding:5px; border-radius:4px;">History:<br/>${item.RH_Terakhir}</div>
                         </td>
                         <td>
-                            ${item.Warning_Text ? `<div style="color:#c0392b; font-weight:800; font-size:11px; margin-bottom:6px;"><i data-lucide="x-circle" style="width:12px; height:12px; vertical-align:-2px;"></i> ${item.Warning_Text}</div>` : ''}
+                            ${item.Warning_Text ? `<div style="color:#c0392b; font-weight:800; font-size:10.5px; margin-bottom:8px;"><i data-lucide="shield-alert" style="width:12px; margin-right:3px;"></i> ${item.Warning_Text}</div>` : ''}
                             <span class="badge ${statusClass}"><i data-lucide="${statusIcon}" style="width:12px; height:12px;"></i> ${aiStatus}</span>
-                            ${isMandatory ? logicHtml : '<div style="font-size:11px; color:#888; margin-top:8px;">Bukan item kritikal (Non-Mandatory). Lolos otomatis.</div>'}
+                            ${aiBoxHtml}
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            <input type="checkbox" class="verif-checkbox" ${isChecked}>
+                            <input type="checkbox" class="v-checkbox" ${isChecked}>
                         </td>
                     `;
-
                     tableBody.appendChild(tr);
                 });
             }
@@ -289,93 +280,25 @@
         function downloadPDF() {
             const btn = document.getElementById('btnDownload');
             btn.style.display = 'none';
-
-            const checkboxes = document.querySelectorAll('.verif-checkbox');
+            const checkboxes = document.querySelectorAll('.v-checkbox');
             const rowsToHide = [];
-            checkboxes.forEach(cb => {
-                if (!cb.checked) {
-                    const tr = cb.closest('tr');
-                    tr.style.display = 'none'; 
-                    rowsToHide.push(tr);
-                }
-            });
-
-            // Sembunyikan Header Subsystem yang kosong
-            const tableBody = document.getElementById('tableBody');
-            const allRows = Array.from(tableBody.children);
-            let currentHeader = null;
-            let visibleItemsCount = 0;
-            const headersToHide = [];
-
-            allRows.forEach(row => {
-                if (row.classList.contains('subsystem-header')) {
-                    if (currentHeader && visibleItemsCount === 0) {
-                        currentHeader.style.display = 'none';
-                        headersToHide.push(currentHeader);
-                    }
-                    currentHeader = row;
-                    visibleItemsCount = 0; 
-                } else {
-                    if (row.style.display !== 'none') visibleItemsCount++;
-                }
-            });
-            if (currentHeader && visibleItemsCount === 0) {
-                currentHeader.style.display = 'none';
-                headersToHide.push(currentHeader);
-            }
+            checkboxes.forEach(cb => { if (!cb.checked) { const tr = cb.closest('tr'); tr.style.display = 'none'; rowsToHide.push(tr); } });
 
             const element = document.getElementById('printableArea');
-            const opt = {
-                margin:       0.3,
-                filename:     'SPB_Verified_Report.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                btn.style.display = 'flex'; 
-                rowsToHide.forEach(tr => tr.style.display = ''); 
-                headersToHide.forEach(th => th.style.display = ''); 
-            });
+            const opt = { margin: 0.3, filename: 'Verification_Report.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } };
+            html2pdf().set(opt).from(element).save().then(() => { btn.style.display = 'flex'; rowsToHide.forEach(tr => tr.style.display = ''); });
         }
 
         async function checkJobStatus(jobId) {
             try {
                 let response = await fetch(`${N8N_CHECK_STATUS_URL}?job_id=${jobId}`);
-                let textResult = await response.text();
-                if (!textResult) return; 
-
-                let result = JSON.parse(textResult);
-                let auditData = null;
-
-                if (Array.isArray(result) && result.length > 0) {
-                    auditData = result;
-                } else if (result.status === "completed" && result.data && result.data.length > 0) {
-                    auditData = result.data;
+                let result = await response.json();
+                if (result.status === "completed" || Array.isArray(result)) {
+                    let data = Array.isArray(result) ? result : result.data;
+                    clearInterval(pollingInterval);
+                    renderTable(data);
                 }
-
-                if (auditData) {
-                    let currentRowCount = auditData.length;
-                    document.getElementById('timerText').innerText = `Merender ${currentRowCount} baris data ke dashboard...`;
-
-                    if (currentRowCount > previousRowCount) {
-                        previousRowCount = currentRowCount;
-                        stableCount = 0; 
-                    } else {
-                        stableCount++; 
-                    }
-
-                    if (stableCount >= 2) {
-                        clearInterval(pollingInterval); 
-                        renderTable(auditData); 
-                    }
-                } else {
-                    document.getElementById('timerText').innerText = "Sistem AI sedang menalar dan menyusun keputusan... " + new Date().toLocaleTimeString();
-                }
-            } catch (e) {
-                console.log("Menunggu N8N...", e);
-            }
+            } catch (e) { console.log("Polling...", e); }
         }
 
         document.getElementById('auditForm').addEventListener('submit', async function(e) {
@@ -384,35 +307,27 @@
             const errorBox = document.getElementById('errorBox');
             const jobId = `JOB-${Date.now()}`;
 
-            previousRowCount = 0;
-            stableCount = 0;
-
             btn.disabled = true;
-            btn.innerHTML = `<div class="loader-small"></div> MENGIRIM DOKUMEN...`;
+            btn.innerHTML = `<div class="loader-small"></div> PROCESSING...`;
             errorBox.style.display = 'none';
             document.getElementById('reportPanel').style.display = 'none';
 
             const formData = new FormData();
             formData.append('engine_type', document.getElementById('engineType').value);
-            formData.append('engine_brand', document.getElementById('engineBrand').value);
             formData.append('job_id', jobId);
             if (document.getElementById('rhFile').files[0]) formData.append('RH_Report', document.getElementById('rhFile').files[0]);
             formData.append('Requisition_Report', document.getElementById('reqFile').files[0]);
 
             try {
-                const response = await fetch(N8N_UPLOAD_URL, { method: 'POST', body: formData });
-                if (!response.ok) throw new Error("Koneksi ke N8N gagal. Cek status server N8N.");
-
+                const res = await fetch(N8N_UPLOAD_URL, { method: 'POST', body: formData });
+                if (!res.ok) throw new Error("Connection to N8N Failed.");
                 document.getElementById('pollingCard').style.display = 'block';
-                btn.innerHTML = `<i data-lucide="check"></i> BERHASIL DIKIRIM`;
-                
                 pollingInterval = setInterval(() => checkJobStatus(jobId), 3000);
-
             } catch (err) {
                 errorBox.style.display = 'block';
-                errorBox.innerHTML = `<i data-lucide="alert-triangle" style="width:16px; height:16px; vertical-align:-3px;"></i> Error: ${err.message}`;
+                errorBox.innerHTML = `<i data-lucide="alert-octagon" style="width:14px; vertical-align:-3px;"></i> Error: ${err.message}`;
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="bot"></i> JALANKAN AUDIT AI`;
+                btn.innerHTML = `<i data-lucide="zap"></i> RUN AI VERIFICATION`;
                 lucide.createIcons();
             }
         });
