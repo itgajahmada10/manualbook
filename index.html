@@ -202,6 +202,11 @@
         let pollingInterval;
 
         function renderTable(auditData) {
+            // [FIX] Matikan animasi loading di tombol saat hasil keluar
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="zap"></i> RUN AI VERIFICATION`;
+
             document.getElementById('pollingCard').style.display = 'none';
             document.getElementById('reportPanel').style.display = 'block';
             const body = document.getElementById('tableBody');
@@ -209,6 +214,7 @@
             
             if (auditData[0].PESAN_ERROR) {
                 body.innerHTML = `<tr><td colspan="7" style="text-align:center; color:red; padding:20px;"><b>${auditData[0].PESAN_ERROR}</b></td></tr>`;
+                lucide.createIcons();
                 return;
             }
 
@@ -295,17 +301,13 @@
             let currentHeader = null;
             let visibleCount = 0;
 
-            // 1. Aplikasikan Mode Simple (Sembunyikan Kolom)
             if (mode === 'simple') {
                 document.body.classList.add('simple-print-mode');
-                // Di mode simple, total kolom yang dicetak ada 4 (No, Identity, Target, Decision)
                 subHeaders.forEach(td => td.setAttribute('colspan', '4')); 
             } else {
-                // Di mode full, total kolom yang dicetak ada 6 (Kolom ke-7 Verify disembunyikan CSS global)
                 subHeaders.forEach(td => td.setAttribute('colspan', '6'));
             }
 
-            // 2. Filter Baris Tidak Dicentang & Bersihkan Header Kosong
             allRows.forEach(row => {
                 if (row.classList.contains('subsystem-header')) {
                     if (currentHeader && visibleCount === 0) currentHeader.classList.add('hide-for-print');
@@ -322,11 +324,9 @@
             });
             if (currentHeader && visibleCount === 0) currentHeader.classList.add('hide-for-print');
 
-            // 3. Panggil Dialog Print Browser
             window.print();
         }
 
-        // Kembalikan semua state setelah Print Dialog ditutup
         window.addEventListener('afterprint', () => {
             document.body.classList.remove('simple-print-mode');
             document.querySelectorAll('.hide-for-print').forEach(el => el.classList.remove('hide-for-print'));
@@ -371,6 +371,7 @@
                 errorBox.innerText = err.message;
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="zap"></i> RUN AI VERIFICATION`;
+                lucide.createIcons();
             }
         };
     </script>
