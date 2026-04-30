@@ -18,10 +18,12 @@
         select, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; margin-bottom: 15px; background: #fafafa; box-sizing: border-box;}
         .upload-section { padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #b59ebc; background: #fbf9fc;}
         input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; font-size: 11px; box-sizing: border-box;}
-        button.btn-submit { background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        
+        .btn-submit { background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .loader { border: 3px solid rgba(78, 43, 92, 0.3); border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
         .loader-small { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        
         .right-panel { flex: 3; min-width: 850px; width: 100%; }
         .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); background: #fff;}
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -36,14 +38,48 @@
         .ai-decision.safe { background: #ebf5fb; color: #2980b9; border: 1px solid #d6eaf8;}
         .ai-decision.cut { background: #fdedec; color: #c0392b; border: 1px solid #fadbd8; }
         .num-val { font-size: 14px; font-weight: 800; font-family: 'Poppins', sans-serif; color: var(--text-main);}
-        .tag-info { font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: 700; margin-left: 4px; vertical-align: middle;}
-        .tag-std { background: #fdedec; color: #d35400; }
-        .tag-rh { background: #ebf5fb; color: #2980b9; }
         .v-checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
         .badge-reduced { background-color: #fdedec; color: #c0392b; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
         .badge-warning { background-color: #fcf3cf; color: #d4ac0d; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
         .badge-approved { background-color: #e9f7ef; color: #1e8449; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
         #printHeader { display: none; }
+
+        /* ==========================================
+           MODERN ACTION BUTTONS
+           ========================================== */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .btn-modern {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.3px;
+        }
+        .btn-full {
+            background: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(78,43,92,0.2);
+        }
+        .btn-full:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 14px rgba(78,43,92,0.3); }
+        .btn-simple {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+        }
+        .btn-simple:hover { background: #fbf9fc; transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.08); }
 
         /* ==========================================
            NATIVE BROWSER PRINT CSS (SUPER ROBUST)
@@ -52,36 +88,41 @@
             @page { size: A4 portrait; margin: 10mm; }
             body { background: white; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             
-            /* Sembunyikan Elemen Web */
+            /* Sembunyikan Elemen UI Web */
             .left-panel, #webHeader, .th-verify, .td-verify { display: none !important; }
             
-            /* Expand Kanan & Matikan Shadow/Border */
+            /* Bersihkan Container agar Full Lebar Kertas */
             .main-container { max-width: 100%; display: block; }
             .right-panel { width: 100%; display: block; min-width: 0; }
             .card-box { padding: 0; border: none; box-shadow: none; }
             .table-responsive { border: none; overflow: visible; }
             
-            /* Nyalakan Header Print */
+            /* Nyalakan Header Cetak */
             #printHeader { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #ccc; padding-bottom: 15px; }
             
-            /* Layout Tabel Khusus Kertas A4 */
+            /* Setup Tabel Dasar Cetak */
             table { font-size: 10px; width: 100%; table-layout: auto; }
             th { font-size: 9px !important; padding: 6px 4px !important; }
             td { padding: 6px 4px !important; }
             .subsystem-header td { font-size: 10px !important; padding: 8px 6px !important; }
-            
-            /* Layout Konten dalam Tabel */
             .num-val { font-size: 11px !important; }
             .trace-box, .ai-box { padding: 6px !important; font-size: 9px !important; line-height: 1.3; }
             .ai-decision { font-size: 9px !important; padding: 4px 6px !important; }
             .badge-mandatory { font-size: 8px !important; padding: 2px 4px !important; }
             
-            /* Anti Terpotong CSS */
             tr { page-break-inside: avoid !important; }
             td { page-break-inside: avoid !important; }
-            
-            /* Kelas khusus untuk menyembunyikan baris saat print */
             .hide-for-print { display: none !important; }
+
+            /* ==========================================
+               LOGIKA "DOWNLOAD" (SIMPLE MODE)
+               ========================================== */
+            body.simple-print-mode .trace-box { display: none !important; }
+            body.simple-print-mode .col-inventory { display: none !important; }
+            body.simple-print-mode .col-limit { display: none !important; }
+            body.simple-print-mode .ai-step { display: none !important; }
+            body.simple-print-mode .ai-box { border: none !important; padding: 0 !important; background: transparent !important; margin-top: 4px !important; }
+            body.simple-print-mode .ai-decision { margin-top: 0 !important; display: inline-flex !important; }
         }
     </style>
 </head>
@@ -118,14 +159,20 @@
                     <div style="background: #4e2b5c; color: white; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; letter-spacing: 1px;">GENERATED BY AI WARUNA</div>
                 </div>
 
-                <div id="webHeader">
+                <div id="webHeader" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;">
                     <div>
                         <h3 id="reportTitle" style="margin:0; display:flex; align-items:center; gap:8px;"><i data-lucide="anchor"></i> Results</h3>
                         <div id="reportSubtitle" style="font-size:11px; color:#666; font-weight:600; margin-top:5px;"></div>
                     </div>
-                    <button id="btnDownload" onclick="printReport()" style="background:var(--primary); color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:8px;">
-                        <i data-lucide="printer" style="width:16px;"></i> Print Browser
-                    </button>
+                    
+                    <div class="action-buttons">
+                        <button onclick="printReport('simple')" class="btn-modern btn-simple" title="Print for Purchasing (No Logs)">
+                            <i data-lucide="file-text" style="width:16px;"></i> Download
+                        </button>
+                        <button onclick="printReport('full')" class="btn-modern btn-full" title="Print for Audit (Full Traceability)">
+                            <i data-lucide="printer" style="width:16px;"></i> Download Full
+                        </button>
+                    </div>
                 </div>
 
                 <div class="table-responsive" id="tableContainer">
@@ -134,10 +181,10 @@
                             <tr>
                                 <th style="width:30px; text-align:center;">No</th>
                                 <th style="width:32%;">Identity & Traceability</th>
-                                <th>Inventory</th>
-                                <th>Limit</th>
+                                <th class="col-inventory">Inventory</th>
+                                <th class="col-limit">Limit</th>
                                 <th>Target RH</th>
-                                <th style="width:28%;">Decision Logic</th>
+                                <th style="width:28%;" class="col-decision">Decision Logic</th>
                                 <th style="text-align:center;" class="th-verify">Verify</th>
                             </tr>
                         </thead>
@@ -170,7 +217,6 @@
             document.getElementById('reportTitle').innerHTML = `<i data-lucide="anchor"></i> ${vessel} — ${engine}`;
             document.getElementById('reportSubtitle').innerText = `Request Date: ${auditData[0].Tanggal || '-'}`;
             
-            // Sinkronisasi data ke Header Print
             document.getElementById('printTitle').innerText = `${vessel} — ${engine}`;
             document.getElementById('printSubtitle').innerText = `Request Date: ${auditData[0].Tanggal || '-'}`;
 
@@ -217,16 +263,16 @@
                                 <div style="color:#d35400;"><b>RH:</b> ${item.Nama_RH || '[NOT FOUND]'}</div>
                             </div>
                         </td>
-                        <td>
+                        <td class="col-inventory">
                             <div style="margin-bottom:8px;"><span style="font-size:9px; color:#888;">REQ</span><br><span class="num-val">${item.Qty_Diminta}</span></div>
                             <div><span style="font-size:9px; color:#888;">ROB</span><br><span class="num-val">${item.ROB}</span></div>
                         </td>
-                        <td>${item.Max_Limit_Jam || '-'}</td>
+                        <td class="col-limit">${item.Max_Limit_Jam || '-'}</td>
                         <td>
                             <div style="font-weight:bold; color:${item.Target_Cylinder !== '-' ? '#c0392b' : '#888'}; font-size:11px;">${item.Target_Cylinder !== '-' ? item.Target_Cylinder : 'Safe'}</div>
                             <div style="font-size:9px; color:#999; margin-top:6px;">History:<br>${item.RH_Terakhir}</div>
                         </td>
-                        <td>
+                        <td class="col-decision">
                             <span class="${statusClass}">${aiStatus}</span>
                             ${aiBoxHtml}
                         </td>
@@ -241,45 +287,50 @@
         }
 
         // ==========================================
-        // FUNGSI PRINT NATIVE BROWSER (ANTI GAGAL)
+        // FUNGSI PRINT NATIVE BROWSER (FULL & SIMPLE)
         // ==========================================
-        function printReport() {
-            // 1. Proses Filter Baris (Tandai yang tidak dicentang)
+        function printReport(mode) {
             const allRows = document.querySelectorAll('#tableBody tr');
+            const subHeaders = document.querySelectorAll('.subsystem-header td');
             let currentHeader = null;
             let visibleCount = 0;
 
+            // 1. Aplikasikan Mode Simple (Sembunyikan Kolom)
+            if (mode === 'simple') {
+                document.body.classList.add('simple-print-mode');
+                // Di mode simple, total kolom yang dicetak ada 4 (No, Identity, Target, Decision)
+                subHeaders.forEach(td => td.setAttribute('colspan', '4')); 
+            } else {
+                // Di mode full, total kolom yang dicetak ada 6 (Kolom ke-7 Verify disembunyikan CSS global)
+                subHeaders.forEach(td => td.setAttribute('colspan', '6'));
+            }
+
+            // 2. Filter Baris Tidak Dicentang & Bersihkan Header Kosong
             allRows.forEach(row => {
                 if (row.classList.contains('subsystem-header')) {
-                    // Jika header sebelumnya tidak punya anak buah, sembunyikan
-                    if (currentHeader && visibleCount === 0) {
-                        currentHeader.classList.add('hide-for-print');
-                    }
+                    if (currentHeader && visibleCount === 0) currentHeader.classList.add('hide-for-print');
                     currentHeader = row;
                     visibleCount = 0;
                 } else if (row.classList.contains('data-row')) {
                     const checkbox = row.querySelector('.v-checkbox');
                     if (!checkbox.checked) {
-                        row.classList.add('hide-for-print'); // Tandai untuk disembunyikan
+                        row.classList.add('hide-for-print');
                     } else {
                         visibleCount++;
                     }
                 }
             });
-            // Cek header terakhir
-            if (currentHeader && visibleCount === 0) {
-                currentHeader.classList.add('hide-for-print');
-            }
+            if (currentHeader && visibleCount === 0) currentHeader.classList.add('hide-for-print');
 
-            // 2. Panggil Jendela Print Bawaan Browser
+            // 3. Panggil Dialog Print Browser
             window.print();
         }
 
-        // 3. Kembalikan tabel seperti semula setelah jendela print ditutup
+        // Kembalikan semua state setelah Print Dialog ditutup
         window.addEventListener('afterprint', () => {
-            document.querySelectorAll('.hide-for-print').forEach(el => {
-                el.classList.remove('hide-for-print');
-            });
+            document.body.classList.remove('simple-print-mode');
+            document.querySelectorAll('.hide-for-print').forEach(el => el.classList.remove('hide-for-print'));
+            document.querySelectorAll('.subsystem-header td').forEach(td => td.setAttribute('colspan', '7'));
         });
 
         async function checkStatus(jobId) {
