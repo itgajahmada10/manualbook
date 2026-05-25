@@ -3,35 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waruna LSA Audit — V7 Pro Dashboard</title>
+    <title>Verification Portal — Waruna Group</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <style>
         :root { --primary: #4e2b5c; --primary-hover: #3b1e47; --bg-card: #ffffff; --border-color: #e8dee8; --text-main: #333333; --success: #27ae60; --error: #c0392b; --warning: #d4ac0d; }
-        body { margin: 0; padding: 40px 20px; background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; }
-        
-        .main-container { width: 100%; max-width: 1200px; display: flex; flex-direction: column; gap: 30px; }
+        body { margin: 0; padding: 30px; background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; }
+        .main-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; max-width: 1500px; margin: 0 auto; align-items: flex-start; }
+        .left-panel { flex: 1; min-width: 320px; max-width: 380px; position: sticky; top: 30px; }
         .card-box { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); }
-        
-        /* Form Header (New UI) */
         .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { color: var(--primary); margin: 0; font-family: 'Poppins', sans-serif; font-size: 24px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .header h2 { color: var(--primary); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 24px;}
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 11px; text-transform: uppercase; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;}
+        select, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; margin-bottom: 15px; background: #fafafa; box-sizing: border-box;}
+        .upload-section { padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #b59ebc; background: #fbf9fc;}
+        input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; font-size: 11px; box-sizing: border-box;}
         
-        /* 3-Column Grid */
-        .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
-        .upload-section { padding: 20px 15px; border-radius: 8px; border: 1px dashed #b59ebc; background: #fbf9fc; text-align: center; }
-        .upload-section label { display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; margin-bottom: 12px; font-size: 11px; text-transform: uppercase; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px; color: var(--primary); }
-        input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; font-size: 11px; box-sizing: border-box; cursor: pointer; }
-        
-        .btn-submit { background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; text-transform: uppercase; }
-        .btn-submit:hover { background-color: var(--primary-hover); }
-        .btn-submit:disabled { background-color: #9b8a9f; cursor: not-allowed; }
-        
+        .btn-submit { background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .loader { border: 3px solid rgba(78, 43, 92, 0.3); border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
         .loader-small { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         
-        /* Table & Results */
+        .right-panel { flex: 3; min-width: 850px; width: 100%; }
         .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); background: #fff;}
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
         th { background-color: #fbf9fc; padding: 16px 14px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--border-color); font-family: 'Poppins', sans-serif; font-size: 11px; text-transform: uppercase;}
@@ -51,25 +44,63 @@
         .badge-approved { background-color: #e9f7ef; color: #1e8449; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
         #printHeader { display: none; }
 
-        /* Modern Action Buttons */
-        .action-buttons { display: flex; gap: 12px; justify-content: flex-end; align-items: center; }
-        .btn-modern { padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; font-family: 'Poppins', sans-serif; letter-spacing: 0.3px; }
-        .btn-full { background: var(--primary); color: white; border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(78,43,92,0.2); }
+        /* ==========================================
+           MODERN ACTION BUTTONS
+           ========================================== */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .btn-modern {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.3px;
+        }
+        .btn-full {
+            background: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(78,43,92,0.2);
+        }
         .btn-full:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 14px rgba(78,43,92,0.3); }
-        .btn-simple { background: white; color: var(--primary); border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+        .btn-simple {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+        }
         .btn-simple:hover { background: #fbf9fc; transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.08); }
 
-        @media (max-width: 768px) { .upload-grid { grid-template-columns: 1fr; } }
-
-        /* Print CSS */
+        /* ==========================================
+           NATIVE BROWSER PRINT CSS (SUPER ROBUST)
+           ========================================== */
         @media print {
             @page { size: A4 portrait; margin: 10mm; }
             body { background: white; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            #formPanel, #webHeader, .th-verify, .td-verify { display: none !important; }
-            .main-container { max-width: 100%; display: block; gap: 0; }
+            
+            /* Sembunyikan Elemen UI Web */
+            .left-panel, #webHeader, .th-verify, .td-verify { display: none !important; }
+            
+            /* Bersihkan Container agar Full Lebar Kertas */
+            .main-container { max-width: 100%; display: block; }
+            .right-panel { width: 100%; display: block; min-width: 0; }
             .card-box { padding: 0; border: none; box-shadow: none; }
             .table-responsive { border: none; overflow: visible; }
+            
+            /* Nyalakan Header Cetak */
             #printHeader { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #ccc; padding-bottom: 15px; }
+            
+            /* Setup Tabel Dasar Cetak */
             table { font-size: 10px; width: 100%; table-layout: auto; }
             th { font-size: 9px !important; padding: 6px 4px !important; }
             td { padding: 6px 4px !important; }
@@ -78,10 +109,18 @@
             .trace-box, .ai-box { padding: 6px !important; font-size: 9px !important; line-height: 1.3; }
             .ai-decision { font-size: 9px !important; padding: 4px 6px !important; }
             .badge-mandatory { font-size: 8px !important; padding: 2px 4px !important; }
-            tr, td { page-break-inside: avoid !important; }
-            .hide-for-print { display: none !important; }
             
-            body.simple-print-mode .trace-box, body.simple-print-mode .col-inventory, body.simple-print-mode .col-limit, body.simple-print-mode .ai-step { display: none !important; }
+            tr { page-break-inside: avoid !important; }
+            td { page-break-inside: avoid !important; }
+            .hide-for-print { display: none !important; }
+
+            /* ==========================================
+               LOGIKA "DOWNLOAD" (SIMPLE MODE)
+               ========================================== */
+            body.simple-print-mode .trace-box { display: none !important; }
+            body.simple-print-mode .col-inventory { display: none !important; }
+            body.simple-print-mode .col-limit { display: none !important; }
+            body.simple-print-mode .ai-step { display: none !important; }
             body.simple-print-mode .ai-box { border: none !important; padding: 0 !important; background: transparent !important; margin-top: 4px !important; }
             body.simple-print-mode .ai-decision { margin-top: 0 !important; display: inline-flex !important; }
         }
@@ -89,79 +128,69 @@
 </head>
 <body>
     <div class="main-container">
-        
-        <div class="card-box" id="formPanel">
-            <div class="header">
-                <h2>Waruna LSA Audit - V7 Pro Dashboard</h2>
-            </div>
-            
-            <form id="auditForm">
-                <div class="upload-grid">
-                    <div class="upload-section">
-                        <label><i data-lucide="file-text" style="width:16px;"></i> Quotation Document</label>
-                        <input type="file" id="quotationFile" accept=".pdf">
-                    </div>
-                    <div class="upload-section">
-                        <label><i data-lucide="file-badge" style="width:16px;"></i> Certificate Report</label>
-                        <input type="file" id="certFile" accept=".pdf">
-                    </div>
-                    <div class="upload-section">
-                        <label><i data-lucide="package-check" style="width:16px;"></i> Delivery Order</label>
-                        <input type="file" id="deliveryFile" accept=".pdf">
-                    </div>
+        <div class="left-panel">
+            <div class="card-box">
+                <div class="header">
+                    <h2><i data-lucide="shield-check"></i> Verification</h2>
+                    <p style="color: #666; font-size: 12px; font-weight:500;">AI Engine System</p>
                 </div>
-
-                <button type="submit" id="submitBtn" class="btn-submit">
-                    <i data-lucide="zap"></i> Run Comprehensive Maritime Audit
-                </button>
-                <div id="errorBox" style="margin-top:15px; display:none; color:red; font-size:12px; font-weight:bold; text-align:center;"></div>
-            </form>
+                <form id="auditForm">
+                    <label>1. Engine Category</label>
+                    <select id="engineType"><option value="ME">Main Engine (ME)</option><option value="AE">Aux Engine (AE)</option></select>
+                    <div class="upload-section"><label>2. Running Hours Report</label><input type="file" id="rhFile" accept=".pdf, .xlsx, .xls"></div>
+                    <div class="upload-section"><label>3. Requisition / PO PDF</label><input type="file" id="reqFile" accept=".pdf" required></div>
+                    <button type="submit" id="submitBtn" class="btn-submit"><i data-lucide="zap"></i> RUN AI VERIFICATION</button>
+                    <div id="errorBox" style="margin-top:15px; display:none; color:red; font-size:12px; font-weight:bold;"></div>
+                </form>
+            </div>
         </div>
 
-        <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 60px 20px;">
-            <div class="loader"></div>
-            <h2>Analyzing...</h2>
-            <p style="color: #666; font-size: 13px;">Performing Triangulation Data</p>
-        </div>
-
-        <div id="reportPanel" class="card-box" style="display: none;">
-            <div id="printHeader">
-                <h2 id="printTitle" style="color: #4e2b5c; margin: 0 0 5px 0; font-family:'Poppins', sans-serif;">Verification Results</h2>
-                <div id="printSubtitle" style="font-weight: bold; margin-bottom: 10px; color: #555; font-size: 11px;"></div>
-                <div style="background: #4e2b5c; color: white; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; letter-spacing: 1px;">GENERATED BY AI WARUNA</div>
+        <div class="right-panel">
+            <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 60px 20px;">
+                <div class="loader"></div>
+                <h2>Analyzing...</h2>
+                <p style="color: #666; font-size: 13px;">Performing Triangulation Data</p>
             </div>
 
-            <div id="webHeader" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;">
-                <div>
-                    <h3 id="reportTitle" style="margin:0; display:flex; align-items:center; gap:8px;"><i data-lucide="anchor"></i> Results</h3>
-                    <div id="reportSubtitle" style="font-size:11px; color:#666; font-weight:600; margin-top:5px;"></div>
+            <div id="reportPanel" class="card-box" style="display: none;">
+                <div id="printHeader">
+                    <h2 id="printTitle" style="color: #4e2b5c; margin: 0 0 5px 0; font-family:'Poppins', sans-serif;">Verification Results</h2>
+                    <div id="printSubtitle" style="font-weight: bold; margin-bottom: 10px; color: #555; font-size: 11px;"></div>
+                    <div style="background: #4e2b5c; color: white; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; letter-spacing: 1px;">GENERATED BY AI WARUNA</div>
                 </div>
-                
-                <div class="action-buttons">
-                    <button type="button" onclick="printReport('simple')" class="btn-modern btn-simple" title="Print for Purchasing (No Logs)">
-                        <i data-lucide="file-text" style="width:16px;"></i> Download
-                    </button>
-                    <button type="button" onclick="printReport('full')" class="btn-modern btn-full" title="Print for Audit (Full Traceability)">
-                        <i data-lucide="printer" style="width:16px;"></i> Download Full
-                    </button>
-                </div>
-            </div>
 
-            <div class="table-responsive" id="tableContainer">
-                <table id="auditTable">
-                    <thead>
-                        <tr>
-                            <th style="width:30px; text-align:center;">No</th>
-                            <th style="width:32%;">Identity & Traceability</th>
-                            <th class="col-inventory">Inventory</th>
-                            <th class="col-limit">Limit</th>
-                            <th>Target RH</th>
-                            <th style="width:28%;" class="col-decision">Decision Logic</th>
-                            <th style="text-align:center;" class="th-verify">Verify</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
+                <div id="webHeader" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;">
+                    <div>
+                        <h3 id="reportTitle" style="margin:0; display:flex; align-items:center; gap:8px;"><i data-lucide="anchor"></i> Results</h3>
+                        <div id="reportSubtitle" style="font-size:11px; color:#666; font-weight:600; margin-top:5px;"></div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button onclick="printReport('simple')" class="btn-modern btn-simple" title="Print for Purchasing (No Logs)">
+                            <i data-lucide="file-text" style="width:16px;"></i> Download
+                        </button>
+                        <button onclick="printReport('full')" class="btn-modern btn-full" title="Print for Audit (Full Traceability)">
+                            <i data-lucide="printer" style="width:16px;"></i> Download Full
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive" id="tableContainer">
+                    <table id="auditTable">
+                        <thead>
+                            <tr>
+                                <th style="width:30px; text-align:center;">No</th>
+                                <th style="width:32%;">Identity & Traceability</th>
+                                <th class="col-inventory">Inventory</th>
+                                <th class="col-limit">Limit</th>
+                                <th>Target RH</th>
+                                <th style="width:28%;" class="col-decision">Decision Logic</th>
+                                <th style="text-align:center;" class="th-verify">Verify</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -173,9 +202,10 @@
         let pollingInterval;
 
         function renderTable(auditData) {
+            // [FIX] Matikan animasi loading di tombol saat hasil keluar
             const btn = document.getElementById('submitBtn');
             btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="zap"></i> RUN COMPREHENSIVE MARITIME AUDIT`;
+            btn.innerHTML = `<i data-lucide="zap"></i> RUN AI VERIFICATION`;
 
             document.getElementById('pollingCard').style.display = 'none';
             document.getElementById('reportPanel').style.display = 'block';
@@ -189,7 +219,7 @@
             }
 
             let vessel = auditData[0].Nama_Kapal || "Unknown";
-            let engine = auditData[0].Tipe_Mesin || "LSA Audit"; // Default string altered based on new context
+            let engine = auditData[0].Tipe_Mesin || "ME";
             document.getElementById('reportTitle').innerHTML = `<i data-lucide="anchor"></i> ${vessel} — ${engine}`;
             document.getElementById('reportSubtitle').innerText = `Request Date: ${auditData[0].Tanggal || '-'}`;
             
@@ -262,6 +292,9 @@
             lucide.createIcons();
         }
 
+        // ==========================================
+        // FUNGSI PRINT NATIVE BROWSER (FULL & SIMPLE)
+        // ==========================================
         function printReport(mode) {
             const allRows = document.querySelectorAll('#tableBody tr');
             const subHeaders = document.querySelectorAll('.subsystem-header td');
@@ -322,14 +355,11 @@
             errorBox.style.display = 'none';
             document.getElementById('reportPanel').style.display = 'none';
 
-            // PERHATIAN: Nama variabel (key) FormData ini dikirim ke n8n.
-            // Anda harus memastikan node Webhook n8n dikonfigurasi untuk menangkap variabel ini,
-            // BUKAN variabel lama (engine_type, RH_Report, Requisition_Report).
             const fd = new FormData();
+            fd.append('engine_type', document.getElementById('engineType').value);
             fd.append('job_id', id);
-            if (document.getElementById('quotationFile').files[0]) fd.append('Quotation', document.getElementById('quotationFile').files[0]);
-            if (document.getElementById('certFile').files[0]) fd.append('Certificate', document.getElementById('certFile').files[0]);
-            if (document.getElementById('deliveryFile').files[0]) fd.append('Delivery_Order', document.getElementById('deliveryFile').files[0]);
+            if (document.getElementById('rhFile').files[0]) fd.append('RH_Report', document.getElementById('rhFile').files[0]);
+            fd.append('Requisition_Report', document.getElementById('reqFile').files[0]);
 
             try {
                 const req = await fetch(WEBHOOK_URL, { method: 'POST', body: fd });
@@ -340,7 +370,7 @@
                 errorBox.style.display = 'block';
                 errorBox.innerText = err.message;
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="zap"></i> RUN COMPREHENSIVE MARITIME AUDIT`;
+                btn.innerHTML = `<i data-lucide="zap"></i> RUN AI VERIFICATION`;
                 lucide.createIcons();
             }
         };
