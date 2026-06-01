@@ -187,6 +187,8 @@
             const body = document.getElementById('tableBody');
             body.innerHTML = '';
             
+            let alertBannerHtml = '';
+            
             if (auditData[0].PESAN_ERROR) {
                 body.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red; padding:20px;"><b>${auditData[0].PESAN_ERROR}</b></td></tr>`;
                 lucide.createIcons();
@@ -200,6 +202,23 @@
             
             document.getElementById('printTitle').innerText = `${vessel} — ${engine}`;
             document.getElementById('printSubtitle').innerText = `Request Date: ${auditData[0].Tanggal || '-'}`;
+
+            // Render Banner Global Alert Jika Ada Mesin Lain Yang Over Limit
+            if (auditData[0].Global_Alerts && auditData[0].Global_Alerts !== "") {
+                alertBannerHtml = `
+                    <tr>
+                        <td colspan="6" style="padding:0; border:none;">
+                            <div style="background:#fdedec; border:1px solid #fadbd8; border-left:4px solid #c0392b; padding:15px; border-radius:6px; margin-bottom:15px; color:#c0392b; font-size:12px;">
+                                <div style="font-weight:800; margin-bottom:8px; font-size:13px; display:flex; align-items:center; gap:6px;">
+                                    <i data-lucide="alert-triangle" style="width:16px;"></i> WARNING: CROSS-ENGINE OVER LIMIT DETECTED
+                                </div>
+                                <div style="line-height:1.5;">${auditData[0].Global_Alerts}</div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                body.innerHTML += alertBannerHtml;
+            }
 
             let grouped = {};
             auditData.forEach(item => {
@@ -231,7 +250,6 @@
                     });
                     aiBoxHtml += `</div>`;
                     
-                    // PENENTUAN WARNA TARGET CYLINDER
                     let targetColor = item.Target_Cylinder !== '-' ? '#c0392b' : '#1e8449';
 
                     let tr = document.createElement('tr');
@@ -283,7 +301,7 @@
                 document.body.classList.add('simple-print-mode');
                 subHeaders.forEach(td => td.setAttribute('colspan', '3')); 
             } else {
-                subHeaders.forEach(td => td.setAttribute('colspan', '5'));
+                subHeaders.forEach(td => td.setAttribute('colspan', '6'));
             }
 
             allRows.forEach(row => {
