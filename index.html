@@ -184,7 +184,6 @@
 
     <script>
         lucide.createIcons();
-        // PASTIKAN N8N WEBHOOK URL INI BENAR
         const WEBHOOK_URL = "https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de";
         const STATUS_URL = "https://n8.waruna-group.co.id/webhook/check-audit-status";
         let pollingInterval;
@@ -220,7 +219,6 @@
                 grouped[s].push(item);
             });
 
-            // 1. RENDER SEMUA BARIS BARANG TERLEBIH DAHULU
             for (let sub in grouped) {
                 let trHead = document.createElement('tr');
                 trHead.className = 'subsystem-header';
@@ -243,8 +241,6 @@
                         }
                     });
                     aiBoxHtml += `</div>`;
-                    
-                    let targetColor = item.Target_Cylinder !== '-' ? '#c0392b' : '#1e8449';
 
                     let tr = document.createElement('tr');
                     tr.className = 'data-row';
@@ -265,7 +261,7 @@
                             <div><span style="font-size:9px; color:#888;">ROB</span><br><span class="num-val">${item.ROB}</span></div>
                         </td>
                         <td>
-                            <div style="font-weight:bold; color:${targetColor}; font-size:11px; margin-bottom: 6px;">${item.Target_Cylinder !== '-' ? item.Target_Cylinder : 'SAFE'}</div>
+                            <div style="font-weight:bold; font-size:11px; margin-bottom: 6px;">${item.Target_Cylinder || 'SAFE'}</div>
                             ${item.RH_Terakhir}
                         </td>
                         <td class="col-decision">
@@ -279,24 +275,6 @@
                     body.appendChild(tr);
                 });
             }
-
-            // 2. RENDER BANNER GLOBAL ALERT DI PALING BAWAH (SETELAH TABEL SELESAI)
-            if (auditData[0].Global_Alerts && auditData[0].Global_Alerts !== "") {
-                let alertBannerHtml = `
-                    <tr>
-                        <td colspan="6" style="padding:0; border:none;">
-                            <div style="background:#fdedec; border:1px solid #fadbd8; border-left:4px solid #c0392b; padding:15px; border-radius:6px; margin-top:20px; margin-bottom:15px; color:#c0392b; font-size:12px;">
-                                <div style="font-weight:800; margin-bottom:8px; font-size:13px; display:flex; align-items:center; gap:6px;">
-                                    <i data-lucide="alert-triangle" style="width:16px;"></i> WARNING: CROSS-ENGINE OVER LIMIT DETECTED
-                                </div>
-                                <div style="line-height:1.5;">${auditData[0].Global_Alerts}</div>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                body.innerHTML += alertBannerHtml;
-            }
-
             lucide.createIcons();
         }
 
