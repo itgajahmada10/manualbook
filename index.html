@@ -3,363 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Portal — Waruna Group</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+    <title>Verification Portal - Waruna Group</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root { --primary: #4e2b5c; --primary-hover: #3b1e47; --bg-card: #ffffff; --border-color: #e8dee8; --text-main: #333333; --success: #27ae60; --error: #c0392b; --warning: #d4ac0d; }
-        body { margin: 0; padding: 30px; background: linear-gradient(135deg, #fffdf2 0%, #ffe9d6 100%); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; }
-        .main-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; max-width: 1500px; margin: 0 auto; align-items: flex-start; }
-        .left-panel { flex: 1; min-width: 320px; max-width: 380px; position: sticky; top: 30px; }
-        .card-box { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 12px 40px rgba(78, 43, 92, 0.08); border: 1px solid var(--border-color); }
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { color: var(--primary); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 24px;}
-        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 11px; text-transform: uppercase; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;}
-        select, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; margin-bottom: 15px; background: #fafafa; box-sizing: border-box;}
-        .upload-section { padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #b59ebc; background: #fbf9fc;}
-        input[type="file"] { width: 100%; padding: 8px; background-color: #fff; border-radius: 6px; border: 1px solid #ccc; font-size: 11px; box-sizing: border-box;}
-        
-        .btn-submit { background-color: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .loader { border: 3px solid rgba(78, 43, 92, 0.3); border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
-        .loader-small { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        .right-panel { flex: 3; min-width: 850px; width: 100%; }
-        .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); background: #fff;}
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background-color: #fbf9fc; padding: 16px 14px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--border-color); font-family: 'Poppins', sans-serif; font-size: 11px; text-transform: uppercase;}
-        td { padding: 16px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
-        .subsystem-header { background-color: #4e2b5c !important; color: white !important; font-family: 'Poppins', sans-serif;}
-        .badge-mandatory { font-size: 9px; background: var(--primary); color: white; padding: 3px 6px; border-radius: 4px; font-weight: 700; display: inline-block; margin-bottom: 8px;}
-        .trace-box { background: #fbf9fc; border: 1px dashed #d2c5d6; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 11px; line-height: 1.5;}
-        .ai-box { background: #f8f9f9; border: 1px solid #eaeded; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 11px; }
-        .ai-step { color: #666; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-weight: 500;}
-        .ai-decision { padding: 8px 10px; border-radius: 6px; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 11px; text-transform: uppercase;}
-        .ai-decision.safe { background: #ebf5fb; color: #2980b9; border: 1px solid #d6eaf8;}
-        .ai-decision.cut { background: #fdedec; color: #c0392b; border: 1px solid #fadbd8; }
-        .num-val { font-size: 14px; font-weight: 800; font-family: 'Poppins', sans-serif; color: var(--text-main);}
-        .v-checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
-        .badge-reduced { background-color: #fdedec; color: #c0392b; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
-        .badge-warning { background-color: #fcf3cf; color: #d4ac0d; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
-        .badge-approved { background-color: #e9f7ef; color: #1e8449; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; }
-        #printHeader { display: none; }
-
-        /* MODERN ACTION BUTTONS */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            align-items: center;
+        :root {
+            --primary: #4a235a;
+            --primary-hover: #5b2c6f;
+            --bg-color: #fdf2ee;
+            --text-main: #2c3e50;
+            --border-light: #e5e8e8;
+            --safe-green: #27ae60;
+            --warn-yellow: #d4ac0d;
+            --danger-red: #c0392b;
         }
-        .btn-modern {
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            font-family: 'Poppins', sans-serif;
-            letter-spacing: 0.3px;
-        }
-        .btn-full { background: var(--primary); color: white; border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(78,43,92,0.2); }
-        .btn-full:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 14px rgba(78,43,92,0.3); }
-        .btn-simple { background: white; color: var(--primary); border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
-        .btn-simple:hover { background: #fbf9fc; transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.08); }
 
-        /* NATIVE BROWSER PRINT CSS (SUPER ROBUST) */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); font-size: 13px; line-height: 1.5; }
+        
+        .container { display: flex; gap: 25px; padding: 25px; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
+        
+        /* SIDEBAR STYLES */
+        .sidebar { width: 320px; background: #fff; padding: 30px 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.04); position: sticky; top: 25px; flex-shrink: 0; }
+        .sidebar-header { text-align: center; margin-bottom: 30px; }
+        .sidebar-header h2 { font-size: 20px; color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; }
+        .sidebar-header p { font-size: 11px; color: #7f8c8d; font-weight: 500; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 10px; font-weight: 700; color: #555; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        select, input[type="file"] { width: 100%; padding: 10px 12px; border: 1px dashed var(--border-light); border-radius: 6px; font-size: 12px; font-family: inherit; transition: all 0.2s; background: #fafafa; }
+        select:focus, input[type="file"]:focus { border-color: var(--primary); outline: none; background: #fff; }
+        input[type="file"] { padding: 8px; cursor: pointer; }
+        
+        .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; margin-top: 10px; }
+        .btn-submit:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+        
+        /* MAIN CONTENT STYLES */
+        .main-content { flex: 1; min-width: 0; }
+        .card { background: #fff; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.04); overflow: hidden; }
+        
+        /* HEADER REPORT */
+        .report-header { padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-light); }
+        .report-title-area h1 { font-size: 22px; color: var(--text-main); display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+        .report-title-area p { font-size: 12px; color: #7f8c8d; font-weight: 500; }
+        .header-actions { display: flex; gap: 10px; }
+        .btn-outline { background: #fff; border: 1px solid var(--primary); color: var(--primary); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn-outline:hover { background: #f5eef8; }
+        .btn-solid { background: var(--primary); color: #fff; border: 1px solid var(--primary); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn-solid:hover { background: var(--primary-hover); }
+
+        /* TABLE STYLES */
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fdfdfd; color: #7f8c8d; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 15px 20px; text-align: left; border-bottom: 1px solid var(--border-light); letter-spacing: 0.5px; }
+        td { padding: 20px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+        .subsystem-header td { background: var(--primary); color: #fff; font-weight: 700; font-size: 12px; padding: 12px 20px; text-transform: uppercase; letter-spacing: 0.5px; border: none; }
+        
+        /* BADGES & BOXES */
+        .badge-mandatory { background: var(--primary); color: #fff; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .badge-reduced { background: #fdedec; color: var(--danger-red); font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 4px; border: 1px solid #fadbd8; display: inline-block; margin-bottom: 10px; }
+        .badge-warning { background: #fef9e7; color: #b9770e; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 4px; border: 1px solid #fcf3cf; display: inline-block; margin-bottom: 10px; }
+        .badge-approved { background: #eafaf1; color: var(--safe-green); font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 4px; border: 1px solid #d5f5e3; display: inline-block; margin-bottom: 10px; }
+        
+        .trace-box { border: 1px dashed #d5d8dc; border-radius: 6px; padding: 10px 12px; margin-top: 10px; font-size: 11px; background: #fafafa; }
+        
+        .ai-box { background: #f8f9f9; border: 1px solid var(--border-light); border-radius: 6px; padding: 12px; font-size: 11px; }
+        .ai-step { display: flex; align-items: center; gap: 6px; color: #555; margin-bottom: 6px; }
+        .ai-decision { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #d5d8dc; font-weight: 800; text-align: center; font-size: 12px; border-radius: 4px; }
+        .ai-decision.cut { color: var(--danger-red); background: #fdedec; padding: 8px; }
+        .ai-decision.safe { color: var(--primary); background: #f5eef8; padding: 8px; }
+
+        .num-val { font-size: 16px; font-weight: 800; color: var(--text-main); }
+        .col-inventory { text-align: center; }
+        
+        .v-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: var(--primary); }
+        .td-verify { vertical-align: middle !important; }
+
+        /* LOADER */
+        .loader-container { padding: 80px 20px; text-align: center; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loader-small { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; }
+
+        #errorBox { display: none; background: #fdedec; color: var(--danger-red); padding: 12px; border-radius: 6px; font-size: 11px; margin-top: 15px; border: 1px solid #fadbd8; font-weight: 600; }
+        
+        .print-only-header { display: none; text-align: center; margin-bottom: 20px; }
+        
+        /* PRINT STYLES */
         @media print {
-            @page { size: A4 portrait; margin: 10mm; }
-            body { background: white; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            
-            .left-panel, #webHeader, .th-verify, .td-verify { display: none !important; }
-            
-            .main-container { max-width: 100%; display: block; }
-            .right-panel { width: 100%; display: block; min-width: 0; }
-            .card-box { padding: 0; border: none; box-shadow: none; }
-            .table-responsive { border: none; overflow: visible; }
-            
-            #printHeader { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #ccc; padding-bottom: 15px; }
-            
-            table { font-size: 10px; width: 100%; table-layout: auto; }
-            th { font-size: 9px !important; padding: 6px 4px !important; }
-            td { padding: 6px 4px !important; }
-            .subsystem-header td { font-size: 10px !important; padding: 8px 6px !important; }
-            .num-val { font-size: 11px !important; }
-            .trace-box, .ai-box { padding: 6px !important; font-size: 9px !important; line-height: 1.3; }
-            .ai-decision { font-size: 9px !important; padding: 4px 6px !important; }
-            .badge-mandatory { font-size: 8px !important; padding: 2px 4px !important; }
-            
-            tr { page-break-inside: avoid !important; }
-            td { page-break-inside: avoid !important; }
+            body { background: #fff; }
+            .container { padding: 0; display: block; max-width: 100%; }
+            .sidebar, .header-actions, .td-verify, th:last-child { display: none !important; }
+            .card { box-shadow: none; border: none; }
+            .report-header { display: none; }
+            .print-only-header { display: block; padding-bottom: 15px; border-bottom: 2px solid #000; margin-bottom: 20px; }
+            .print-only-header h2 { font-size: 18px; margin-bottom: 5px; color: #000; }
+            .print-only-header p { font-size: 12px; color: #555; }
+            table, th, td { border-color: #000; }
+            th { color: #000; padding: 10px; }
+            td { padding: 10px; }
+            .badge-mandatory, .badge-reduced, .badge-warning, .badge-approved { border: 1px solid #000; color: #000 !important; background: transparent !important; }
+            .subsystem-header td { background: #f0f0f0 !important; color: #000 !important; border: 1px solid #000; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .hide-for-print { display: none !important; }
-
-            /* LOGIKA "DOWNLOAD" (SIMPLE MODE) */
-            body.simple-print-mode .trace-box { display: none !important; }
-            body.simple-print-mode .col-inventory { display: none !important; }
-            body.simple-print-mode .col-decision { display: none !important; }
+            
+            .simple-print-mode .col-inventory, .simple-print-mode th:nth-child(3),
+            .simple-print-mode .col-decision, .simple-print-mode th:nth-child(5) { display: none !important; }
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="left-panel">
-            <div class="card-box">
-                <div class="header">
-                    <h2><i data-lucide="shield-check"></i> Verification</h2>
-                    <p style="color: #666; font-size: 12px; font-weight:500;">AI Engine System</p>
-                </div>
-                <form id="auditForm">
-                    <label>1. Engine Category</label>
-                    <select id="engineType">
-                        <option value="ME">Main Engine (ME)</option>
-                        <option value="AE">Aux Engine (AE)</option>
-                    </select>
-                    <div class="upload-section">
-                        <label>2. Running Hours Report</label>
-                        <input type="file" id="rhFile" accept=".pdf, .xlsx, .xls">
-                    </div>
-                    <div class="upload-section">
-                        <label>3. Requisition / PO PDF</label>
-                        <input type="file" id="reqFile" accept=".pdf" required>
-                    </div>
-                    <button type="submit" id="submitBtn" class="btn-submit">
-                        <i data-lucide="zap"></i> RUN AI VERIFICATION
-                    </button>
-                    <div id="errorBox" style="margin-top:15px; display:none; color:red; font-size:12px; font-weight:bold;"></div>
-                </form>
-            </div>
+
+<div class="container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2><i data-lucide="shield-check"></i> Verification</h2>
+            <p>AI Engine System</p>
         </div>
 
-        <div class="right-panel">
-            <div id="pollingCard" class="card-box" style="display: none; text-align: center; padding: 60px 20px;">
-                <div class="loader"></div>
-                <h2>Analyzing...</h2>
-                <p style="color: #666; font-size: 13px;">Performing Triangulation Data</p>
+        <form id="auditForm">
+            <div class="form-group">
+                <label>1. Engine Category</label>
+                <select id="engineType">
+                    <option value="ME">Main Engine (ME)</option>
+                    <option value="AE">Aux Engine (AE)</option>
+                </select>
             </div>
-
-            <div id="reportPanel" class="card-box" style="display: none;">
-                <div id="printHeader">
-                    <h2 id="printTitle" style="color: #4e2b5c; margin: 0 0 5px 0; font-family:'Poppins', sans-serif;">Verification Results</h2>
-                    <div id="printSubtitle" style="font-weight: bold; margin-bottom: 10px; color: #555; font-size: 11px;"></div>
-                    <div style="background: #4e2b5c; color: white; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; letter-spacing: 1px;">GENERATED BY AI WARUNA</div>
-                </div>
-
-                <div id="webHeader" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;">
-                    <div>
-                        <h3 id="reportTitle" style="margin:0; display:flex; align-items:center; gap:8px;"><i data-lucide="anchor"></i> Results</h3>
-                        <div id="reportSubtitle" style="font-size:11px; color:#666; font-weight:600; margin-top:5px;"></div>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <button onclick="printReport('simple')" class="btn-modern btn-simple" title="Print for Purchasing (No Logs)">
-                            <i data-lucide="file-text" style="width:16px;"></i> Download
-                        </button>
-                        <button onclick="printReport('full')" class="btn-modern btn-full" title="Print for Audit (Full Traceability)">
-                            <i data-lucide="printer" style="width:16px;"></i> Download Full
-                        </button>
-                    </div>
-                </div>
-
-                <div class="table-responsive" id="tableContainer">
-                    <table id="auditTable">
-                        <thead>
-                            <tr>
-                                <th style="width:30px; text-align:center;">No</th>
-                                <th style="width:32%;">Identity & Traceability</th>
-                                <th class="col-inventory">Inventory</th>
-                                <th>Target RH & History</th>
-                                <th style="width:28%;" class="col-decision">Decision Logic</th>
-                                <th style="text-align:center;" class="th-verify">Verify</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        lucide.createIcons();
-        const WEBHOOK_URL = "https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de";
-        const STATUS_URL = "https://n8.waruna-group.co.id/webhook/check-audit-status";
-        let pollingInterval;
-
-        function renderTable(auditData) {
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="zap"></i> RUN AI VERIFICATION`;
-
-            document.getElementById('pollingCard').style.display = 'none';
-            document.getElementById('reportPanel').style.display = 'block';
-            const body = document.getElementById('tableBody');
-            body.innerHTML = '';
             
-            if (auditData[0].PESAN_ERROR) {
-                body.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red; padding:20px;"><b>${auditData[0].PESAN_ERROR}</b></td></tr>`;
-                lucide.createIcons();
+            <div class="form-group" style="padding: 15px; border: 1px dashed #ccc; border-radius: 8px; background: #fafafa;">
+                <label>2. Running Hours Report (PDF)</label>
+                <input type="file" id="rhFile" accept=".pdf,.xls,.xlsx" required>
+            </div>
+            
+            <div class="form-group" style="padding: 15px; border: 1px dashed #ccc; border-radius: 8px; background: #fafafa;">
+                <label>3. Requisition / PO PDF</label>
+                <input type="file" id="reqFile" accept=".pdf" required>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">
+                <i data-lucide="zap"></i> RUN AI VERIFICATION
+            </button>
+            
+            <div id="errorBox"></div>
+        </form>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- Loader Card -->
+        <div class="card" id="pollingCard" style="display:none;">
+            <div class="loader-container">
+                <div class="spinner"></div>
+                <h3 style="font-size:18px; margin-bottom:8px; color:var(--primary);">Analyzing...</h3>
+                <p style="color:#777; font-size:12px;">Performing Triangulation Data</p>
+            </div>
+        </div>
+
+        <!-- Result Card -->
+        <div class="card" id="reportPanel" style="display:none;">
+            <div class="print-only-header">
+                <h2 id="printTitle">VESSEL NAME</h2>
+                <p id="printSubtitle">Date</p>
+                <p style="font-weight:bold; margin-top:5px;">GENERATED BY AI WARUNA</p>
+            </div>
+
+            <div class="report-header">
+                <div class="report-title-area">
+                    <h1 id="reportTitle"><i data-lucide="anchor"></i> VESSEL NAME</h1>
+                    <p id="reportSubtitle">Request Date: -</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-outline" onclick="printReport('simple')"><i data-lucide="printer"></i> Download</button>
+                    <button class="btn-solid" onclick="printReport('full')"><i data-lucide="file-down"></i> Download Full</button>
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table id="resultTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">NO</th>
+                            <th style="width: 30%;">IDENTITY & TRACEABILITY</th>
+                            <th style="width: 10%; text-align:center;">INVENTORY</th>
+                            <th style="width: 25%;">TARGET RH & HISTORY</th>
+                            <th style="width: 25%;">DECISION LOGIC</th>
+                            <th style="width: 5%; text-align:center;">VERIFY</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be rendered here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    lucide.createIcons();
+    const WEBHOOK_URL = "https://n8.waruna-group.co.id/webhook/277b56f1-5761-412a-9be5-86298d5aa5de";
+    const STATUS_URL = "https://n8.waruna-group.co.id/webhook/check-audit-status";
+    let pollingInterval;
+    let pollCount = 0;
+    const MAX_POLLS = 60; // Timeout 3 menit (60 x 3 detik)
+
+    function renderTable(auditData) {
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="zap"></i> RUN AI VERIFICATION`;
+
+        document.getElementById('pollingCard').style.display = 'none';
+        document.getElementById('reportPanel').style.display = 'block';
+        const body = document.getElementById('tableBody');
+        body.innerHTML = '';
+        
+        // PENCEGAT ERROR DARI N8N (BANNER MERAH MUTLAK)
+        if (auditData[0].PESAN_ERROR) {
+            body.innerHTML = `
+                <tr>
+                    <td colspan="6" style="padding: 30px;">
+                        <div style="background:#fdedec; border:1px solid #fadbd8; border-left:5px solid #c0392b; padding:20px; border-radius:8px; color:#c0392b;">
+                            <div style="font-weight:800; font-size:16px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+                                <i data-lucide="x-octagon" style="width:24px; height:24px;"></i> SYSTEM ERROR / AI TIMEOUT
+                            </div>
+                            <div style="font-size:13px; line-height:1.6; font-family: 'Inter', sans-serif;">
+                                <b>Pesan Diagnostik:</b><br>
+                                ${auditData[0].PESAN_ERROR}
+                            </div>
+                            <div style="margin-top:15px; font-size:11px; color:#7b241c; font-weight:600;">
+                                *Silakan cek dokumen atau klik tombol "RUN AI VERIFICATION" untuk mencoba ulang (Retry).
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            lucide.createIcons();
+            return;
+        }
+
+        let vessel = auditData[0].Nama_Kapal || "Unknown";
+        let engine = auditData[0].Tipe_Mesin || "ME";
+        document.getElementById('reportTitle').innerHTML = `<i data-lucide="anchor"></i> ${vessel} — ${engine}`;
+        document.getElementById('reportSubtitle').innerText = `Request Date: ${auditData[0].Tanggal || '-'}`;
+        
+        document.getElementById('printTitle').innerText = `${vessel} — ${engine}`;
+        document.getElementById('printSubtitle').innerText = `Request Date: ${auditData[0].Tanggal || '-'}`;
+
+        let grouped = {};
+        auditData.forEach(item => {
+            let s = item.Subsystem && item.Subsystem !== "-" ? item.Subsystem : "GENERAL COMPONENTS";
+            if (!grouped[s]) grouped[s] = [];
+            grouped[s].push(item);
+        });
+
+        for (let sub in grouped) {
+            let trHead = document.createElement('tr');
+            trHead.className = 'subsystem-header';
+            trHead.innerHTML = `<td colspan="6"><i data-lucide="layers" style="width:13px; margin-right:6px; vertical-align:-2px;"></i> SYSTEM: ${sub}</td>`;
+            body.appendChild(trHead);
+
+            grouped[sub].forEach(item => {
+                let aiStatus = item.AI_Status || "";
+                let isChecked = (aiStatus.includes("APPROVED")) ? "checked" : "";
+                let statusClass = aiStatus.includes("REDUCED") ? "badge-reduced" : (aiStatus === "UNDER-ORDER" ? "badge-warning" : "badge-approved");
+                
+                let steps = item.Rekomendasi_AI ? item.Rekomendasi_AI.split("|").map(s => s.trim()) : [];
+                let aiBoxHtml = `<div class="ai-box">`;
+                steps.forEach(step => {
+                    if(step.includes("FINAL DECISION")) {
+                        let dClass = aiStatus.includes("REDUCED") ? "cut" : "safe";
+                        aiBoxHtml += `<div class="ai-decision ${dClass}">${step}</div>`;
+                    } else {
+                        aiBoxHtml += `<div class="ai-step"><i data-lucide="chevron-right" style="width:10px;"></i> ${step}</div>`;
+                    }
+                });
+                aiBoxHtml += `</div>`;
+
+                let tr = document.createElement('tr');
+                tr.className = 'data-row';
+                tr.innerHTML = `
+                    <td style="text-align:center; font-weight:bold; color:#777;">${item.No_Item_PDF || '-'}</td>
+                    <td>
+                        <span class="badge-mandatory">MANDATORY</span>
+                        <div style="font-weight:bold; color:var(--primary); font-size:13px; margin-bottom:4px;">${item.Nama_Barang}</div>
+                        <div style="font-size:10px; color:#666;">PN: <b>${item.No_Part || '-'}</b></div>
+                        <div class="trace-box">
+                            <div style="margin-bottom:4px;"><b>DB:</b> ${item.Nama_Master}</div>
+                            <div style="color:#d35400;"><b>RH:</b> ${item.Nama_RH || '[NOT FOUND]'}</div>
+                            <div style="margin-top:4px;">${item.Warning_Text || ''}</div>
+                        </div>
+                    </td>
+                    <td class="col-inventory">
+                        <div style="margin-bottom:8px;"><span style="font-size:9px; color:#888;">REQ</span><br><span class="num-val">${item.Qty_Diminta}</span></div>
+                        <div><span style="font-size:9px; color:#888;">ROB</span><br><span class="num-val">${item.ROB}</span></div>
+                    </td>
+                    <td>
+                        <div style="font-weight:bold; font-size:11px; margin-bottom: 6px;">${item.Target_Cylinder !== '-' ? item.Target_Cylinder : 'SAFE'}</div>
+                        ${item.RH_Terakhir}
+                    </td>
+                    <td class="col-decision">
+                        <span class="${statusClass}">${aiStatus}</span>
+                        ${aiBoxHtml}
+                    </td>
+                    <td style="text-align:center;" class="td-verify">
+                        <input type="checkbox" class="v-checkbox" ${isChecked}>
+                    </td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+        lucide.createIcons();
+    }
+
+    function printReport(mode) {
+        const allRows = document.querySelectorAll('#tableBody tr');
+        const subHeaders = document.querySelectorAll('.subsystem-header td');
+        let currentHeader = null;
+        let visibleCount = 0;
+
+        if (mode === 'simple') {
+            document.body.classList.add('simple-print-mode');
+            subHeaders.forEach(td => td.setAttribute('colspan', '3')); 
+        } else {
+            subHeaders.forEach(td => td.setAttribute('colspan', '6'));
+        }
+
+        allRows.forEach(row => {
+            if (row.classList.contains('subsystem-header')) {
+                if (currentHeader && visibleCount === 0) currentHeader.classList.add('hide-for-print');
+                currentHeader = row;
+                visibleCount = 0;
+            } else if (row.classList.contains('data-row')) {
+                const checkbox = row.querySelector('.v-checkbox');
+                if (!checkbox.checked) {
+                    row.classList.add('hide-for-print');
+                } else {
+                    visibleCount++;
+                }
+            }
+        });
+        if (currentHeader && visibleCount === 0) currentHeader.classList.add('hide-for-print');
+
+        window.print();
+    }
+
+    window.addEventListener('afterprint', () => {
+        document.body.classList.remove('simple-print-mode');
+        document.querySelectorAll('.hide-for-print').forEach(el => el.classList.remove('hide-for-print'));
+        document.querySelectorAll('.subsystem-header td').forEach(td => td.setAttribute('colspan', '6'));
+    });
+
+    async function checkStatus(jobId) {
+        try {
+            let res = await fetch(`${STATUS_URL}?job_id=${jobId}`);
+            
+            if (!res.ok) {
+                throw new Error(`HTTP Error ${res.status}: API Pengecekan gagal diakses.`);
+            }
+
+            let json = await res.json();
+            
+            if (json.status === "error" || json.error) {
+                clearInterval(pollingInterval);
+                renderTable([{ PESAN_ERROR: "API ERROR: " + (json.message || json.error || "Gagal menarik data dari Database.") }]);
                 return;
             }
 
-            let vessel = auditData[0].Nama_Kapal || "Unknown";
-            let engine = auditData[0].Tipe_Mesin || "ME";
-            document.getElementById('reportTitle').innerHTML = `<i data-lucide="anchor"></i> ${vessel} — ${engine}`;
-            document.getElementById('reportSubtitle').innerText = `Request Date: ${auditData[0].Tanggal || '-'}`;
-            
-            document.getElementById('printTitle').innerText = `${vessel} — ${engine}`;
-            document.getElementById('printSubtitle').innerText = `Request Date: ${auditData[0].Tanggal || '-'}`;
-
-            let grouped = {};
-            auditData.forEach(item => {
-                let s = item.Subsystem && item.Subsystem !== "-" ? item.Subsystem : "GENERAL COMPONENTS";
-                if (!grouped[s]) grouped[s] = [];
-                grouped[s].push(item);
-            });
-
-            for (let sub in grouped) {
-                let trHead = document.createElement('tr');
-                trHead.className = 'subsystem-header';
-                trHead.innerHTML = `<td colspan="6"><i data-lucide="layers" style="width:13px; margin-right:6px; vertical-align:-2px;"></i> SYSTEM: ${sub}</td>`;
-                body.appendChild(trHead);
-
-                grouped[sub].forEach(item => {
-                    let aiStatus = item.AI_Status || "";
-                    let isChecked = (aiStatus.includes("APPROVED")) ? "checked" : "";
-                    let statusClass = aiStatus.includes("REDUCED") ? "badge-reduced" : (aiStatus === "UNDER-ORDER" ? "badge-warning" : "badge-approved");
-                    
-                    let steps = item.Rekomendasi_AI ? item.Rekomendasi_AI.split("|").map(s => s.trim()) : [];
-                    let aiBoxHtml = `<div class="ai-box">`;
-                    steps.forEach(step => {
-                        if(step.includes("FINAL DECISION")) {
-                            let dClass = aiStatus.includes("REDUCED") ? "cut" : "safe";
-                            aiBoxHtml += `<div class="ai-decision ${dClass}">${step}</div>`;
-                        } else {
-                            aiBoxHtml += `<div class="ai-step"><i data-lucide="chevron-right" style="width:10px;"></i> ${step}</div>`;
-                        }
-                    });
-                    aiBoxHtml += `</div>`;
-
-                    let tr = document.createElement('tr');
-                    tr.className = 'data-row';
-                    tr.innerHTML = `
-                        <td style="text-align:center; font-weight:bold; color:#777;">${item.No_Item_PDF || '-'}</td>
-                        <td>
-                            <span class="badge-mandatory">MANDATORY</span>
-                            <div style="font-weight:bold; color:var(--primary); font-size:13px; margin-bottom:4px;">${item.Nama_Barang}</div>
-                            <div style="font-size:10px; color:#666;">PN: <b>${item.No_Part || '-'}</b></div>
-                            <div class="trace-box">
-                                <div style="margin-bottom:4px;"><b>DB:</b> ${item.Nama_Master}</div>
-                                <div style="color:#d35400;"><b>RH:</b> ${item.Nama_RH || '[NOT FOUND]'}</div>
-                                <div style="margin-top:4px;">${item.Warning_Text || ''}</div>
-                            </div>
-                        </td>
-                        <td class="col-inventory">
-                            <div style="margin-bottom:8px;"><span style="font-size:9px; color:#888;">REQ</span><br><span class="num-val">${item.Qty_Diminta}</span></div>
-                            <div><span style="font-size:9px; color:#888;">ROB</span><br><span class="num-val">${item.ROB}</span></div>
-                        </td>
-                        <td>
-                            <div style="font-weight:bold; font-size:11px; margin-bottom: 6px;">${item.Target_Cylinder || 'SAFE'}</div>
-                            ${item.RH_Terakhir}
-                        </td>
-                        <td class="col-decision">
-                            <span class="${statusClass}">${aiStatus}</span>
-                            ${aiBoxHtml}
-                        </td>
-                        <td style="text-align:center;" class="td-verify">
-                            <input type="checkbox" class="v-checkbox" ${isChecked}>
-                        </td>
-                    `;
-                    body.appendChild(tr);
-                });
+            if (json.status === "completed" || Array.isArray(json)) {
+                clearInterval(pollingInterval);
+                let dataToRender = Array.isArray(json) ? json : json.data;
+                
+                if (!dataToRender || dataToRender.length === 0) {
+                    renderTable([{ PESAN_ERROR: "DATA KOSONG: N8N sukses, tapi Google Sheets mengirimkan array kosong. Kemungkinan file Mandatory Excel tidak terbaca dengan benar." }]);
+                } else {
+                    renderTable(dataToRender);
+                }
+                return;
             }
+        } catch (e) {
+            console.warn("Sedang menunggu respon API...", e.message);
+        }
+
+        pollCount++;
+        if (pollCount > MAX_POLLS) {
+            clearInterval(pollingInterval);
+            renderTable([{ PESAN_ERROR: "TIMEOUT (3 MENIT): Sistem dihentikan paksa. Koneksi nyangkut atau AI gagal merespon tepat waktu." }]);
+        }
+    }
+
+    document.getElementById('auditForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const id = `JOB-${Date.now()}`;
+        const btn = document.getElementById('submitBtn');
+        const errorBox = document.getElementById('errorBox');
+        
+        btn.disabled = true;
+        btn.innerHTML = `<div class="loader-small"></div> PROCESSING...`;
+        errorBox.style.display = 'none';
+        document.getElementById('reportPanel').style.display = 'none';
+        
+        pollCount = 0; // Reset bom waktu
+
+        const fd = new FormData();
+        fd.append('engine_type', document.getElementById('engineType').value);
+        fd.append('job_id', id);
+        if (document.getElementById('rhFile').files[0]) fd.append('RH_Report', document.getElementById('rhFile').files[0]);
+        fd.append('Requisition_Report', document.getElementById('reqFile').files[0]);
+
+        try {
+            const req = await fetch(WEBHOOK_URL, { method: 'POST', body: fd });
+            if (!req.ok) throw new Error("Koneksi ke server N8N gagal terhubung di awal.");
+            
+            document.getElementById('pollingCard').style.display = 'block';
+            pollingInterval = setInterval(() => checkStatus(id), 3000);
+        } catch (err) {
+            errorBox.style.display = 'block';
+            errorBox.innerText = err.message;
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="zap"></i> RUN AI VERIFICATION`;
             lucide.createIcons();
         }
+    };
+</script>
 
-        // ==========================================
-        // FUNGSI PRINT NATIVE BROWSER (FULL & SIMPLE)
-        // ==========================================
-        function printReport(mode) {
-            const allRows = document.querySelectorAll('#tableBody tr');
-            const subHeaders = document.querySelectorAll('.subsystem-header td');
-            let currentHeader = null;
-            let visibleCount = 0;
-
-            if (mode === 'simple') {
-                document.body.classList.add('simple-print-mode');
-                subHeaders.forEach(td => td.setAttribute('colspan', '3')); 
-            } else {
-                subHeaders.forEach(td => td.setAttribute('colspan', '6'));
-            }
-
-            allRows.forEach(row => {
-                if (row.classList.contains('subsystem-header')) {
-                    if (currentHeader && visibleCount === 0) currentHeader.classList.add('hide-for-print');
-                    currentHeader = row;
-                    visibleCount = 0;
-                } else if (row.classList.contains('data-row')) {
-                    const checkbox = row.querySelector('.v-checkbox');
-                    if (!checkbox.checked) {
-                        row.classList.add('hide-for-print');
-                    } else {
-                        visibleCount++;
-                    }
-                }
-            });
-            if (currentHeader && visibleCount === 0) currentHeader.classList.add('hide-for-print');
-
-            window.print();
-        }
-
-        window.addEventListener('afterprint', () => {
-            document.body.classList.remove('simple-print-mode');
-            document.querySelectorAll('.hide-for-print').forEach(el => el.classList.remove('hide-for-print'));
-            document.querySelectorAll('.subsystem-header td').forEach(td => td.setAttribute('colspan', '6'));
-        });
-
-        async function checkStatus(jobId) {
-            try {
-                let res = await fetch(`${STATUS_URL}?job_id=${jobId}`);
-                let json = await res.json();
-                if (json.status === "completed" || Array.isArray(json)) {
-                    clearInterval(pollingInterval);
-                    renderTable(Array.isArray(json) ? json : json.data);
-                }
-            } catch (e) {}
-        }
-
-        document.getElementById('auditForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const id = `JOB-${Date.now()}`;
-            const btn = document.getElementById('submitBtn');
-            const errorBox = document.getElementById('errorBox');
-            
-            btn.disabled = true;
-            btn.innerHTML = `<div class="loader-small"></div> PROCESSING...`;
-            errorBox.style.display = 'none';
-            document.getElementById('reportPanel').style.display = 'none';
-
-            const fd = new FormData();
-            fd.append('engine_type', document.getElementById('engineType').value);
-            fd.append('job_id', id);
-            if (document.getElementById('rhFile').files[0]) fd.append('RH_Report', document.getElementById('rhFile').files[0]);
-            fd.append('Requisition_Report', document.getElementById('reqFile').files[0]);
-
-            try {
-                const req = await fetch(WEBHOOK_URL, { method: 'POST', body: fd });
-                if (!req.ok) throw new Error("Connection to N8N failed.");
-                document.getElementById('pollingCard').style.display = 'block';
-                pollingInterval = setInterval(() => checkStatus(id), 3000);
-            } catch (err) {
-                errorBox.style.display = 'block';
-                errorBox.innerText = err.message;
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="zap"></i> RUN AI VERIFICATION`;
-                lucide.createIcons();
-            }
-        };
-    </script>
 </body>
 </html>
